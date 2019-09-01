@@ -23,7 +23,7 @@
 
 (define-parser *yyparse*
   (:start-symbol E-OPT)
-  (:terminals (int id +  * |(| |)|))
+  (:terminals (int +  * |(| |)|))
   (:precedence ((:left * ) (:left + )))
 
   ;; optional expression
@@ -37,7 +37,6 @@
    T)                                ; implicit action #'identity
 
   (T
-   id                                   ; implicit action #'identity
    int                                  ; implicit action #'identity
    (|(| E |)| #'k-2-3)))
 
@@ -100,24 +99,6 @@
            (return-from read-number v))
          (setf v (+ (* (or v 0) 10) (- (char-code c) (char-code #\0))))))))
 
-(defun intern-id (string)
-  ;; I'd really like to say (intern (string-upcase string) '#.*package*),
-  ;; but that breaks Allegro's case hacks.
-  (let ((*package* '#.*package*))
-    (read-from-string string)))
-
-(defun read-id (stream)
-  (let ((v '()))
-    (loop
-       (let ((c (read-char stream nil nil)))
-         (when (or (null c)
-                   (not (or (digit-char-p c) (alpha-char-p c) (eql c #\_))))
-           (maybe-unread c stream)
-           (when (null v)
-             (lexer-error c))
-           (return-from read-id (intern-id (coerce (nreverse v) 'string))))
-         (push c v)))))
-
 (defun lexer (&optional (stream *standard-input*))
   (loop
      (let ((c (read-char stream nil nil)))
@@ -130,9 +111,6 @@
          ((digit-char-p c)
           (unread-char c stream)
           (return-from lexer (values 'int (read-number stream))))
-         ((alpha-char-p c)
-          (unread-char c stream)
-          (return-from lexer (values 'id (read-id stream))))
          (t
           (lexer-error c))))))
 
