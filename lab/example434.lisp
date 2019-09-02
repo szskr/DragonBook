@@ -12,32 +12,32 @@
 ;;;
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun i2p (a b c)
-    "Infix to prefix"
     (list b a c))
 
   (defun k-2-3 (a b c)
-    "Second out of three"
     (declare (ignore a c))
     b)
 )
 
 (define-parser *yyparse*
-  (:start-symbol E-OPT)
-  (:terminals (int +  * |(| |)|))
+  (:start-symbol S)
+  (:terminals (id +  * |(| |)|))
   (:precedence ((:left * ) (:left + )))
 
-  ;; optional expression
-  (E-OPT
+  (S
    E                           ; implicit action #'identity
-   ())                                  ; implicit action #'list
+   ())
 
   (E
-   (E + E #'i2p)
-   (E * E #'i2p)
-   T)                                ; implicit action #'identity
+   (E + T #'i2p)
+   T)                          ; implicit action #'identity
 
   (T
-   int                                  ; implicit action #'identity
+   (T * F #'i2p)
+    F)
+
+  (F
+   id                          ; implicit action #'identity
    (|(| E |)| #'k-2-3)))
 
 ;;;
@@ -110,7 +110,7 @@
             (return-from lexer (values symbol symbol))))
          ((digit-char-p c)
           (unread-char c stream)
-          (return-from lexer (values 'int (read-number stream))))
+          (return-from lexer (values 'id (read-number stream))))
          (t
           (lexer-error c))))))
 
