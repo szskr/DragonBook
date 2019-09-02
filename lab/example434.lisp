@@ -62,12 +62,7 @@
                (t (fail)))))
     (cond
       ((numberp e) e)
-      ((eql 'pi e) (int-or-float pi))
-      ((eql 'e e) (int-or-float (exp 1)))
       ((atom e) (fail))
-      ((= 2 (length e))
-       (unless (eql '- (car e)) (fail))
-       (- (evaluate (cadr e))))
       ((= 3 (length e))
        (funcall (binop (car e)) (evaluate (cadr e)) (evaluate (caddr e))))
       (t (fail)))))
