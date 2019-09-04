@@ -1,0 +1,17 @@
+#
+# Fig. 4.29 Model of an LR parser
+#
+
+         (INPUT a(1):,,,:a(i):,,,:a(n):$)
+	 
+                          ^
+			  |
+			  
+STACK s(m)    <--   (LR Parsing Program)  --> Output 
+      X(m)               
+      s(m-1)              |
+      X(m-1)       +------+------+
+      ...          |             |
+      s(0)         |             |
+                   V             V
+	       (action)       (goto)

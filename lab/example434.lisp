@@ -1,5 +1,6 @@
-;; Copyright (c) 2009 by Juliusz Chroboczek
-;;  2019/September: Modified version by szskr
+;;
+;;  Grammar 4.34 (page 222 (4.19))
+;;
 
 (defpackage #:example434
   (:export #:example434)
@@ -11,12 +12,17 @@
 ;;; The parser
 ;;;
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (defun i2p (a b c)
-    (list b a c))
+  (defun add_them ($1 $2 $3)
+    (declare (ignore $2))
+    (+ $1 $3))
 
-  (defun k-2-3 (a b c)
-    (declare (ignore a c))
-    b)
+  (defun multiply_them ($1 $2 $3)
+    (declare (ignore $2))
+    (* $1 $3))
+
+  (defun k-2-3 ($1 $2 $3)
+    (declare (ignore $1 $3))
+    $2)
 )
 
 (define-parser *yyparse*
@@ -29,43 +35,16 @@
    ())
 
   (E
-   (E + T #'i2p)
+   (E + T #'add_them)
    T)                          ; implicit action #'identity
 
   (T
-   (T * F #'i2p)
+   (T * F #'multiply_them)
     F)
 
   (F
    id                          ; implicit action #'identity
    (|(| E |)| #'k-2-3)))
-
-;;;
-;;; The evaluator
-;;;
-(define-condition evaluator-error (yacc-runtime-error)
-  ((expression :initarg :expression :reader evaluator-error-expression))
-  (:report (lambda (e stream)
-             (format stream "Couldn't evaluate expression ~S"
-                     (evaluator-error-expression e)))))
-
-(defun evaluate (e)
-  (labels ((fail () (error (make-condition 'evaluator-error :expression e)))
-           (int-or-float (n)
-             (typecase n
-               (integer n)
-               (real (coerce n *read-default-float-format*))
-               (t (fail))))
-           (binop (symbol)
-             (case symbol
-               ((+ *) (fdefinition symbol))
-               (t (fail)))))
-    (cond
-      ((numberp e) e)
-      ((atom e) (fail))
-      ((= 3 (length e))
-       (funcall (binop (car e)) (evaluate (cadr e)) (evaluate (caddr e))))
-      (t (fail)))))
 
 ;;;
 ;;; The lexer
@@ -120,4 +99,4 @@
        (let ((e (parse-with-lexer #'lexer *yyparse*)))
          (when (null e)
            (return-from example434))
-         (format t " => ~A~%" (evaluate e))))))
+         (format t " => ~A~%" e)))))
