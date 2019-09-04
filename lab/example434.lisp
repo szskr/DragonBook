@@ -12,6 +12,12 @@
 ;;; The parser
 ;;;
 (eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun apply_op ($1 $2 $3)
+    (cond
+       ((equal $2 '+) (+ $1 $3))
+       ((equal $2 '*) (* $1 $3))
+       (t (print "Internal Error"))))
+	   
   (defun add_them ($1 $2 $3)
     (declare (ignore $2))
     (+ $1 $3))
@@ -35,11 +41,11 @@
    ())
 
   (E
-   (E + T #'add_them)
+   (E + T #'apply_op)
    T)                          ; implicit action #'identity
 
   (T
-   (T * F #'multiply_them)
+   (T * F #'apply_op)
     F)
 
   (F
@@ -92,7 +98,6 @@
 ;;; The toplevel loop
 ;;;
 (defun example434 ()
-  (format t "Type an infix expression to evaluate it, an empty line to quit.~%")
   (loop
      (with-simple-restart (abort "Return to example434 toplevel.")
        (format t "? ")
