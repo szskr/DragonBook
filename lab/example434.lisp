@@ -17,14 +17,6 @@
        ((equal $2 '+) (+ $1 $3))
        ((equal $2 '*) (* $1 $3))
        (t (print "Internal Error"))))
-	   
-  (defun add_them ($1 $2 $3)
-    (declare (ignore $2))
-    (+ $1 $3))
-
-  (defun multiply_them ($1 $2 $3)
-    (declare (ignore $2))
-    (* $1 $3))
 
   (defun k-2-3 ($1 $2 $3)
     (declare (ignore $1 $3))
