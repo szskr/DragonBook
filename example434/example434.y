@@ -59,11 +59,8 @@ yylex(void)
     return (EOF);
 
   switch (c) {
-  case '\n':
-  case '(':
-  case '+':
-  case '*':
-  case ')':
+  case '\n': case '(': case ')':
+  case '+': case '*':
     return (c);
   }
   
