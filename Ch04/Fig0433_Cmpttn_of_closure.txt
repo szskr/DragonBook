@@ -1,0 +1,27 @@
+;; P.222
+;; The Closure Operation
+;;
+
+If I is a set of item for a grammar G, then closure(I) is the set of items
+constructed from I by the two rules:
+
+1. Initally, every items in I is added to closure(I).
+2. If A -> a.Bb is in a closure(I) and B -> r is a production, then add the item
+   B -> .b to I, if it is not already there. We apply this rule untilno more new
+   items can be added to closure(I).
+
+
+;; P.223
+;; FUNCTION closure(I)
+;;
+FUNCTION closure (I)
+BEGIN
+  J := I;
+  REPEAT
+    FOR each item A->a.Bb in J and each production,,
+      B -> r of G such that B -> .r is not in J
+      DO
+        add B -> .r to J
+  UNTIL no more item can be added to J;
+  RETURN J
+END
