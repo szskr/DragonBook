@@ -113,10 +113,13 @@ main(int argc, char *argv[])
 {
 	(void) setlocale(LC_ALL, "");
 
-	d_trace("dyacc: main()");
-	setup(argc, argv); 		/* initialize and read productions */
+	d_trace("dyacc: IN  main()");
+	
+	setup(argc, argv); /* initialize and read productions */
+	
 	TBITSET = NWORDS(ntoksz*LKFACTOR);
 	tbitset = NWORDS(ntokens*LKFACTOR);
+	
 	mktbls();
 	cpres(); 	/* make table of which productions yield a */
 			/* given nonterminal */
@@ -130,6 +133,8 @@ main(int argc, char *argv[])
 	summary();
 	callopt();
 	others();
+       
+        d_trace("dyacc: OUT main()");
 	return (0);
 }
 
@@ -329,7 +334,7 @@ others()
 	}
 	(void) fclose(ftable);
 
-        d_trace("OUT:y2 finact()");
+        d_trace("OUT:y1 others()");
 	out_func();
 }
 
@@ -339,9 +344,16 @@ static char *
 chcopy(p, q)
 char *p, *q;
 {
-	while (*p = *q++)
-		++p;
-	return (p);
+  in_func();
+  d_trace("IN: y1 chcopy()");
+ 
+  while (*p = *q++)
+    ++p;
+
+  d_trace("OUT:y1 chcopy()");
+  out_func();
+  
+  return (p);
 }
 
 #define	ISIZE 400
@@ -355,6 +367,9 @@ int *pp;
 	static char *sarr = NULL;
 	char  *q;
 
+	in_func();
+	d_trace("IN: y1 writem()");
+	
 	if (sarr == NULL) {
 		sarr = (char *)malloc(sizeof (char) * isize);
 		if (sarr == NULL)
@@ -411,6 +426,10 @@ int *pp;
 		q = chcopy(q, "    (");
 		(void) sprintf(q, "%d)", -i);
 	}
+
+	d_trace("OUT:y1 writem()");
+	out_func();
+	
 	return (sarr);
 }
 
@@ -419,10 +438,17 @@ char *
 symnam(int i)
 {
 	char *cp;
-
+	
+	in_func();
+	d_trace("IN: y1 symnam()");
+	
 	cp = (i >= NTBASE) ? nontrst[i-NTBASE].name : tokset[i].name;
 	if (*cp == L' ')
 		++cp;
+	
+	d_trace("OUT:y1 symnam()");
+	out_func();
+
 	return (cp);
 }
 
@@ -439,6 +465,9 @@ int zzrrconf = 0;
 static void
 summary()
 {
+  in_func();
+  d_trace("IN: y1 summary()");
+  
 	if (foutput != NULL) {
 		(void) fprintf(foutput,
 		    "\n%d/%d terminals, %d/%d nonterminals\n",
@@ -490,6 +519,9 @@ summary()
 		(void) fclose(ftemp);
 	if (fdefine != NULL)
 		(void) fclose(fdefine);
+	
+	d_trace("OUT:y1 summary()");
+	out_func();
 }
 
 /* write out error comment */
@@ -574,8 +606,15 @@ aryfil(v, n, c)
 int *v, n, c;
 {
 	int i;
+	
+	in_func();
+	d_trace("IN: y1 anyfil()");
+	
 	for (i = 0; i < n; ++i)
 		v[i] = c;
+	
+	d_trace("OUT:y1 anyfil()");
+	out_func();
 }
 
 /* set a to the union of a and b */
@@ -586,12 +625,18 @@ int *a, *b;
 {
 	int i, x, sub;
 
+	in_func();
+	d_trace("IN: y1 setunion()");
+	
 	sub = 0;
 	SETLOOP(i) {
 		*a = (x = *a) | *b++;
 		if (*a++ != x)
 			sub = 1;
 	}
+	
+	d_trace("OUT:y1 setunion()");
+	out_func();
 	return (sub);
 }
 
