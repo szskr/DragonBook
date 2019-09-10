@@ -1,7 +1,8 @@
 /*
  *
  */
-char gettext(char *s)
+char *
+gettext(char *s)
 {
   return (s);
 }

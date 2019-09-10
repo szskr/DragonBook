@@ -34,7 +34,7 @@ static void go2gen(int);
 static void precftn(int, int, int);
 static void wract(int);
 static void wrstate(int);
-static void wdef(wchar_t *, int);
+static void wdef(char *, int);
 static void wrmbchars(void);
 	/* important local variables */
 static int lastred; /* number of the last reduction of a state */
@@ -92,7 +92,7 @@ output()
 							if (foutput != NULL)
 					(void) fprintf(foutput,
 				WSFMT("\n%d: reduce/reduce conflict"
-				" (red'ns %d and %d ) on %ws"),
+				" (red'ns %d and %d ) on %s"),
 							i, -temp1[k],
 							lastred, symnam(k));
 						    if (-temp1[k] > lastred)
@@ -114,7 +114,7 @@ output()
 	}
 
 	(void) fprintf(ftable, "\t};\n");
-	wdef(L"YYNPROD", nprod);
+	wdef("YYNPROD", nprod);
 	if (nmbchars > 0) {
 		wrmbchars();
 	}
@@ -282,10 +282,10 @@ static void go2gen(int c)
 	/* now, we have temp1[c] = 1 if a goto on c in closure of cc */
 
 	if (g2debug && foutput != NULL) {
-		(void) fprintf(foutput, WSFMT("%ws: gotos on "),
+		(void) fprintf(foutput, WSFMT("%s: gotos on "),
 		    nontrst[c].name);
 		NTLOOP(i) if (temp1[i])
-			(void) fprintf(foutput, WSFMT("%ws "), nontrst[i].name);
+			(void) fprintf(foutput, WSFMT("%s "), nontrst[i].name);
 		(void) fprintf(foutput, "\n");
 	}
 
@@ -324,7 +324,7 @@ precftn(int r, int t, int s)
 		if (foutput != NULL)
 			(void) fprintf(foutput,
 			    WSFMT("\n%d: shift/reduce conflict"
-			    " (shift %d, red'n %d) on %ws"),
+			    " (shift %d, red'n %d) on %s"),
 			    s, temp1[t], r, symnam(t));
 		++zzsrconf;
 		return;
@@ -438,20 +438,20 @@ wrstate(int i)
 		return;
 	(void) fprintf(foutput, "\nstate %d\n", i);
 	ITMLOOP(i, pp, qq) {
-		(void) fprintf(foutput, WSFMT("\t%ws\n"), writem(pp->pitem));
+		(void) fprintf(foutput, WSFMT("\t%s\n"), writem(pp->pitem));
 	}
 	if (tystate[i] == MUSTLOOKAHEAD) {
 		/* print out empty productions in closure */
 		WSLOOP(wsets + (pstate[i + 1] - pstate[i]), u) {
 			if (*(u->pitem) < 0)
 				(void) fprintf(foutput,
-				    WSFMT("\t%ws\n"), writem(u->pitem));
+				    WSFMT("\t%s\n"), writem(u->pitem));
 		}
 	}
 
 	/* check for state equal to another */
 	TLOOP(j0) if ((j1 = temp1[j0]) != 0) {
-		(void) fprintf(foutput, WSFMT("\n\t%ws  "), symnam(j0));
+		(void) fprintf(foutput, WSFMT("\n\t%s  "), symnam(j0));
 		if (j1 > 0) { /* shift, error, or accept */
 			if (j1 == ACCEPTCODE)
 				(void) fprintf(foutput,  "accept");
@@ -475,25 +475,25 @@ wrstate(int i)
 	for (j0 = 1; j0 <= nnonter; ++j0) {
 		if (temp1[++j1])
 			(void) fprintf(foutput,
-			    WSFMT("\t%ws  goto %d\n"),
+			    WSFMT("\t%s  goto %d\n"),
 			    symnam(j0 + NTBASE), temp1[j1]);
 	}
 }
 
 static void
-wdef(wchar_t *s, int n)
+wdef(char *s, int n)
 {
 	/* output a definition of s to the value n */
-	(void) fprintf(ftable, WSFMT("# define %ws %d\n"), s, n);
+	(void) fprintf(ftable, WSFMT("# define %s %d\n"), s, n);
 }
 
 void
 warray(s, v, n)
-wchar_t *s;
+char *s;
 int *v, n;
 {
 	int i;
-	(void) fprintf(ftable, WSFMT("static YYCONST yytabelem %ws[]={\n"), s);
+	(void) fprintf(ftable, WSFMT("static YYCONST yytabelem %s[]={\n"), s);
 	for (i = 0; i < n; ) {
 		if (i % 10 == 0)
 			(void) fprintf(ftable, "\n");
@@ -524,7 +524,7 @@ hideprod()
 			++j;
 			if (foutput != NULL) {
 				(void) fprintf(foutput,
-				    WSFMT("Rule not reduced:   %ws\n"),
+				    WSFMT("Rule not reduced:   %s\n"),
 				    writem(prdptr[i]));
 			}
 		}
@@ -553,11 +553,11 @@ static void
 wrmbchars()
 {
 	int i;
-	wdef(L"YYNMBCHARS", nmbchars);
+	wdef("YYNMBCHARS", nmbchars);
 	qsort(mbchars, nmbchars, sizeof (*mbchars),
 	    (int (*)(const void *, const void *))cmpmbchars);
 	(void) fprintf(ftable,
-	    "static struct{\n\twchar_t character;"
+	    "static struct{\n\tchar character;"
 	    "\n\tint tvalue;\n}yymbchars[YYNMBCHARS]={\n");
 	for (i = 0; i < nmbchars; ++i) {
 		(void) fprintf(ftable, "\t{%#x,%d}",

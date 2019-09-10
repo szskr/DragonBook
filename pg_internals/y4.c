@@ -35,7 +35,7 @@ static void gin(int);
 static void stin(int);
 static void osummary(void);
 static void aoutput(void);
-static void arout(wchar_t *, int *, int);
+static void arout(char *, int *, int);
 static int nxti(void);
 static int gtnm(void);
 
@@ -425,19 +425,19 @@ aoutput()
 	/* write out the optimized parser */
 
 	(void) fprintf(ftable, "# define YYLAST %" PRIdPTR "\n", maxa-amem + 1);
-	arout(L"yyact", amem, (maxa - amem) + 1);
-	arout(L"yypact", indgo, nstate);
-	arout(L"yypgo", pgo, nnonter + 1);
+	arout("yyact", amem, (maxa - amem) + 1);
+	arout("yypact", indgo, nstate);
+	arout("yypgo", pgo, nnonter + 1);
 }
 
 static void
 arout(s, v, n)
-wchar_t *s;
+char *s;
 int *v, n;
 {
 	int i;
 
-	(void) fprintf(ftable, WSFMT("static YYCONST yytabelem %ws[]={\n"), s);
+	(void) fprintf(ftable, WSFMT("static YYCONST yytabelem %s[]={\n"), s);
 	for (i = 0; i < n; ) {
 		if (i % 10 == 0)
 			(void) fprintf(ftable, "\n");
@@ -461,8 +461,8 @@ gtnm()
 	s = 1;
 	val = 0;
 
-	while ((c = getwc(finput)) != EOF) {
-		if (iswdigit(c))
+	while ((c = getc(finput)) != EOF) {
+		if (isdigit(c))
 			val = val * 10 + c - L'0';
 		else if (c == L'-')
 			s = -1;

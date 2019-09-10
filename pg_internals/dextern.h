@@ -40,6 +40,7 @@
 #include <values.h> 
 #include <unistd.h>
 #include <stdlib.h>
+#include "dragon.h"
 
 #ifdef	__cplusplus
 extern "C" {
@@ -172,7 +173,7 @@ typedef struct item {
 } ITEM;
 
 typedef struct toksymb {
-	char **name;
+	char *name;
 	int value;
 } TOKSYMB;
 
@@ -286,12 +287,6 @@ extern void exp_mem(int);
 extern void exp_act(int **);
 extern int apack(int *, int);
 extern int state(int);
-extern void fprintf3(FILE *, const char *, const wchar_t *, const char *, ...);
-extern void error3(const char *, const char *, const char *, ...);
-
-extern wchar_t *wscpy(wchar_t *, const wchar_t *);
-extern size_t wslen(const wchar_t *);
-extern int wscmp(const wchar_t *, const wchar_t *);
 
 
 	/* yaccpar location */

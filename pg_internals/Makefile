@@ -36,9 +36,10 @@ CSRC=		y1.c y2.c y3.c y4.c dragon.c
 OBJS=           y1.o y2.o y3.o y4.o dragon.o
 PROG=		dyacc
 CFLAGS=         -I./h -DDRAGON
+DFILES= $(OBJS) $(PROG) y.output y.tab.c y.tab.h
 
 $(PROG): $(OBJS)
 	$(CC) -o $(PROG)  $(OBJS)
 
 clean:
-	rm -f $(PROG) $(OBJS)
+	rm -f $(DFILES)
