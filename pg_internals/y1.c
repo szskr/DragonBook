@@ -34,6 +34,7 @@
 #include <unistd.h>
 #include <locale.h>
 #include <stdarg.h>	/* For error() */
+#include "dragon.h"
 
 static void mktbls(void);
 static void others(void);

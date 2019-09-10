@@ -32,8 +32,8 @@
 # 2019/09 szskr
 #
 
-CSRC=		y1.c y2.c y3.c y4.c
-OBJS=           y1.o y2.o y3.o y4.o
+CSRC=		y1.c y2.c y3.c y4.c dragon.c
+OBJS=           y1.o y2.o y3.o y4.o dragon.o
 PROG=		dyacc
 CFLAGS=         -I./h
 
