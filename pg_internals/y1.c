@@ -119,7 +119,6 @@ main(int argc, char *argv[])
 	
 	TBITSET = NWORDS(ntoksz*LKFACTOR);
 	tbitset = NWORDS(ntokens*LKFACTOR);
-	
 	mktbls();
 	cpres(); 	/* make table of which productions yield a */
 			/* given nonterminal */
@@ -345,14 +344,12 @@ chcopy(p, q)
 char *p, *q;
 {
   in_func();
-  d_trace("IN: y1 chcopy()");
+  d_trace("IO: y1 chcopy()");
+  out_func();
  
   while (*p = *q++)
     ++p;
 
-  d_trace("OUT:y1 chcopy()");
-  out_func();
-  
   return (p);
 }
 
@@ -440,15 +437,13 @@ symnam(int i)
 	char *cp;
 	
 	in_func();
-	d_trace("IN: y1 symnam()");
+	d_trace("IO: y1 symnam()");
+	out_func();
 	
 	cp = (i >= NTBASE) ? nontrst[i-NTBASE].name : tokset[i].name;
 	if (*cp == L' ')
 		++cp;
 	
-	d_trace("OUT:y1 symnam()");
-	out_func();
-
 	return (cp);
 }
 
@@ -466,7 +461,8 @@ static void
 summary()
 {
   in_func();
-  d_trace("IN: y1 summary()");
+  d_trace("IO: y1 summary()");
+  out_func();
   
 	if (foutput != NULL) {
 		(void) fprintf(foutput,
@@ -520,8 +516,6 @@ summary()
 	if (fdefine != NULL)
 		(void) fclose(fdefine);
 	
-	d_trace("OUT:y1 summary()");
-	out_func();
 }
 
 /* write out error comment */
@@ -608,13 +602,12 @@ int *v, n, c;
 	int i;
 	
 	in_func();
-	d_trace("IN: y1 anyfil()");
+	d_trace("IO: y1 aryfil()");
+	out_func();
 	
 	for (i = 0; i < n; ++i)
 		v[i] = c;
 	
-	d_trace("OUT:y1 anyfil()");
-	out_func();
 }
 
 /* set a to the union of a and b */
@@ -626,7 +619,8 @@ int *a, *b;
 	int i, x, sub;
 
 	in_func();
-	d_trace("IN: y1 setunion()");
+	d_trace("IO: y1 setunion()");
+	out_func();
 	
 	sub = 0;
 	SETLOOP(i) {
@@ -635,8 +629,6 @@ int *a, *b;
 			sub = 1;
 	}
 	
-	d_trace("OUT:y1 setunion()");
-	out_func();
 	return (sub);
 }
 
@@ -645,6 +637,9 @@ prlook(p)
 LOOKSETS *p;
 {
 	int j, *pp;
+	in_func();
+	d_trace("IN: y1 prlook()");
+	
 	pp = p->lset;
 	if (pp == 0)
 		(void) fprintf(foutput, "\tNULL");
@@ -657,6 +652,9 @@ LOOKSETS *p;
 		}
 		(void) fprintf(foutput,  "}");
 	}
+
+	d_trace("OUT:y1 prlook()");
+	out_func();
 }
 
 /*
@@ -671,6 +669,10 @@ cpres()
 	int **ptrpy;
 	int **pyield;
 	int c, j, i;
+	
+	in_func();
+	d_trace("IO: y1 opres()");
+	out_func();
 
 	/*
 	 * 2/29/88 -
@@ -744,6 +746,9 @@ static void
 cpfir()
 {
 	int *p, **s, i, **t, ch, changes;
+	
+	in_func();
+	d_trace("IN: y1 cpfir()");
 
 	zzcwp = nnonter;
 	NTLOOP(i) {
@@ -782,8 +787,11 @@ cpfir()
 
 	NTLOOP(i)
 		pfirst[i] = flset(&wsets[i].ws);
-	if (!indebug)
+	if (!indebug) {
+	  	d_trace("OUT:y1 cpfir()");
+		out_func();
 		return;
+	}
 	if ((foutput != NULL)) {
 		NTLOOP(i) {
 			(void) fprintf(foutput, WSFMT("\n%s: "),
@@ -792,6 +800,9 @@ cpfir()
 			(void) fprintf(foutput, " %d\n", pempty[i]);
 		}
 	}
+
+	d_trace("OUT:y1 cpfir()");
+	out_func();
 }
 
 /* sorts last state,and sees if it equals earlier ones. returns state number */
@@ -801,6 +812,10 @@ state(int c)
 	int size1, size2;
 	int i;
 	ITEM *p1, *p2, *k, *l, *q1, *q2;
+	in_func();
+	d_trace("IO: y1 state()");
+	out_func();
+	
 	p1 = pstate[nstate];
 	p2 = pstate[nstate+1];
 	if (p1 == p2)
@@ -885,7 +900,10 @@ putitem(ptr, lptr)
 int *ptr;
 LOOKSETS *lptr;
 {
-	register ITEM *j;
+	ITEM *j;
+
+	in_func();
+	d_trace("IN: y1 putitem()");
 
 	if (pidebug && (foutput != NULL))
 		(void) fprintf(foutput,
@@ -901,6 +919,9 @@ LOOKSETS *lptr;
 			exp_psmem();
 			/* error("out of state space"); */
 	}
+
+	d_trace("OUT:y1 putitem()");
+	out_func();
 }
 
 /*
