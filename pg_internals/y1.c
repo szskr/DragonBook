@@ -112,13 +112,8 @@ int
 main(int argc, char *argv[])
 {
 	(void) setlocale(LC_ALL, "");
-#ifndef DRAGON
-#if !defined(TEXT_DOMAIN)	/* Should be defined by cc -D */
-#define	TEXT_DOMAIN "SYS_TEST"	/* Use this only if it weren't */
-#endif
-	(void) textdomain(TEXT_DOMAIN);
-#endif
 
+	d_trace("dyacc: main()");
 	setup(argc, argv); 		/* initialize and read productions */
 	TBITSET = NWORDS(ntoksz*LKFACTOR);
 	tbitset = NWORDS(ntokens*LKFACTOR);
@@ -144,6 +139,9 @@ mktbls()
 {
 	int i;
 
+	in_func();
+	d_trace("IN: y1 mktbls()");
+   
 	size = ntoksz + nnontersz +1;
 	if (size < nstatesz)
 		size = nstatesz;
@@ -237,6 +235,9 @@ mktbls()
 	aryfil(tstates, ntoksz+1, 0);
 	wsetsz = nnontersz + 1;
 	lsetsize = INIT_LSIZE + 1;
+
+	d_trace("OUT:y1 mktble()");
+	out_func();
 }
 
 /* put out other arrays, copy the parsers */
@@ -246,6 +247,9 @@ others()
 	extern int gen_lines;
 	int c, i, j;
 	int tmpline;
+
+	in_func();
+	d_trace("IN: y1 others()");
 
 	finput = fopen(parser, "r");
 	if (finput == NULL)
@@ -324,6 +328,9 @@ others()
 		(void) putc(c, ftable);
 	}
 	(void) fclose(ftable);
+
+        d_trace("OUT:y2 finact()");
+	out_func();
 }
 
 

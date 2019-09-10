@@ -182,6 +182,9 @@ char *argv[];
 #define	F_NAME_LENGTH	128
 	char	fname[F_NAME_LENGTH+1];
 
+	in_func();
+	d_trace("IN: y2 setup():");
+
 	foutput = NULL;
 	fdefine = NULL;
 	i = 1;
@@ -835,14 +838,24 @@ char *argv[];
 			(void) putc(c, ftable);
 		}
 	(void) fclose(finput);
+
+	d_trace("OUT:y2 setup()");
+	out_func();
 }
 
 static void
 finact()
 {
+  	in_func();
+	d_trace("IN: y2 finact()");
+
 	/* finish action routine */
 	(void) fclose(faction);
 	(void) fprintf(ftable, "# define YYERRCODE %d\n", tokset[2].value);
+
+	
+	d_trace("OUT:y2 finact()");
+	out_func();
 }
 
 static char *
@@ -854,7 +867,10 @@ char *s;
 	static int used_save = 0;
 	static int exp_cname = CNAMSZ;
 	int len = strlen(s);
-
+	
+  	in_func();
+	d_trace("IN: y2 cstash()");
+	
 	/*
 	 * 2/29/88 -
 	 * Don't need to expand the table, just allocate new space.
@@ -884,6 +900,10 @@ char *s;
 		*cnamp++ = *s;
 	} while (*s++);
 	used += cnamp - temp;
+
+	d_trace("OUT:y2 cstash()");
+	out_func();
+	
 	return (temp);
 }
 
@@ -894,12 +914,17 @@ defin(int t, char *s)
 
 	int val;
 
+        in_func();
+	d_trace("IN: y2 defin()");
+
 	if (t) {
 		if (++nnonter >= nnontersz)
 			exp_nonterm();
 		nontrst[nnonter].name = cstash(s);
+		d_trace("OUT:y2 defin()");
+		out_func();
 		return (NTBASE + nnonter);
-		}
+	}
 	/* must be a token */
 	if (++ntokens >= ntoksz)
 		exp_ntok();
@@ -1045,6 +1070,10 @@ defin(int t, char *s)
 	}
 	tokset[ntokens].value = val;
 	toklev[ntokens] = 0;
+
+	d_trace("OUT:y2 defin()");
+	out_func();
+
 	return (ntokens);
 }
 
@@ -1056,6 +1085,9 @@ defout()
 	int i, c;
 	char *cp;
 
+	in_func();
+	d_trace("IN: y2 defout()");
+	
 	for (i = ndefout; i <= ntokens; ++i) {
 
 		cp = tokset[i].name;
@@ -1089,6 +1121,9 @@ defout()
 	nodef:;
 	}
 	ndefout = ntokens+1;
+	
+	d_trace("OUT:y2 defout()");
+	out_func();
 }
 
 static int
@@ -1097,6 +1132,8 @@ gettok()
 	int i, base;
 	static int peekline; /* number of '\n' seen in lookahead */
 	int c, match, reserve;
+
+	d_trace("IN: y2 gettok()");
 begin:
 	reserve = 0;
 	lineno += peekline;
@@ -1262,6 +1299,7 @@ begin:
 	if (c == ':')
 		return (C_IDENTIFIER);
 	(void) ungetc(c, finput);
+	
 	return (IDENTIFIER);
 }
 
