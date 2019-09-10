@@ -39,7 +39,7 @@
 static void mktbls(void);
 static void others(void);
 static void summary(void);
-static wchar_t *chcopy(wchar_t *, wchar_t *);
+static char *chcopy(char *, char *);
 static int setunion(int *, int *);
 static void prlook(LOOKSETS *);
 static void cpres(void);
@@ -112,10 +112,12 @@ int
 main(int argc, char *argv[])
 {
 	(void) setlocale(LC_ALL, "");
+#ifndef DRAGON
 #if !defined(TEXT_DOMAIN)	/* Should be defined by cc -D */
 #define	TEXT_DOMAIN "SYS_TEST"	/* Use this only if it weren't */
 #endif
 	(void) textdomain(TEXT_DOMAIN);
+#endif
 
 	setup(argc, argv); 		/* initialize and read productions */
 	TBITSET = NWORDS(ntoksz*LKFACTOR);
@@ -257,13 +259,13 @@ others()
 		"cannot find parser %s"),
 		    parser);
 
-	warray(L"yyr1", levprd, nprod);
+	warray("yyr1", levprd, nprod);
 
 	aryfil(temp1, nprod, 0);
 					/* had_act[i] is either 1 or 0 */
 	PLOOP(1, i)
 		temp1[i] = ((prdptr[i+1] - prdptr[i]-2) << 1) | had_act[i];
-	warray(L"yyr2", temp1, nprod);
+	warray("yyr2", temp1, nprod);
 
 	aryfil(temp1, nstate, -10000000);
 	TLOOP(i)
@@ -272,14 +274,14 @@ others()
 	NTLOOP(i)
 		for (j = ntstates[i]; j != 0; j = mstates[j])
 			temp1[j] = -i;
-	warray(L"yychk", temp1, nstate);
+	warray("yychk", temp1, nstate);
 
-	warray(L"yydef", defact, nstate);
+	warray("yydef", defact, nstate);
 
 	if ((fdebug = fopen(DEBUGNAME, "r")) == NULL)
 		error("cannot open yacc.debug");
-	while ((c = getwc(fdebug)) != EOF)
-		(void) putwc(c, ftable);
+	while ((c = getc(fdebug)) != EOF)
+		(void) putc(c, ftable);
 	(void) fclose(fdebug);
 	ZAPFILE(DEBUGNAME);
 
@@ -287,12 +289,12 @@ others()
 		(void) fprintf(ftable, "# line\t1 \"%s\"\n", parser);
 	tmpline = 1;
 	/* copy parser text */
-	while ((c = getwc(finput)) != EOF) {
+	while ((c = getc(finput)) != EOF) {
 		if (c == '\n')
 			tmpline++;
 		if (c == L'$') {
-			if ((c = getwc(finput)) != L'A')
-				(void) putwc(L'$', ftable);
+			if ((c = getc(finput)) != L'A')
+				(void) putc(L'$', ftable);
 			else { /* copy actions */
 				tmpline++;
 				faction = fopen(ACTNAME, "r");
@@ -307,8 +309,8 @@ others()
  */
 					error(gettext(
 					"cannot open action tempfile"));
-				while ((c = getwc(faction)) != EOF)
-					(void) putwc(c, ftable);
+				while ((c = getc(faction)) != EOF)
+					(void) putc(c, ftable);
 				(void) fclose(faction);
 				if (gen_lines)
 					(void) fprintf(ftable,
@@ -316,19 +318,19 @@ others()
 					    tmpline,
 					    parser);
 				ZAPFILE(ACTNAME);
-				c = getwc(finput);
+				c = getc(finput);
 			}
 		}
-		(void) putwc(c, ftable);
+		(void) putc(c, ftable);
 	}
 	(void) fclose(ftable);
 }
 
 
 /* copies string q into p, returning next free char ptr */
-static wchar_t *
+static char *
 chcopy(p, q)
-wchar_t *p, *q;
+char *p, *q;
 {
 	while (*p = *q++)
 		++p;
@@ -337,17 +339,17 @@ wchar_t *p, *q;
 
 #define	ISIZE 400
 /* creates output string for item pointed to by pp */
-wchar_t *
+char *
 writem(pp)
 int *pp;
 {
 	int i, *p;
 	static int isize = ISIZE;
-	static wchar_t *sarr = NULL;
-	wchar_t *q;
+	static char *sarr = NULL;
+	char  *q;
 
 	if (sarr == NULL) {
-		sarr = (wchar_t *)malloc(sizeof (wchar_t) * isize);
+		sarr = (char *)malloc(sizeof (char) * isize);
 		if (sarr == NULL)
 /*
  * TRANSLATION_NOTE  -- This is a message from yacc.
@@ -366,7 +368,7 @@ int *pp;
 	for (p = pp; *p > 0; ++p) /* NULL */;
 	p = prdptr[-*p];
 	q = chcopy(sarr, nontrst[*p-NTBASE].name);
-	q = chcopy(q, L" : ");
+	q = chcopy(q, " : ");
 
 	for (;;) {
 		*q++ = ++p == pp ? L'_' : L' ';
@@ -375,11 +377,11 @@ int *pp;
 			break;
 		q = chcopy(q, symnam(i));
 		while (q > &sarr[isize-30]) {
-			static wchar_t *sarrbase;
+			static char *sarrbase;
 
 			sarrbase = sarr;
 			isize += ISIZE;
-			sarr = (wchar_t *)
+			sarr = (char *)
 				realloc((char *)sarr, sizeof (*sarr) * isize);
 			if (sarr == NULL)
 /*
@@ -399,17 +401,17 @@ int *pp;
 
 	/* an item calling for a reduction */
 	if ((i = *pp) < 0) {
-		q = chcopy(q, L"    (");
-		(void) wsprintf(q, "%d)", -i);
+		q = chcopy(q, "    (");
+		(void) sprintf(q, "%d)", -i);
 	}
 	return (sarr);
 }
 
 /* return a pointer to the name of symbol i */
-wchar_t *
+char *
 symnam(int i)
 {
-	wchar_t *cp;
+	char *cp;
 
 	cp = (i >= NTBASE) ? nontrst[i-NTBASE].name : tokset[i].name;
 	if (*cp == L' ')
@@ -644,7 +646,7 @@ cpres()
 	ptrpy = pyield;
 
 	NTLOOP(i) {
-		c = i+NTBASE;
+		c = i + NTBASE;
 		pres[i] = ptrpy;
 		fatfl = 0;  /* make undefined  symbols  nonfatal */
 		PLOOP(0, j) {

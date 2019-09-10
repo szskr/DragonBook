@@ -38,10 +38,8 @@
 #include <string.h>
 #include <malloc.h>
 #include <values.h> 
-/*  #include <widec.h> */
 #include <unistd.h>
 #include <stdlib.h>
-#include <wctype.h>
 
 #ifdef	__cplusplus
 extern "C" {
@@ -51,7 +49,6 @@ extern "C" {
 #if u3b || u3b15 || u3b2 || vax || uts || sparc
 #define	WORD32
 #endif
-#include <libintl.h>
 
 	/* base of nonterminal internal numbers */
 
@@ -175,17 +172,17 @@ typedef struct item {
 } ITEM;
 
 typedef struct toksymb {
-	wchar_t *name;
+	char **name;
 	int value;
 } TOKSYMB;
 
 typedef struct mbclit {
-	wchar_t character;
+	char character;
 	int tvalue; /* token issued for the character */
 } MBCLIT;
 
 typedef struct ntsymb {
-	wchar_t *name;
+	char *name;
 	int tvalue;
 } NTSYMB;
 
@@ -221,7 +218,7 @@ extern int nnontersz;
 extern int nprod;	/* number of productions */
 extern int **prdptr;	/* pointers to descriptions of productions */
 extern int *levprd;	/* contains production levels to break conflicts */
-extern wchar_t *had_act; /* set if reduction has associated action code */
+extern char *had_act; /* set if reduction has associated action code */
 
 	/* state information */
 
@@ -282,15 +279,15 @@ extern void putitem(int *, LOOKSETS *);
 extern void go2out(void);
 extern void hideprod(void);
 extern void callopt(void);
-extern void warray(wchar_t *, int *, int);
-extern wchar_t *symnam(int);
-extern wchar_t *writem(int *);
+extern void warray(char *, int *, int);
+extern char *symnam(int);
+extern char *writem(int *);
 extern void exp_mem(int);
 extern void exp_act(int **);
 extern int apack(int *, int);
 extern int state(int);
 extern void fprintf3(FILE *, const char *, const wchar_t *, const char *, ...);
-extern void error3(const char *, const wchar_t *, const char *, ...);
+extern void error3(const char *, const char *, const char *, ...);
 
 extern wchar_t *wscpy(wchar_t *, const wchar_t *);
 extern size_t wslen(const wchar_t *);
@@ -323,6 +320,10 @@ extern char *parser;
 #define	ZAPFILE(x) (void)unlink(x)
 #endif
 
+#ifdef DRAGON
+#define PARSER "./yaccpar"
+#endif
+  
 #ifndef PARSER
 #define	PARSER "/usr/share/lib/ccs/yaccpar"
 #endif
