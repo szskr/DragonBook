@@ -35,12 +35,15 @@
 CSRC=		y1.c y2.c y3.c y4.c dragon.c
 OBJS=           y1.o y2.o y3.o y4.o dragon.o
 DYACC=		dyacc
-EXMPL434=        example434
+EXMPL434=       example434
+SGRAMMAR=	sgrammar.c
 CFLAGS=         -I./h -DDRAGON
 
-DFILES= $(OBJS) $(DYACC) $(EXMPL434) y.output y.tab.c y.tab.h example434.c
+GFILES= y.output y.tab.c y.tab.h example434.c y.tab.o\
+	example434.output sgrammar.output sgrammar.c
+DFILES= $(OBJS) $(DYACC) $(EXMPL434) $(GFILES)
 
-all: $(DYACC) $(EXMPL434)
+all: $(DYACC) $(EXMPL434) $(SGRAMMAR)
 
 $(DYACC): $(OBJS)
 	$(CC) -o $(DYACC)  $(OBJS)
@@ -48,7 +51,13 @@ $(DYACC): $(OBJS)
 $(EXMPL434): example434.y $(DYACC)
 	./$(DYACC) -dv example434.y
 	mv y.tab.c example434.c
+	mv y.output example434.output
 	$(CC) example434.c -o $(EXMPL434)
+
+$(SGRAMMAR): sgrammar.y $(DYACC)
+	./$(DYACC) -dv sgrammar.y
+	mv y.tab.c sgrammar.c
+	mv y.output sgrammar.output
 
 clean:
 	rm -f $(DFILES)

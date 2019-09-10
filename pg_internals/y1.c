@@ -935,7 +935,10 @@ cempty()
 #define	WHOKNOWS 0
 #define	OK 1
 	int i, *p;
-
+	
+	in_func();
+	d_trace("IN: y1 cempty()");
+	
 	/*
 	 * first, use the array pempty to detect productions
 	 * that can never be reduced
@@ -1015,6 +1018,8 @@ again:
 			}
 		}
 	}
+	d_trace("OUT:y1 cempty()");
+	out_func();
 }
 
 /* generate the states */
@@ -1027,6 +1032,8 @@ stagen()
 	register WSET *p, *q;
 
 	/* initialize */
+	in_func();
+	d_trace("IN: y1 stagen()");
 
 	nstate = 0;
 
@@ -1085,6 +1092,8 @@ stagen()
 		goto more; /* we have done one goto; do some more */
 	}
 	/* no more to do... stop */
+	d_trace("OUT:y1 stagen()");
+	out_func();
 }
 
 /* generate the closure of state i */
@@ -1100,7 +1109,10 @@ closure(int i)
 	ITEM *q;
 	register ITEM *p;
 	int idx1 = 0;
-
+	
+	in_func();
+	d_trace("IN: y1 closure()");
+	
 	++zzclose;
 
 	/* first, copy kernel of state i to wsets */
@@ -1216,11 +1228,13 @@ closure(int i)
 			(void) fprintf(foutput,  "\n");
 		}
 	}
+	
+	d_trace("OUT:y1 closure()");
+	out_func();
 }
 
 static LOOKSETS *
-flset(p)
-LOOKSETS *p;
+flset(LOOKSETS *p)
 {
 	/* decide if the lookahead set pointed to by p is known */
 	/* return pointer to a perminent location for the set */
@@ -1228,6 +1242,9 @@ LOOKSETS *p;
 	int j, *w;
 	int *u, *v;
 	register LOOKSETS *q;
+
+	in_func();
+	d_trace("IN: y1 flset()");
 
 	for (q = &lkst[nlset]; q-- > lkst; ) {
 		u = p->lset;
@@ -1237,6 +1254,8 @@ LOOKSETS *p;
 			if (*u++ != *v++)
 				goto more;
 		/* we have matched */
+		d_trace("OUT:y1 flset(1)");
+		out_func();
 		return (q);
 		more:;
 	}
@@ -1247,6 +1266,8 @@ LOOKSETS *p;
 		q = &lkst[nlset++];
 	}
 	SETLOOP(j) q->lset[j] = p->lset[j];
+	d_trace("OUT:y1 flset(2)");
+	out_func();
 	return (q);
 }
 
