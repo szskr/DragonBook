@@ -34,12 +34,21 @@
 
 CSRC=		y1.c y2.c y3.c y4.c dragon.c
 OBJS=           y1.o y2.o y3.o y4.o dragon.o
-PROG=		dyacc
+DYACC=		dyacc
+EXMPL434=        example434
 CFLAGS=         -I./h -DDRAGON
-DFILES= $(OBJS) $(PROG) y.output y.tab.c y.tab.h
 
-$(PROG): $(OBJS)
-	$(CC) -o $(PROG)  $(OBJS)
+DFILES= $(OBJS) $(DYACC) $(EXMPL434) y.output y.tab.c y.tab.h example434.c
+
+all: $(DYACC) $(EXMPL434)
+
+$(DYACC): $(OBJS)
+	$(CC) -o $(DYACC)  $(OBJS)
+
+$(EXMPL434): example434.y $(DYACC)
+	./$(DYACC) -dv example434.y
+	mv y.tab.c example434.c
+	$(CC) example434.c -o $(EXMPL434)
 
 clean:
 	rm -f $(DFILES)
