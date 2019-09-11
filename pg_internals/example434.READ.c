@@ -503,6 +503,6 @@ int yyparse()
 		case 7:
 		     {yyval.val = yypvt[-0].val;}
 		     break;
-		}
-		goto yystack;		/* reset registers in driver code */
+	}
+	goto yystack;		/* reset registers in driver code */
 }

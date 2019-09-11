@@ -1,7 +1,6 @@
 /*
  * Dragon Yacc Supplementary functions.
  */
-#include <stdio.h>
 #include "dragon.h"
 
 static int indent_level = 0;

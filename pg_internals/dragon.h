@@ -1,6 +1,7 @@
 /*
  * DragonBook
  */
+#include <stdio.h>
 
 void in_func();
 void out_func();
