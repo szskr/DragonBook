@@ -4,70 +4,41 @@
  
 #include <ctype.h>
 #include <stdio.h>
-int yylex(void);
-void yyerror (char const *);
-
-typedef union
-#ifdef __cplusplus
-	YYSTYPE
-#endif
- {
-  int val;
-  char *str;
-} YYSTYPE;
-# define id 257
-
 #include <inttypes.h>
-
-#ifdef __STDC__
 #include <stdlib.h>
 #include <string.h>
+
+#define id 257
+#define YYFLAG		(-10000000)
+#define YYMAXDEPTH 150
 #define	YYCONST	const
-#else
-#include <malloc.h>
-#include <memory.h>
-#define	YYCONST
-#endif
-
-#if defined(__cplusplus) || defined(__STDC__)
-
-#if defined(__cplusplus) && defined(__EXTERN_C__)
-extern "C" {
-#endif
-#ifndef yyerror
-#if defined(__cplusplus)
-	void yyerror(YYCONST char *);
-#endif
-#endif
-#ifndef yylex
-	int yylex(void);
-#endif
-	int yyparse(void);
-#if defined(__cplusplus) && defined(__EXTERN_C__)
-}
-#endif
-
-#endif
+#define YYERRCODE 256
 
 #define yyclearin yychar = -1
 #define yyerrok yyerrflag = 0
-extern int yychar;
-extern int yyerrflag;
+
+typedef int yytabelem;
+
+typedef union {
+  int val;
+  char *str;
+} YYSTYPE;
+
+void yyerror (char const *);
+void yyerror(YYCONST char *);
+int yylex(void);
+int yyparse(void);
+
 YYSTYPE yylval;
 YYSTYPE yyval;
-typedef int yytabelem;
-#ifndef YYMAXDEPTH
-#define YYMAXDEPTH 150
-#endif
-#if YYMAXDEPTH > 0
-int yy_yys[YYMAXDEPTH], *yys = yy_yys;
-YYSTYPE yy_yyv[YYMAXDEPTH], *yyv = yy_yyv;
-#else	/* user does initial allocation */
-int *yys;
-YYSTYPE *yyv;
-#endif
+
+int yy_yys[YYMAXDEPTH];
+int *yys = yy_yys;
+
+YYSTYPE yy_yyv[YYMAXDEPTH];
+YYSTYPE *yyv = yy_yyv;
+
 static int yymaxdepth = YYMAXDEPTH;
-# define YYERRCODE 256
 
 void
 yyerror(char const *s)
@@ -106,15 +77,15 @@ main(int argc, char *argv[])
   while (ret == 0)
     ret = yyparse();
 }
-static YYCONST yytabelem yyexca[] ={
--1, 1,
-	0, -1,
-	-2, 0,
-	};
+
+static YYCONST yytabelem yyexca[] = {
+  -1, 1, 0, -1, -2, 0,
+};
+
 # define YYNPROD 8
 # define YYLAST 218
-static YYCONST yytabelem yyact[]={
 
+static YYCONST yytabelem yyact[] = {
      5,     7,    13,     4,     8,     9,     3,     1,     2,     0,
      0,     0,     0,    12,    10,    11,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
@@ -136,43 +107,48 @@ static YYCONST yytabelem yyact[]={
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-     0,     0,     0,     0,     0,     0,     0,     6 };
-static YYCONST yytabelem yypact[]={
+     0,     0,     0,     0,     0,     0,     0,     6
+};
 
-   -40,-10000000,    -9,   -37,-10000000,   -40,-10000000,-10000000,   -40,   -40,
-   -39,   -37,-10000000,-10000000 };
-static YYCONST yytabelem yypgo[]={
+static YYCONST yytabelem yypact[] = {
+   -40, YYFLAG, -9, -37, YYFLAG, -40, YYFLAG, YYFLAG,
+   -40, -40, -39, -37, YYFLAG, YYFLAG
+};
 
-     0,     7,     8,     6,     3 };
-static YYCONST yytabelem yyr1[]={
+static YYCONST yytabelem yypgo[] = {
+     0,     7,     8,     6,     3
+};
 
-     0,     1,     2,     2,     3,     3,     4,     4 };
-static YYCONST yytabelem yyr2[]={
+static YYCONST yytabelem yyr1[] = {
+     0,     1,     2,     2,     3,
+     3,     4,     4
+};
 
-     0,     5,     7,     3,     7,     3,     7,     3 };
-static YYCONST yytabelem yychk[]={
+static YYCONST yytabelem yyr2[] = {
+     0,     5,     7,     3,     7,
+     3,     7,     3
+};
 
--10000000,    -1,    -2,    -3,    -4,    40,   257,    10,    43,    42,
-    -2,    -3,    -4,    41 };
-static YYCONST yytabelem yydef[]={
+static YYCONST yytabelem yychk[] = {
+  YYFLAG, -1, -2, -3, -4,  40, 257, 10,
+  43, 42, -2,    -3,    -4,    41
+};
 
-     0,    -2,     0,     3,     5,     0,     7,     1,     0,     0,
-     0,     2,     4,     6 };
-typedef struct
-#ifdef __cplusplus
-	yytoktype
-#endif
-{
-#ifdef __cplusplus
-const
-#endif
-char *t_name; int t_val; } yytoktype;
+static YYCONST yytabelem yydef[] = {
+     0,    -2,     0,     3,     5,     0,     7,     1,
+     0,     0,     0,     2,     4,     6
+};
+
+typedef struct yytoktype {
+  const char *t_name;
+  int t_val;
+} yytoktype;
+
 #ifndef YYDEBUG
-#	define YYDEBUG	0	/* don't allow debugging */
+#	define YYDEBUG	0
 #endif
 
 #if YYDEBUG
-
 yytoktype yytoks[] =
 {
 	"id",	257,
@@ -181,11 +157,7 @@ yytoktype yytoks[] =
 	"-unknown-",	-1	/* ends search */
 };
 
-#ifdef __cplusplus
-const
-#endif
-char * yyreds[] =
-{
+const char * yyreds[] = {
 	"-no such reduction-",
 	"S : E '\n'",
 	"E : E '+' T",
@@ -219,6 +191,7 @@ char * yyreds[] =
 	yylval = newvalue;\
 	goto yynewstate;\
 }
+
 #define YYRECOVERING()	(!!yyerrflag)
 #define YYNEW(type)	malloc(sizeof(type) * yynewmax)
 #define YYCOPY(to, from, type) \
@@ -235,11 +208,6 @@ char * yyreds[] =
 int yydebug;			/* set to 1 to get debugging */
 
 /*
-** driver internal defines
-*/
-#define YYFLAG		(-10000000)
-
-/*
 ** global variables used by the parser
 */
 YYSTYPE *yypv;			/* top of value stack */
@@ -252,28 +220,13 @@ int yynerrs;			/* number of errors */
 int yyerrflag;			/* error recovery flag */
 int yychar;			/* current input token number */
 
-#define YYLEX()		yylex()
-
 /*
 ** yyparse - return 0 if worked, 1 if syntax error not recovered from
 */
 
 int yyparse()
 {
-	register YYSTYPE *yypvt = 0;	/* top of value stack for $vars */
-
-#if defined(__cplusplus) || defined(lint)
-/*
-	hacks to please C++ and lint - goto's inside
-	switch should never be executed
-*/
-	static int __yaccpar_lint_hack__ = 0;
-	switch (__yaccpar_lint_hack__)
-	{
-		case 1: goto yyerrlab;
-		case 2: goto yynewstate;
-	}
-#endif
+	YYSTYPE *yypvt = 0;	/* top of value stack for $vars */
 
 	/*
 	** Initialize externals - yyparse may be called more than once
@@ -285,23 +238,11 @@ int yyparse()
 	yynerrs = 0;
 	yyerrflag = 0;
 	yychar = -1;
-
-#if YYMAXDEPTH <= 0
-	if (yymaxdepth <= 0)
 	{
-		if ((yymaxdepth = YYEXPAND(0)) <= 0)
-		{
-			yyerror("yacc initialization error");
-			YYABORT;
-		}
-	}
-#endif
-
-	{
-		register YYSTYPE *yy_pv;	/* top of value stack */
-		register int *yy_ps;		/* top of state stack */
-		register int yy_state;		/* current state */
-		register int  yy_n;		/* internal state number info */
+		YYSTYPE *yy_pv;	/* top of value stack */
+		int *yy_ps;		/* top of state stack */
+		int yy_state;		/* current state */
+		int  yy_n;		/* internal state number info */
 	goto yystack;	/* moved from 6 lines above to here to please C++ */
 
 		/*
@@ -331,7 +272,7 @@ int yyparse()
 		** put a state and value onto the stacks
 		*/
 
-		if ( ++yy_ps >= &yys[ yymaxdepth ] )	/* room on stack? */
+		if (++yy_ps >= &yys[yymaxdepth])	/* room on stack? */
 		{
 			/*
 			** reallocate and recover.  Note that pointers
@@ -341,14 +282,12 @@ int yyparse()
 			long yypv_index = (yy_pv - yyv);
 			long yypvt_index = (yypvt - yyv);
 			int yynewmax;
-#ifdef YYEXPAND
-			yynewmax = YYEXPAND(yymaxdepth);
-#else
+			
 			yynewmax = 2 * yymaxdepth;	/* double table size */
 			if (yymaxdepth == YYMAXDEPTH)	/* first time growth */
 			{
-				char *newyys = (char *)YYNEW(int);
-				char *newyyv = (char *)YYNEW(YYSTYPE);
+				char *newyys = (char *) YYNEW(int);
+				char *newyyv = (char *) YYNEW(YYSTYPE);
 				if (newyys != 0 && newyyv != 0)
 				{
 					yys = YYCOPY(newyys, yys, int);
@@ -356,18 +295,15 @@ int yyparse()
 				}
 				else
 					yynewmax = 0;	/* failed */
-			}
-			else				/* not first time */
-			{
-				yys = YYENLARGE(yys, int);
+			} else {			/* not first time */
+			        yys = YYENLARGE(yys, int);
 				yyv = YYENLARGE(yyv, YYSTYPE);
 				if (yys == 0 || yyv == 0)
 					yynewmax = 0;	/* failed */
 			}
-#endif
 			if (yynewmax <= yymaxdepth)	/* tables not expanded */
 			{
-				yyerror( "yacc stack overflow" );
+				yyerror("yacc stack overflow");
 				YYABORT;
 			}
 			yymaxdepth = yynewmax;
@@ -383,43 +319,43 @@ int yyparse()
 		** we have a new state - find out what to do
 		*/
 	yy_newstate:
-		if ( ( yy_n = yypact[ yy_state ] ) <= YYFLAG )
+		if ((yy_n = yypact[yy_state]) <= YYFLAG)
 			goto yydefault;		/* simple state */
-		if ( ( yychar < 0 ) && ( ( yychar = YYLEX() ) < 0 ) )
+		if ((yychar < 0 ) && ((yychar = yylex()) < 0))
 			yychar = 0;		/* reached EOF */
-		if ( ( ( yy_n += yychar ) < 0 ) || ( yy_n >= YYLAST ) )
+		if (((yy_n += yychar) < 0) || (yy_n >= YYLAST))
 			goto yydefault;
-		if ( yychk[ yy_n = yyact[ yy_n ] ] == yychar )	/*valid shift*/
+		if (yychk[yy_n = yyact[yy_n]] == yychar)	/*valid shift*/
 		{
 			yychar = -1;
 			yyval = yylval;
 			yy_state = yy_n;
-			if ( yyerrflag > 0 )
+			if (yyerrflag > 0)
 				yyerrflag--;
 			goto yy_stack;
 		}
 
 	yydefault:
-		if ( ( yy_n = yydef[ yy_state ] ) == -2 )
+		if((yy_n = yydef[ yy_state]) == -2)
 		{
-			if ( ( yychar < 0 ) && ( ( yychar = YYLEX() ) < 0 ) )
+			if ((yychar < 0) && ((yychar = yylex()) < 0))
 				yychar = 0;		/* reached EOF */
 
 			/*
 			** look through exception table
 			*/
 			{
-				register YYCONST int *yyxi = yyexca;
+				YYCONST int *yyxi = yyexca;
 
-				while ( ( *yyxi != -1 ) ||
-					( yyxi[1] != yy_state ) )
+				while ((*yyxi != -1) ||
+					(yyxi[1] != yy_state))
 				{
 					yyxi += 2;
 				}
-				while ( ( *(yyxi += 2) >= 0 ) &&
-					( *yyxi != yychar ) )
+				while ((*(yyxi += 2) >= 0) &&
+				       (*yyxi != yychar))
 					;
-				if ( ( yy_n = yyxi[1] ) < 0 )
+				if ((yy_n = yyxi[1]) < 0)
 					YYACCEPT;
 			}
 		}
@@ -427,10 +363,10 @@ int yyparse()
 		/*
 		** check for syntax error
 		*/
-		if ( yy_n == 0 )	/* have an error */
+		if (yy_n == 0)	/* have an error */
 		{
 			/* no worry about speed here! */
-			switch ( yyerrflag )
+			switch (yyerrflag)
 			{
 			case 0:		/* new error */
 				yyerror( "syntax error" );
@@ -454,17 +390,19 @@ int yyparse()
 				** find state where "error" is a legal
 				** shift action
 				*/
-				while ( yy_ps >= yys )
+				while (yy_ps >= yys)
 				{
 					yy_n = yypact[ *yy_ps ] + YYERRCODE;
-					if ( yy_n >= 0 && yy_n < YYLAST &&
-						yychk[yyact[yy_n]] == YYERRCODE)					{
+					if (yy_n >= 0 && yy_n < YYLAST &&
+					    yychk[yyact[yy_n]] == YYERRCODE)
+					{
 						/*
 						** simulate shift of "error"
 						*/
 						yy_state = yyact[ yy_n ];
 						goto yy_stack;
 					}
+					
 					/*
 					** current state has no shift on
 					** "error", pop stack
@@ -484,7 +422,7 @@ int yyparse()
 				yychar = -1;
 				goto yy_newstate;
 			}
-		}/* end if ( yy_n == 0 ) */
+		} /* end if (yy_n == 0) */
 		/*
 		** reduction by production yy_n
 		** put stack tops, etc. so things right after switch
@@ -506,33 +444,33 @@ int yyparse()
 		*/
 		{
 			/* length of production doubled with extra bit */
-			register int yy_len = yyr2[ yy_n ];
+			int yy_len = yyr2[yy_n];
 
-			if ( !( yy_len & 01 ) )
+			if (!(yy_len & 01))
 			{
 				yy_len >>= 1;
-				yyval = ( yy_pv -= yy_len )[1];	/* $$ = $1 */
-				yy_state = yypgo[ yy_n = yyr1[ yy_n ] ] +
-					*( yy_ps -= yy_len ) + 1;
-				if ( yy_state >= YYLAST ||
-					yychk[ yy_state =
-					yyact[ yy_state ] ] != -yy_n )
+				yyval = (yy_pv -= yy_len)[1];	/* $$ = $1 */
+				yy_state = yypgo[ yy_n = yyr1[ yy_n]] +
+					*(yy_ps -= yy_len) + 1;
+				if (yy_state >= YYLAST ||
+					yychk[yy_state =
+					yyact[yy_state]] != -yy_n)
 				{
-					yy_state = yyact[ yypgo[ yy_n ] ];
+					yy_state = yyact[yypgo[yy_n]];
 				}
 				goto yy_stack;
 			}
 			yy_len >>= 1;
-			yyval = ( yy_pv -= yy_len )[1];	/* $$ = $1 */
-			yy_state = yypgo[ yy_n = yyr1[ yy_n ] ] +
-				*( yy_ps -= yy_len ) + 1;
-			if ( yy_state >= YYLAST ||
-				yychk[ yy_state = yyact[ yy_state ] ] != -yy_n )
+			yyval = (yy_pv -= yy_len)[1];	/* $$ = $1 */
+			yy_state = yypgo[yy_n = yyr1[ yy_n]] +
+				*(yy_ps -= yy_len) + 1;
+			if (yy_state >= YYLAST ||
+				yychk[yy_state = yyact[yy_state]] != -yy_n)
 			{
-				yy_state = yyact[ yypgo[ yy_n ] ];
+				yy_state = yyact[yypgo[yy_n]];
 			}
 		}
-					/* save until reenter driver code */
+	       /* save until reenter driver code */
 		yystate = yy_state;
 		yyps = yy_ps;
 		yypv = yy_pv;
@@ -540,9 +478,8 @@ int yyparse()
 	/*
 	** code supplied by user is placed in this switch
 	*/
-	switch( yytmp )
+	switch(yytmp)
 	{
-		
 		case 1:
 		     yyval.val = yypvt[-1].val;
     		     printf("\tval = %d\n", yyval.val);
