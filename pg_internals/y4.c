@@ -496,9 +496,13 @@ gtnm()
 	/* read and convert an integer from the standard input */
 	/* return the terminating character */
 	/* blanks, tabs, and newlines are ignored */
-	
-	in_func();
-	d_trace("IN: y4 gtnm()");
+
+	if (0) {
+	  /* DRAGON: let's shut it for now. */
+	  in_func();
+	  d_trace("IO: y4 gtnm()");
+	  out_func();
+	}
 
 	s = 1;
 	val = 0;
@@ -511,13 +515,10 @@ gtnm()
 		else
 			break;
 	}
-	*optimmem++ = s*val;
+	*optimmem++ = s * val;
 	if (optimmem >= &tracemem[new_memsize])
 		exp_mem(0);
 
-       	d_trace("OUT:y4 gtnm()");
-	out_func();
-	
 	return (c);
 }
 
