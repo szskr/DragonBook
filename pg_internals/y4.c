@@ -56,6 +56,9 @@ callopt()
 {
 	int i, *p, j, k, *q;
 
+	in_func();
+	d_trace("IN: y4 callopt()");
+
 	ggreed = (int *) malloc(sizeof (int) * size);
 	pgo = (int *) malloc(sizeof (int) * size);
 	yypgo = &nontrst[0].tvalue;
@@ -193,6 +196,9 @@ callopt()
 	aoutput();
 	osummary();
 	ZAPFILE(TEMPNAME);
+	
+	d_trace("OUT:y4 callopt()");
+	out_func();
 }
 
 static void
@@ -200,6 +206,9 @@ gin(int i)
 {
 	int *r, *s, *q1, *q2;
 	int *p;
+
+	in_func();
+	d_trace("IN: y4 gin()");
 
 	/* enter gotos on nonterminal i into array amem */
 	ggreed[i] = 0;
@@ -267,6 +276,9 @@ gin(int i)
 	}
 	/* error( "cannot place goto %d\n", i ); */
 	nextgi:;
+
+	d_trace("OUT:y4 gin()");
+	out_func();
 }
 
 static void
@@ -274,6 +286,9 @@ stin(int i)
 {
 	int *r, n, nn, flag, j, *q1, *q2;
 	int *s;
+
+	in_func();
+	d_trace("IN: y4 stin()");
 
 	tystate[i] = 0;
 
@@ -326,6 +341,9 @@ stin(int i)
 						    "State %d: entry at"
 						    " %d equals state %d\n",
 						    i, n, j);
+					
+					d_trace("OUT:y4 stin(1)");
+					out_func();
 					return;
 				}
 				goto nextn;  /* we have some disagreement */
@@ -356,6 +374,9 @@ stin(int i)
 		if (adb > 1)
 			(void) fprintf(ftable,
 			    "State %d: entry at %d\n", i, indgo[i]);
+		
+		d_trace("OUT:y4 stin(2)");
+		out_func();
 		return;
 		nextn:;
 	}
@@ -372,6 +393,11 @@ nxti()
 {
 	/* finds the next i */
 	int i, max, maxi;
+
+	in_func();
+	d_trace("IO: y4 nxti()");
+	out_func();
+	
 	max = 0;
 
 	for (i = 1; i <= nnonter; ++i)
@@ -399,6 +425,10 @@ osummary()
 	/* write summary */
 	int i, *p;
 
+	in_func();
+	d_trace("IO: y4 osummary()");
+	out_func();
+
 	if (foutput == NULL)
 		return;
 	i = 0;
@@ -415,12 +445,14 @@ osummary()
 	    "%" PRIdPTR " table entries, %d zero\n", (maxa-amem) + 1, i);
 	(void) fprintf(foutput,
 	    "maximum spread: %d, maximum offset: %d\n", maxspr, maxoff);
-
 }
 
 static void
 aoutput()
 {
+  in_func();
+  d_trace("IN: y4 aoutput()");
+  
 	/* this version is for C */
 	/* write out the optimized parser */
 
@@ -428,6 +460,9 @@ aoutput()
 	arout("yyact", amem, (maxa - amem) + 1);
 	arout("yypact", indgo, nstate);
 	arout("yypgo", pgo, nnonter + 1);
+	
+	d_trace("OUT:y4 aoutput()");
+	out_func();
 }
 
 static void
@@ -436,6 +471,10 @@ char *s;
 int *v, n;
 {
 	int i;
+
+	in_func();
+	d_trace("IO: y4 arout()");
+	out_func();
 
 	(void) fprintf(ftable, WSFMT("static YYCONST yytabelem %s[]={\n"), s);
 	for (i = 0; i < n; ) {
@@ -457,6 +496,9 @@ gtnm()
 	/* read and convert an integer from the standard input */
 	/* return the terminating character */
 	/* blanks, tabs, and newlines are ignored */
+	
+	in_func();
+	d_trace("IN: y4 gtnm()");
 
 	s = 1;
 	val = 0;
@@ -472,6 +514,10 @@ gtnm()
 	*optimmem++ = s*val;
 	if (optimmem >= &tracemem[new_memsize])
 		exp_mem(0);
+
+       	d_trace("OUT:y4 gtnm()");
+	out_func();
+	
 	return (c);
 }
 
@@ -481,6 +527,11 @@ int **ptr;
 {
 	static int *actbase;
 	int i;
+
+	in_func();
+	d_trace("IO: y4 finact()");
+	out_func();
+	
 	new_actsize += ACTSIZE;
 
 	actbase = amem;

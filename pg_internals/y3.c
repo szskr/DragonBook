@@ -49,6 +49,9 @@ output()
 	int i, k, c;
 	register WSET *u, *v;
 
+	in_func();
+	d_trace("IN: y3 output()");
+
 	(void) fprintf(ftable, "static YYCONST yytabelem yyexca[] ={\n");
 
 	SLOOP(i) { /* output the stuff for state i */
@@ -118,6 +121,9 @@ output()
 	if (nmbchars > 0) {
 		wrmbchars();
 	}
+	
+	d_trace("OUT:y3 output()");
+	out_func();
 }
 
 static int pkdebug = 0;
@@ -132,6 +138,9 @@ int n;
 	int *q, *rr;
 	int diff;
 
+	in_func();
+	d_trace("IN: y3 apack()");
+
 	/*
 	 * we don't need to worry about checking because we
 	 * we will only look up entries known to be there...
@@ -142,8 +151,11 @@ int n;
 	q = p + n;
 	for (pp = p, off = 0; *pp == 0 && pp <= q; ++pp, --off)
 		/* NULL */;
-	if (pp > q)
+	if (pp > q) {
+	  	d_trace("OUT:y3 apack(1)");
+		out_func();
 		return (0);  /* no actions */
+	}
 	p = pp;
 
 	/* now, find a place for the elements from p to q, inclusive */
@@ -192,6 +204,10 @@ int n;
 				(void) fprintf(foutput, "\n");
 			}
 		}
+		
+		d_trace("OUT:y3 apack(2)");
+		out_func();
+		
 		return (off);
 		nextk:;
 	}
@@ -204,6 +220,10 @@ go2out()
 {
 	/* output the gotos for the nontermninals */
 	int i, j, k, best, count, cbest, times;
+
+	in_func();
+	d_trace("IO: y3 go2out()");
+	out_func();
 
 	(void) fprintf(ftemp, "$\n");  /* mark begining of gotos */
 
@@ -247,11 +267,15 @@ go2out()
 }
 
 static int g2debug = 0;
-static void go2gen(int c)
+static void
+go2gen(int c)
 {
 	/* output the gotos for nonterminal c */
 	int i, work, cc;
 	ITEM *p, *q;
+
+	in_func();
+	d_trace("IN: y3 go2gen()");
 
 	/* first, find nonterminals with gotos on c */
 	aryfil(temp1, nnonter + 1, 0);
@@ -302,6 +326,8 @@ static void go2gen(int c)
 			}
 		}
 	}
+	d_trace("OUT:y3 go2gen()");
+	out_func();
 }
 
 /* decide a shift/reduce conflict by precedence.  */
@@ -309,6 +335,10 @@ static void
 precftn(int r, int t, int s)
 {
 
+  in_func();
+  d_trace(":IO: y3 preftn(shift:reduce conflict:)");
+  out_func();
+  
 	/*
 	 * r is a rule number, t a token number
 	 * the conflict is in state s
@@ -354,6 +384,9 @@ wract(int i)
 	int p, p0, p1;
 	int ntimes, tred, count, j;
 	int flag;
+	
+	in_func();
+	d_trace("IN: y3 wract()");
 
 	/* find the best choice for lastred */
 
@@ -424,6 +457,10 @@ wract(int i)
 		(void) fprintf(ftable, "\t-2, %d,\n", lastred);
 	}
 	(void) fprintf(ftemp, "\n");
+	
+	d_trace("OUT:y3 wract()");
+	out_func();
+
 }
 
 static void
@@ -433,6 +470,10 @@ wrstate(int i)
 	int j0, j1;
 	register ITEM *pp, *qq;
 	register WSET *u;
+
+	in_func();
+	d_trace("IO: y3 wrstate()");
+	out_func();
 
 	if (foutput == NULL)
 		return;
@@ -483,6 +524,10 @@ wrstate(int i)
 static void
 wdef(char *s, int n)
 {
+  in_func();
+  d_trace("IO: y3 wdef()");
+  out_func();
+  
 	/* output a definition of s to the value n */
 	(void) fprintf(ftable, WSFMT("# define %s %d\n"), s, n);
 }
@@ -493,6 +538,11 @@ char *s;
 int *v, n;
 {
 	int i;
+	
+	in_func();
+	d_trace("IO: y3 warray()");
+	out_func();
+	
 	(void) fprintf(ftable, WSFMT("static YYCONST yytabelem %s[]={\n"), s);
 	for (i = 0; i < n; ) {
 		if (i % 10 == 0)
@@ -516,6 +566,10 @@ hideprod()
 	 */
 
 	int i, j;
+
+	in_func();
+	d_trace("IO: y3 hidepro()");
+	out_func();
 
 	j = 0;
 	levprd[0] = 0;
@@ -553,6 +607,11 @@ static void
 wrmbchars()
 {
 	int i;
+	
+	in_func();
+	d_trace("IO: y3 wrmbchar()");
+	out_func();
+ 
 	wdef("YYNMBCHARS", nmbchars);
 	qsort(mbchars, nmbchars, sizeof (*mbchars),
 	    (int (*)(const void *, const void *))cmpmbchars);

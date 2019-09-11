@@ -847,15 +847,13 @@ static void
 finact()
 {
   	in_func();
-	d_trace("IN: y2 finact()");
+	d_trace("IO: y2 finact()");
+	out_func();
 
 	/* finish action routine */
 	(void) fclose(faction);
 	(void) fprintf(ftable, "# define YYERRCODE %d\n", tokset[2].value);
 
-	
-	d_trace("OUT:y2 finact()");
-	out_func();
 }
 
 static char *
@@ -869,7 +867,8 @@ char *s;
 	int len = strlen(s);
 	
   	in_func();
-	d_trace("IN: y2 cstash()");
+	d_trace("IO: y2 cstash()");
+	out_func();
 	
 	/*
 	 * 2/29/88 -
@@ -901,9 +900,6 @@ char *s;
 	} while (*s++);
 	used += cnamp - temp;
 
-	d_trace("OUT:y2 cstash()");
-	out_func();
-	
 	return (temp);
 }
 
@@ -921,7 +917,7 @@ defin(int t, char *s)
 		if (++nnonter >= nnontersz)
 			exp_nonterm();
 		nontrst[nnonter].name = cstash(s);
-		d_trace("OUT:y2 defin()");
+		d_trace("OUT:y2 defin(1)");
 		out_func();
 		return (NTBASE + nnonter);
 	}
@@ -1071,7 +1067,7 @@ defin(int t, char *s)
 	tokset[ntokens].value = val;
 	toklev[ntokens] = 0;
 
-	d_trace("OUT:y2 defin()");
+	d_trace("OUT:y2 defin(2)");
 	out_func();
 
 	return (ntokens);
@@ -1086,7 +1082,8 @@ defout()
 	char *cp;
 
 	in_func();
-	d_trace("IN: y2 defout()");
+	d_trace("IO: y2 defout()");
+	out_func();
 	
 	for (i = ndefout; i <= ntokens; ++i) {
 
@@ -1121,9 +1118,6 @@ defout()
 	nodef:;
 	}
 	ndefout = ntokens+1;
-	
-	d_trace("OUT:y2 defout()");
-	out_func();
 }
 
 static int
@@ -1308,6 +1302,11 @@ fdtype(int t)
 {
 	/* determine the type of a symbol */
 	int v;
+
+	in_func();
+	d_trace("IO: y2 fdtype()");
+	out_func();
+	
 	if (t >= NTBASE)
 		v = nontrst[t-NTBASE].tvalue;
 	else
@@ -1325,23 +1324,34 @@ chfind(int t, char *s)
 {
 	int i;
 
+	in_func();
+	d_trace("IN: y2 chfind()");
+
 	if (s[0] == ' ')
 		t = 0;
 	TLOOP(i) {
 		if (!strcmp(s, tokset[i].name)) {
-			return (i);
+		  d_trace("OUT:y2 chfind(1)");
+		  out_func();
+		  return (i);
 		}
 	}
 	NTLOOP(i) {
 		if (!strcmp(s, nontrst[i].name)) {
-			return (i + NTBASE);
+		  d_trace("OUT:y2 chfind(2)");
+		  out_func();
+		  return (i + NTBASE);
 		}
 	}
 	/* cannot find name */
 	if (t > 1)
 		error(gettext(
 		"%s should have been defined earlier"), s);
-	return (defin(t, s));
+	
+	i = defin(t, s);
+	d_trace("OUT:y2 chfind(3)");
+	out_func();
+	return (i);
 }
 
 static void
@@ -1352,6 +1362,11 @@ cpyunion()
 	 * and the define file if present
 	 */
 	int level, c;
+	
+	in_func();
+	d_trace("IO: y2 cpyunion()");
+	out_func();
+	
 	if (gen_lines)
 		(void) fprintf(ftable, "\n# line %d \"%s\"\n", lineno, infile);
 	(void) fprintf(ftable, "typedef union\n");
@@ -1406,6 +1421,11 @@ cpycode()
 	/* copies code between \{ and \} */
 
 	int c;
+	
+	in_func();
+	d_trace("IO: y2 cpycode()");
+	out_func();
+	
 	c = getc(finput);
 	if (c == '\n') {
 		c = getc(finput);
@@ -1445,6 +1465,10 @@ skipcom()
 	/* skip over comments */
 	int c, i = 0;  /* i is the number of lines skipped */
 
+	in_func();
+	d_trace("IO: y2 skipcom()");
+	out_func();
+
 	/* skipcom is called after reading a / */
 
 	if (getc(finput) != '*')
@@ -1478,6 +1502,10 @@ cpyact(int offset)
 	int brac, c, match, i, t, j, s, tok, argument, m;
 	char id_name[NAMESIZE+1];
 	int id_idx = 0;
+
+	in_func();
+	d_trace("IO: y2 cpyact()");
+	out_func();
 
 	if (gen_lines) {
 		(void) fprintf(faction, "\n# line %d \"%s\"\n", lineno, infile);
@@ -1753,6 +1781,11 @@ char *s;
 {
 	static int lhs_len = LHS_TEXT_LEN;
 	int s_lhs = strlen(s);
+	
+	in_func();
+	d_trace("IN: y2 lhsfill()");
+	out_func();
+	
 	if (s_lhs >= lhs_len) {
 		lhs_len = s_lhs + 2;
 		lhstext = (char *)
@@ -1779,6 +1812,10 @@ char *s;	/* either name or 0 */
 	static int used = 0;
 	int s_rhs = (s == NULL ? 0 : strlen(s));
 	char *p;
+
+	in_func();
+	d_trace("IO: y2 rhsfill()");
+	out_func();
 
 	if (!s)	/* print out and erase old text */
 	{
@@ -1828,6 +1865,10 @@ lrprnt()	/* print out the left and right hand sides */
 {
 	char *rhs;
 	char *m_rhs = NULL;
+
+	in_func();
+	d_trace("IN: y2 lrprnt()");
+	out_func();
 
 	if (!*rhstext)		/* empty rhs - print usual comment */
 		rhs = " /* empty */";
@@ -1921,6 +1962,10 @@ beg_debug()	/* dump initial sequence for fdebug file */
 static void
 end_toks()	/* finish yytoks array, get ready for yyred's strings */
 {
+  in_func();
+  d_trace("IN: y2 end_toks()");
+  out_func();
+  
 	(void) fprintf(fdebug, "\t\"-unknown-\",\t-1\t/* ends search */\n");
 	(void) fprintf(fdebug, "};\n\n");
 	(void) fprintf(fdebug,
@@ -1947,6 +1992,10 @@ end_debug()	/* finish yyred array, close file */
 static void
 exp_tokname()
 {
+  in_func();
+  d_trace("IO: y2 exp_tokname()");
+  out_func();
+  
 	toksize += NAMESIZE;
 	tokname = (char *)
 	    realloc((char *)tokname, sizeof (char) * toksize);
@@ -1962,6 +2011,10 @@ exp_prod()
 {
 	int i;
 	nprodsz += NPROD;
+	
+	in_func();
+	d_trace("IO: y2 exp_prod()");
+	out_func();
 
 	prdptr = (int **) realloc((char *)prdptr, sizeof (int *) * (nprodsz+2));
 	levprd  = (int *)  realloc((char *)levprd, sizeof (int) * (nprodsz+2));
@@ -1997,6 +2050,10 @@ exp_prod()
 static void
 exp_ntok()
 {
+  	in_func();
+	d_trace("IO: y2 exp_ntok()");
+	out_func();
+	
 	ntoksz += NTERMS;
 
 	tokset = (TOKSYMB *) realloc((char *)tokset, sizeof (TOKSYMB) * ntoksz);
@@ -2019,6 +2076,10 @@ exp_ntok()
 static void
 exp_nonterm()
 {
+   	in_func();
+	d_trace("IO: y2 exp_nonterm()");
+	out_func();
+	
 	nnontersz += NNONTERM;
 
 	nontrst = (NTSYMB *)
@@ -2043,6 +2104,10 @@ int flag;
 	int i;
 	static int *membase;
 	new_memsize += MEMSIZE;
+	
+	in_func();
+	d_trace("IO: y2 exp_mem()");
+	out_func();
 
 	membase = tracemem;
 	tracemem = (int *)
@@ -2068,17 +2133,20 @@ int flag;
 	}
 }
 
-static int
-findchtok(chlit)
-int chlit;
 /*
  * findchtok(chlit) returns the token number for a character literal
  * chlit that is "bigger" than 255 -- the max char value that the
  * original yacc was build for.  This yacc treate them as though
  * an ordinary token.
  */
+static int
+findchtok(int chlit)
 {
 	int	i;
+
+	in_func();
+	d_trace("IO: y2 findchtok()");
+	out_func();
 
 	if (chlit < 0xff)
 		return (chlit); /* single-byte char */
@@ -2124,6 +2192,10 @@ put_prefix_define(char *pre)
 		"nerrs",
 		NULL};
 	int i;
+	
+	in_func();
+	d_trace("IO: y2 put_prefix_define()");
+	out_func();
 
 	for (i = 0; syms[i]; i++)
 		(void) fprintf(ftable, "#define\tyy%s\t%s%s\n",

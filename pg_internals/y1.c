@@ -112,7 +112,9 @@ int
 main(int argc, char *argv[])
 {
 	(void) setlocale(LC_ALL, "");
+	int i_level = d_indent_level();
 
+	fprintf(stderr, "INDENT_LEVEL (%d) in MAIN at the beginning.\n", i_level);
 	d_trace("dyacc: IN  main()");
 	
 	setup(argc, argv); /* initialize and read productions */
@@ -124,16 +126,19 @@ main(int argc, char *argv[])
 			/* given nonterminal */
 	cempty(); 	/* make a table of which nonterminals can match	*/
 			/* the empty string */
-	cpfir(); 	/* make a table of firsts of nonterminals */
+
+	cpfir(); 	/* make a table of firsts of nonterminals */		
 	stagen();	/* generate the states 	*/
 	output();  	/* write the states and the tables */
-	go2out();
-	hideprod();
+ 	go2out();
+	hideprod();		
 	summary();
 	callopt();
 	others();
        
         d_trace("dyacc: OUT main()");
+	fprintf(stderr, "INDENT_LEVEL (%d) in MAIN at end.\n", d_indent_level());
+	
 	return (0);
 }
 
@@ -671,7 +676,7 @@ cpres()
 	int c, j, i;
 	
 	in_func();
-	d_trace("IO: y1 opres()");
+	d_trace("IO: y1 cpres()");
 	out_func();
 
 	/*
@@ -1277,6 +1282,10 @@ exp_lkst()
 	int i, j;
 	static LOOKSETS *lookbase;
 
+	in_func();
+	d_trace("IO: y1 exp_lkst()");
+	out_func();
+
 	lookbase = lkst;
 	lsetsize += LSETSIZE;
 	tmp_lset = (int *)
@@ -1322,6 +1331,10 @@ exp_wsets()
 {
 	int i, j;
 
+	in_func();
+	d_trace("IO: y1 exp_wsets()");
+	out_func();
+
 	wsetsz += WSETSIZE;
 	tmp_lset = (int *)
 	    calloc((size_t)(TBITSET * (wsetsz-WSETSIZE)), sizeof (int));
@@ -1357,6 +1370,10 @@ exp_wsets()
 static void
 exp_states()
 {
+  in_func();
+  d_trace("IO: y1 exp_states()");
+  out_func();
+  
 	nstatesz += NSTATES;
 
 	pstate = (ITEM **)
@@ -1384,6 +1401,9 @@ static void
 exp_psmem()
 {
 	int i;
+	in_func();
+	d_trace("IO: y1 exp_pmem()");
+	out_func();
 
 	new_pstsize += PSTSIZE;
 	psmem = (ITEM *) realloc((char *)psmem, sizeof (ITEM) * new_pstsize);

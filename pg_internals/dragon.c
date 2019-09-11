@@ -7,7 +7,7 @@
 static int indent_level = 0;
 
 /*
- * tracer
+ * tracer routines
  */
 
 void
@@ -20,6 +20,12 @@ void
 out_func()
 {
   indent_level--;
+}
+
+int
+d_indent_level()
+{
+  return (indent_level);
 }
 
 void
