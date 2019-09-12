@@ -1,0 +1,103 @@
+
+/* sizes and limits */
+
+#define	ACTSIZE 4000
+#define	MEMSIZE 2000
+#define	PSTSIZE 1024
+#define	NSTATES 1000
+#define	NTERMS 127
+#define	NPROD 300
+#define	NNONTERM 600
+#define	TEMPSIZE 800
+#define	CNAMSZ 1000
+#define	LSETSIZE 950
+#define	WSETSIZE 850
+
+#define	NAMESIZE 50
+#define	NTYPES 1000
+
+#define	LKFACTOR 5
+	/* structure declarations */
+
+typedef struct looksets {
+	int *lset;
+} LOOKSETS;
+
+typedef struct item {
+	int *pitem;
+	LOOKSETS *look;
+} ITEM;
+
+typedef struct toksymb {
+	char *name;
+	int value;
+} TOKSYMB;
+
+typedef struct ntsymb {
+	char *name;
+	int tvalue;
+} NTSYMB;
+
+typedef struct wset {
+	int *pitem;
+	int flag;
+	LOOKSETS ws;
+} WSET;
+
+	/* token information */
+
+extern int ntokens;	/* number of tokens */
+extern TOKSYMB *tokset;
+extern int ntoksz;
+
+	/* nonterminal information */
+
+extern int nnonter;	/* the number of nonterminals */
+extern NTSYMB *nontrst;
+extern int nnontersz;
+
+	/* grammar rule information */
+
+extern int nprod;	/* number of productions */
+extern int **prdptr;	/* pointers to descriptions of productions */
+extern int *levprd;	/* contains production levels to break conflicts */
+extern char *had_act; /* set if reduction has associated action code */
+
+	/* state information */
+
+extern int nstate;		/* number of states */
+extern ITEM **pstate;	/* pointers to the descriptions of the states */
+extern int *tystate;	/* contains type information about the states */
+extern int *defact;	/* the default action of the state */
+
+extern int size;
+
+	/* lookahead set information */
+
+extern int TBITSET;
+extern LOOKSETS *lkst;
+extern int nolook;  /* flag to turn off lookahead computations */
+
+	/* working set information */
+
+extern WSET *wsets;
+
+	/* define external functions */
+
+extern void setup(int, char *[]);
+extern void closure(int);
+extern void output(void);
+extern void aryfil(int *, int, int);
+extern void error(char *, ...);
+extern void warning(int, char *, ...);
+extern void putitem(int *, LOOKSETS *);
+extern void go2out(void);
+extern void hideprod(void);
+extern void callopt(void);
+extern void warray(char *, int *, int);
+extern char *symnam(int);
+extern char *writem(int *);
+extern void exp_mem(int);
+extern void exp_act(int **);
+extern int apack(int *, int);
+extern int state(int);
