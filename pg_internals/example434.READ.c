@@ -1,5 +1,6 @@
 /*
- * READ THIS FILE
+ * example434.READ.c
+ *  edited (yacc generated) example434.c
  */
  
 #include <ctype.h>
