@@ -1,3 +1,8 @@
+/*
+ * Commentary on yacc source codes
+ *   f1.c
+ */
+ 
 int TBITSET;
 static int tbitset;	/* size of lookahead sets */
 LOOKSETS *lkst;
@@ -32,7 +37,6 @@ static int *mstates;		/* chain of overflows of term/nonterm	*/
 	/* storage for the actions in the parser */
 
 int *amem, *memp;		/* next free action table position */
-int new_actsize = ACTSIZE;
 
 	/* other storage areas */
 
@@ -79,22 +83,7 @@ static void
 mktbls()
 {
 	lkst = (LOOKSETS *) malloc(sizeof (LOOKSETS) * (INIT_LSIZE + 1));
-	for (i = 0; i <= INIT_LSIZE; ++i)
-		lkst[i].lset = tmp_lset + TBITSET * i;
-	tmp_lset = NULL;
-
-	/*
-	 * For wsets
-	 */
-	tmp_lset = (int *)
-	    calloc((size_t)(TBITSET * (nnontersz+1)), sizeof (int));
-	if (tmp_lset == NULL)
-		error(gettext(
-		"could not allocate lookset array"));
 	wsets = (WSET *) malloc(sizeof (WSET) * (nnontersz + 1));
-	for (i = 0; i <= nnontersz; ++i)
-		wsets[i].ws.lset = tmp_lset + TBITSET * i;
-	tmp_lset = NULL;
 
 	clset.lset = (int *)malloc(sizeof (int)*TBITSET);
 	tstates = (int *)malloc(sizeof (int)*(ntoksz + 1));
@@ -109,39 +98,19 @@ mktbls()
 	indgo = (int *)malloc(sizeof (int)*nstatesz);
 	mstates = (int *)malloc(sizeof (int)*nstatesz);
 	defact = (int *)malloc(sizeof (int)*nstatesz);
-
-	aryfil(ntstates, nnontersz+1, 0);
-	aryfil(tstates, ntoksz+1, 0);
 	wsetsz = nnontersz + 1;
 	lsetsize = INIT_LSIZE + 1;
-
 }
 
 /* put out other arrays, copy the parsers */
 static void
 others()
 {
-
-	finput = fopen(parser, "r");
-	if (finput == NULL)
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is passed to error() function.
- *	This error message is issued when yacc can not find
- *	the parser to be copied.
- */
-		error(gettext(
-		"cannot find parser %s"),
-		    parser);
-
 	warray("yyr1", levprd, nprod);
-
 	aryfil(temp1, nprod, 0);
-					/* had_act[i] is either 1 or 0 */
 	PLOOP(1, i)
 		temp1[i] = ((prdptr[i+1] - prdptr[i]-2) << 1) | had_act[i];
 	warray("yyr2", temp1, nprod);
-
 	aryfil(temp1, nstate, -10000000);
 	TLOOP(i)
 		for (j = tstates[i]; j != 0; j = mstates[j])
@@ -152,237 +121,32 @@ others()
 	warray("yychk", temp1, nstate);
 
 	warray("yydef", defact, nstate);
-
-	if ((fdebug = fopen(DEBUGNAME, "r")) == NULL)
-		error("cannot open yacc.debug");
-	while ((c = getc(fdebug)) != EOF)
-		(void) putc(c, ftable);
-	(void) fclose(fdebug);
-	ZAPFILE(DEBUGNAME);
-
-	if (gen_lines)
-		(void) fprintf(ftable, "# line\t1 \"%s\"\n", parser);
-	tmpline = 1;
-	/* copy parser text */
-	while ((c = getc(finput)) != EOF) {
-		if (c == '\n')
-			tmpline++;
-		if (c == L'$') {
-			if ((c = getc(finput)) != L'A')
-				(void) putc(L'$', ftable);
-			else { /* copy actions */
-				tmpline++;
-				faction = fopen(ACTNAME, "r");
-				if (faction == NULL)
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is passed to error() function.
- *	This error is issued when yacc can not open a
- *	temporary file to be used. You do not need to
- *	use the word 'tempfile'. You can translate it to
- *	mean 'temporary file'.
- */
-					error(gettext(
-					"cannot open action tempfile"));
-				while ((c = getc(faction)) != EOF)
-					(void) putc(c, ftable);
-				(void) fclose(faction);
-				if (gen_lines)
-					(void) fprintf(ftable,
-					    "\n# line\t%d \"%s\"",
-					    tmpline,
-					    parser);
-				ZAPFILE(ACTNAME);
-				c = getc(finput);
-			}
-		}
-		(void) putc(c, ftable);
-	}
-	(void) fclose(ftable);
-
-        d_trace("OUT:y1 others()");
-	out_func();
 }
-
 
 /* copies string q into p, returning next free char ptr */
 static char *
 chcopy(p, q)
 char *p, *q;
 {
-  in_func();
-  d_trace("IO: y1 chcopy()");
-  out_func();
- 
-  while (*p = *q++)
-    ++p;
-
-  return (p);
 }
 
-#define	ISIZE 400
 /* creates output string for item pointed to by pp */
 char *
 writem(pp)
 int *pp;
 {
-	int i, *p;
-	static int isize = ISIZE;
-	static char *sarr = NULL;
-	char  *q;
-
-	in_func();
-	d_trace("IN: y1 writem()");
-	
-	if (sarr == NULL) {
-		sarr = (char *)malloc(sizeof (char) * isize);
-		if (sarr == NULL)
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is passed to error() function.
- *	This error is issued when yacc could not allocate
- *	memory for internally used array.
- *
- *	You may just translate this as:
- *	'Could not allocate internally used memory.'
- */
-			error(gettext(
-			"could not allocate output string array"));
-		for (i = 0; i < isize; ++i)
-			sarr[i] = L' ';
-	}
-	for (p = pp; *p > 0; ++p) /* NULL */;
-	p = prdptr[-*p];
-	q = chcopy(sarr, nontrst[*p-NTBASE].name);
-	q = chcopy(q, " : ");
-
-	for (;;) {
-		*q++ = ++p == pp ? L'_' : L' ';
-		*q = 0;
-		if ((i = *p) <= 0)
-			break;
-		q = chcopy(q, symnam(i));
-		while (q > &sarr[isize-30]) {
-			static char *sarrbase;
-
-			sarrbase = sarr;
-			isize += ISIZE;
-			sarr = (char *)
-				realloc((char *)sarr, sizeof (*sarr) * isize);
-			if (sarr == NULL)
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is passed to error() function.
- *	This error is issued when yacc could not allocate
- *	memory for internally used array.
- *
- *	You may just translate this as:
- *	'Could not allocate internally used memory.'
- */
-				error(gettext(
-				"cannot expand sarr arrays"));
-			q = q - sarrbase + sarr;
-		}
-	}
-
-	/* an item calling for a reduction */
-	if ((i = *pp) < 0) {
-		q = chcopy(q, "    (");
-		(void) sprintf(q, "%d)", -i);
-	}
-
-	d_trace("OUT:y1 writem()");
-	out_func();
-	
-	return (sarr);
 }
 
 /* return a pointer to the name of symbol i */
 char *
 symnam(int i)
 {
-	char *cp;
-	
-	in_func();
-	d_trace("IO: y1 symnam()");
-	out_func();
-	
-	cp = (i >= NTBASE) ? nontrst[i-NTBASE].name : tokset[i].name;
-	if (*cp == L' ')
-		++cp;
-	
-	return (cp);
 }
-
-static int zzcwp = 0;
-static int zzclose = 0;
-int zzgoent = 0;
-int zzgobest = 0;
-int zzacent = 0;
-int zzexcp = 0;
-int zzsrconf = 0;
-int zzrrconf = 0;
 
 /* output the summary on the tty */
 static void
 summary()
 {
-  in_func();
-  d_trace("IO: y1 summary()");
-  out_func();
-  
-	if (foutput != NULL) {
-		(void) fprintf(foutput,
-		    "\n%d/%d terminals, %d/%d nonterminals\n",
-		    ntokens, ntoksz, nnonter, nnontersz);
-		(void) fprintf(foutput,
-		    "%d/%d grammar rules, %d/%d states\n",
-		    nprod, nprodsz, nstate, nstatesz);
-		(void) fprintf(foutput,
-		"%d shift/reduce, %d reduce/reduce conflicts reported\n",
-		    zzsrconf, zzrrconf);
-		(void) fprintf(foutput,
-		    "%d/%d working sets used\n", zzcwp, wsetsz);
-		(void) fprintf(foutput,
-		    "memory: states,etc. %" PRIdPTR
-		    "/%d, parser %" PRIdPTR "/%d\n",
-		    mem-tracemem, new_memsize,
-		    memp-amem, new_actsize);
-		(void) fprintf(foutput,
-		    "%d/%d distinct lookahead sets\n", nlset, lsetsize);
-		(void) fprintf(foutput,
-		    "%d extra closures\n", zzclose - 2*nstate);
-		(void) fprintf(foutput,
-		    "%d shift entries, %d exceptions\n", zzacent, zzexcp);
-		(void) fprintf(foutput,
-		    "%d goto entries\n", zzgoent);
-		(void) fprintf(foutput,
-		    "%d entries saved by goto default\n", zzgobest);
-	}
-	if (zzsrconf != 0 || zzrrconf != 0) {
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	You may just leave this message un-translated.
- *	This message only makes sense to those who knows
- *	how yacc works, and the person should know what
- *	this message means in English.
- */
-		(void) fprintf(stderr, gettext(
-		    "\nconflicts: "));
-		if (zzsrconf)
-			(void) fprintf(stderr, "%d shift/reduce", zzsrconf);
-		if (zzsrconf && zzrrconf)
-			(void) fprintf(stderr, ", ");
-		if (zzrrconf)
-			(void) fprintf(stderr, "%d reduce/reduce", zzrrconf);
-		(void) fprintf(stderr, "\n");
-	}
-
-	if (ftemp != NULL)
-		(void) fclose(ftemp);
-	if (fdefine != NULL)
-		(void) fclose(fdefine);
-	
 }
 
 /* write out error comment */
@@ -390,38 +154,6 @@ summary()
 void
 error(char *s, ...)
 {
-	extern char *infile;
-	va_list	ap;
-
-	va_start(ap, s);
-
-	++nerrors;
-	if (!lineno)
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is a prefix to the error messages
- *	passed to error() function.
- */
-		(void) fprintf(stderr, gettext(
-		    "command line: fatal: "));
-	else {
-		(void) fprintf(stderr, "\"%s\", ", infile);
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is a prefix to the error messages
- *	passed to error() function.
- */
-		(void) fprintf(stderr, gettext(
-		    "line %d: fatal: "),
-		    lineno);
-	}
-	(void) vfprintf(stderr, s, ap);
-	(void) fprintf(stderr, "\n");
-	va_end(ap);
-	if (!fatfl)
-		return;
-	summary();
-	exit(1);
 }
 
 /*
@@ -431,34 +163,6 @@ error(char *s, ...)
 void
 warning(int flag, char *s, ...)
 {
-	extern char *infile;
-	va_list	ap;
-	va_start(ap, s);
-
-	(void) fprintf(stderr, "\"%s\", ", infile);
-	/*
-	 * If flag, print lineno as well.
-	 */
-	if (flag == 0)
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is a prefix to the warning messages
- *	passed to warning() function.
- */
-		(void) fprintf(stderr, gettext(
-		    "warning: "));
-	else
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is a prefix to the warning messages
- *	passed to warning() function.
- */
-		(void) fprintf(stderr, gettext(
-		    "line %d: warning: "),
-		    lineno);
-	(void) vfprintf(stderr, s, ap);
-	(void) fprintf(stderr, "\n");
-	va_end(ap);
 }
 
 /* set elements 0 through n-1 to c */
@@ -466,15 +170,6 @@ void
 aryfil(v, n, c)
 int *v, n, c;
 {
-	int i;
-	
-	in_func();
-	d_trace("IO: y1 aryfil()");
-	out_func();
-	
-	for (i = 0; i < n; ++i)
-		v[i] = c;
-	
 }
 
 /* set a to the union of a and b */
@@ -504,9 +199,7 @@ prlook(p)
 LOOKSETS *p;
 {
 	int j, *pp;
-	in_func();
-	d_trace("IN: y1 prlook()");
-	
+
 	pp = p->lset;
 	if (pp == 0)
 		(void) fprintf(foutput, "\tNULL");
@@ -519,9 +212,6 @@ LOOKSETS *p;
 		}
 		(void) fprintf(foutput,  "}");
 	}
-
-	d_trace("OUT:y1 prlook()");
-	out_func();
 }
 
 /*
@@ -537,10 +227,6 @@ cpres()
 	int **pyield;
 	int c, j, i;
 	
-	in_func();
-	d_trace("IO: y1 cpres()");
-	out_func();
-
 	/*
 	 * 2/29/88 -
 	 * nprodsz is the size of the tables describing the productions.
@@ -549,18 +235,6 @@ cpres()
 	 * N is the number of times the tables had to be expanded.)
 	 */
 	if ((pyield = (int **) malloc(sizeof (int *) * nprodsz)) == NULL)
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is passed to error() function.
- *	This error is issued when yacc could not allocate
- *	memory for internally used array.
- *
- *	pyield is name of an array. You should not try to translate
- *	this word.
- *
- *	You may just translate this as:
- *	'Could not allocate internally used memory.'
- */
 		error(gettext(
 		"cannot allocate space for pyield array"));
 
@@ -575,12 +249,6 @@ cpres()
 				*ptrpy++ =  prdptr[j] + 1;
 		}
 		if (pres[i] == ptrpy) { 		/* c not found */
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is passed to error() function.
- *	Ask somebody who knows yacc how to translate nonterminal or
- *	look at translated yacc document.
- */
 			error(gettext(
 			"undefined nonterminal: %s"),
 			    nontrst[i].name);
@@ -593,21 +261,11 @@ cpres()
 		exit(1);
 	}
 	if (ptrpy != &pyield[nprod])
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is passed to error() function.
- *	This is an internal error message.
- *	Very little use to user. You may leave it
- *	un-translated.
- *
- *	pyied is name of an array. Do not translate it.
- */
 		error(gettext(
 		"internal Yacc error: pyield %d"),
 		    ptrpy-&pyield[nprod]);
 }
 
-static int indebug = 0;
 /* compute an array with the first of nonterminals */
 static void
 cpfir()
@@ -738,12 +396,6 @@ state(int c)
 	}
 	/* state is new */
 	if (nolook)
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is passed to error() function.
- *	You may leave this untranslated. Leave
- *	state/nolook un-translated.
- */
 		error(gettext(
 		"yacc state/nolook error"));
 	pstate[nstate+2] = p2;
@@ -760,7 +412,6 @@ state(int c)
 	return (nstate++);
 }
 
-static int pidebug = 0;
 
 void
 putitem(ptr, lptr)
@@ -842,13 +493,6 @@ cempty()
 			continue;
 		if (pempty[i] != OK) {
 			fatfl = 0;
-/*
- * TRANSLATION_NOTE  -- This is a message from yacc.
- *	This message is passed to error() function.
- *	Ask somebody who knows yacc how to translate nonterminal or
- *	look at translated yacc document. Check how 'derive' is
- *	translated in these documents also.
- */
 			error(gettext(
 			"nonterminal %s never derives any token string"),
 			    nontrst[i].name);

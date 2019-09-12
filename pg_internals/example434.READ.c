@@ -144,11 +144,6 @@ typedef struct yytoktype {
   int t_val;
 } yytoktype;
 
-#ifndef YYDEBUG
-#	define YYDEBUG	0
-#endif
-
-#if YYDEBUG
 yytoktype yytoks[] =
 {
 	"id",	257,
@@ -167,7 +162,6 @@ const char * yyreds[] = {
 	"F : '(' E ')'",
 	"F : id",
 };
-#endif /* YYDEBUG */
 
 /*
 ** Skeleton parser driver for yacc output
@@ -179,28 +173,12 @@ const char * yyreds[] = {
 #define YYERROR		goto yyerrlab
 #define YYACCEPT	return(0)
 #define YYABORT		return(1)
-#define YYBACKUP( newtoken, newvalue )\
-{\
-	if ( yychar >= 0 || ( yyr2[ yytmp ] >> 1 ) != 1 )\
-	{\
-		yyerror( "syntax error - cannot backup" );\
-		goto yyerrlab;\
-	}\
-	yychar = newtoken;\
-	yystate = *yyps;\
-	yylval = newvalue;\
-	goto yynewstate;\
-}
 
-#define YYRECOVERING()	(!!yyerrflag)
 #define YYNEW(type)	malloc(sizeof(type) * yynewmax)
 #define YYCOPY(to, from, type) \
 	(type *) memcpy(to, (char *) from, yymaxdepth * sizeof (type))
 #define YYENLARGE( from, type) \
 	(type *) realloc((char *) from, yynewmax * sizeof(type))
-#ifndef YYDEBUG
-#	define YYDEBUG	1	/* make debugging available */
-#endif
 
 /*
 ** user known globals
@@ -243,22 +221,7 @@ int yyparse()
 		int *yy_ps;		/* top of state stack */
 		int yy_state;		/* current state */
 		int  yy_n;		/* internal state number info */
-	goto yystack;	/* moved from 6 lines above to here to please C++ */
 
-		/*
-		** get globals into registers.
-		** branch to here only if YYBACKUP was called.
-		*/
-	yynewstate:
-		yy_pv = yypv;
-		yy_ps = yyps;
-		yy_state = yystate;
-		goto yy_newstate;
-
-		/*
-		** get globals into registers.
-		** either we just started, or we just finished a reduction
-		*/
 	yystack:
 		yy_pv = yypv;
 		yy_ps = yyps;
@@ -272,46 +235,6 @@ int yyparse()
 		** put a state and value onto the stacks
 		*/
 
-		if (++yy_ps >= &yys[yymaxdepth])	/* room on stack? */
-		{
-			/*
-			** reallocate and recover.  Note that pointers
-			** have to be reset, or bad things will happen
-			*/
-			long yyps_index = (yy_ps - yys);
-			long yypv_index = (yy_pv - yyv);
-			long yypvt_index = (yypvt - yyv);
-			int yynewmax;
-			
-			yynewmax = 2 * yymaxdepth;	/* double table size */
-			if (yymaxdepth == YYMAXDEPTH)	/* first time growth */
-			{
-				char *newyys = (char *) YYNEW(int);
-				char *newyyv = (char *) YYNEW(YYSTYPE);
-				if (newyys != 0 && newyyv != 0)
-				{
-					yys = YYCOPY(newyys, yys, int);
-					yyv = YYCOPY(newyyv, yyv, YYSTYPE);
-				}
-				else
-					yynewmax = 0;	/* failed */
-			} else {			/* not first time */
-			        yys = YYENLARGE(yys, int);
-				yyv = YYENLARGE(yyv, YYSTYPE);
-				if (yys == 0 || yyv == 0)
-					yynewmax = 0;	/* failed */
-			}
-			if (yynewmax <= yymaxdepth)	/* tables not expanded */
-			{
-				yyerror("yacc stack overflow");
-				YYABORT;
-			}
-			yymaxdepth = yynewmax;
-
-			yy_ps = yys + yyps_index;
-			yy_pv = yyv + yypv_index;
-			yypvt = yyv + yypvt_index;
-		}
 		*yy_ps = yy_state;
 		*++yy_pv = yyval;
 
@@ -336,7 +259,7 @@ int yyparse()
 		}
 
 	yydefault:
-		if((yy_n = yydef[ yy_state]) == -2)
+		if((yy_n = yydef[yy_state]) == -2)
 		{
 			if ((yychar < 0) && ((yychar = yylex()) < 0))
 				yychar = 0;		/* reached EOF */
@@ -348,15 +271,13 @@ int yyparse()
 				YYCONST int *yyxi = yyexca;
 
 				while ((*yyxi != -1) ||
-					(yyxi[1] != yy_state))
-				{
-					yyxi += 2;
-				}
+				       (yyxi[1] != yy_state))
+				  yyxi += 2;
 				while ((*(yyxi += 2) >= 0) &&
 				       (*yyxi != yychar))
-					;
+				  ;
 				if ((yy_n = yyxi[1]) < 0)
-					YYACCEPT;
+				  YYACCEPT;
 			}
 		}
 
@@ -386,38 +307,10 @@ int yyparse()
 			case 2:		/* incompletely recovered error */
 					/* try again... */
 				yyerrflag = 3;
-				/*
-				** find state where "error" is a legal
-				** shift action
-				*/
-				while (yy_ps >= yys)
-				{
-					yy_n = yypact[ *yy_ps ] + YYERRCODE;
-					if (yy_n >= 0 && yy_n < YYLAST &&
-					    yychk[yyact[yy_n]] == YYERRCODE)
-					{
-						/*
-						** simulate shift of "error"
-						*/
-						yy_state = yyact[ yy_n ];
-						goto yy_stack;
-					}
-					
-					/*
-					** current state has no shift on
-					** "error", pop stack
-					*/
-
-					yy_ps--;
-					yy_pv--;
-				}
-				/*
-				** there is no state on stack with "error" as
-				** a valid shift.  give up.
-				*/
+				/* DRAGON: recovery codes removed */
 				YYABORT;
 			case 3:		/* no shift yet; eat a token */
-				if ( yychar == 0 )	/* reached EOF. quit */
+				if (yychar == 0)	/* reached EOF. quit */
 					YYABORT;
 				yychar = -1;
 				goto yy_newstate;
@@ -428,8 +321,8 @@ int yyparse()
 		** put stack tops, etc. so things right after switch
 		*/
 
-		yytmp = yy_n;			/* value to switch over */
-		yypvt = yy_pv;			/* $vars top of value stack */
+		yytmp = yy_n;	       	/* value to switch over */
+		yypvt = yy_pv;	       	/* $vars top of value stack */
 		/*
 		** Look in goto table for next state
 		** Sorry about using yy_state here as temporary

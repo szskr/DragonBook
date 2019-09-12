@@ -1,6 +1,6 @@
 ;;;
-;;; yacc.lisp
-;;;   Data Structures and Functions/Macros
+;;; Commentary on yacc.lisp.
+;;;   Data Structures and Functions/Macro
 ;;;
 
 (defun required-argument ())
@@ -195,9 +195,11 @@
 
 (defun kernel-item (kernel)
   "The item in a singleton set of items.")
-  
+
+;;
 ;; Items-closure starts by using a list, and switches to hashtables
 ;; later.  Using some sort of balanced tree would probably be better.
+;;
 
 (defparameter *items-closure-hash-threshold* 20
   "The number of elements when items-closure switches to using a hashtable.")
@@ -318,7 +320,7 @@ If PROPAGATE-ONLY is true, ignore spontaneous generation.")
 
 (defun find-precedence (op precedence)
   "Return the tail of PRECEDENCE starting with the element containing OP.
-PRECEDENCE is a list of elements of the form (KEYWORD . (op...)).")
+   PRECEDENCE is a list of elements of the form (KEYWORD . (op...)).")
 
 (defun find-single-terminal (s grammar)
   "Return the only terminal in S, or NIL if none or multiple.")
@@ -340,20 +342,20 @@ Returns three actions: the chosen action, the number of new sr and rr.")
                     (print-states nil)
                     (print-goto-graph nil) (print-lookaheads nil))
   "Returns a parser for the given grammar.
-If MUFFLE-CONFLICTS is NIL, then a warning will be signaled for all conflicts.
-If it is T, then no warnings will be signaled.  If it is a list of the form
-(SR SS), then a warning will be signaled unless there are exactly SR
-shift-reduce conflicts and SS shift-shift conflicts.")
+   If MUFFLE-CONFLICTS is NIL, then a warning will be signaled for all conflicts.
+   If it is T, then no warnings will be signaled.  If it is a list of the form
+   (SR SS), then a warning will be signaled unless there are exactly SR
+   shift-reduce conflicts and SS shift-shift conflicts.")
 
 (define-condition yacc-runtime-error (error))
 
 (define-condition yacc-parse-error (yacc-runtime-error))
 
 (defun parse-with-lexer (lexer parser)
-"Parse the stream of symbols provided by LEXER using PARSER.
-LEXER is a function of no arguments returning a symbol and a semantic value,
-and should return (VALUES NIL NIL) when the end of input is reached.
-Handle YACC-PARSE-ERROR to provide custom error reporting.")
+  "Parse the stream of symbols provided by LEXER using PARSER.
+   LEXER is a function of no arguments returning a symbol and a semantic value,
+   and should return (VALUES NIL NIL) when the end of input is reached.
+   Handle YACC-PARSE-ERROR to provide custom error reporting.")
 
 ;;;
 ;;; User interface
