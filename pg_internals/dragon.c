@@ -29,6 +29,19 @@ d_indent_level()
 }
 
 void
+d_printf(char *format, ...)
+{
+  va_list arg;
+  
+  if (t_flag == 0)
+    return;
+  
+  va_start (arg, format);
+  vfprintf(stderr, format, arg);
+  va_end (arg);
+}
+
+void
 d_trace_on()
 {
   t_flag = 0x01;

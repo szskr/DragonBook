@@ -19,6 +19,7 @@ DFILES= $(OBJS) $(DYACC) $(DTYACC) $(EXMPL434) $(GFILES) $(CMMNTD434)
 all: $(DYACC) $(EXMPL434) $(SGRAMMAR) $(CMMNTD434)
 
 $(DYACC): $(OBJS)
+	rm -f $(DTYACC)
 	$(CC) -o $(DYACC)  $(OBJS)
 	ln -s $(DYACC) $(DTYACC)
 

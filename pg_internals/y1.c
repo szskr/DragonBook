@@ -117,8 +117,6 @@ main(int argc, char *argv[])
 	 d_trace_on();
     
 	int i_level = d_indent_level();
-
-	fprintf(stderr, "INDENT_LEVEL (%d) in MAIN at the beginning.\n", i_level);
 	d_trace("dyacc: IN  main()");
 	
 	setup(argc, argv); /* initialize and read productions */
@@ -130,7 +128,6 @@ main(int argc, char *argv[])
 			/* given nonterminal */
 	cempty(); 	/* make a table of which nonterminals can match	*/
 			/* the empty string */
-
 	cpfir(); 	/* make a table of firsts of nonterminals */		
 	stagen();	/* generate the states 	*/
 	output();  	/* write the states and the tables */
@@ -141,7 +138,9 @@ main(int argc, char *argv[])
 	others();
        
         d_trace("dyacc: OUT main()");
-	fprintf(stderr, "INDENT_LEVEL (%d) in MAIN at end.\n", d_indent_level());
+	if (i_level != d_indent_level())
+	  fprintf(stderr, "CAUTION: INDENT_LEVEL inconsistency (%d:%d).\n",
+		  i_level, d_indent_level());
 	
 	return (0);
 }
