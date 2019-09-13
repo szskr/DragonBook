@@ -111,7 +111,11 @@ extern int nprodsz;
 int
 main(int argc, char *argv[])
 {
-	(void) setlocale(LC_ALL, "");
+       (void) setlocale(LC_ALL, "");
+  
+       if (strcmp(argv[0], "dtyacc") == 0)
+	 d_trace_on();
+    
 	int i_level = d_indent_level();
 
 	fprintf(stderr, "INDENT_LEVEL (%d) in MAIN at the beginning.\n", i_level);

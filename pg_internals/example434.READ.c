@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define YYFLAG 	(-10000000)
 #define YYMAXDEPTH 150
@@ -29,6 +30,20 @@ int     yy_yys[YYMAXDEPTH], *yys = yy_yys;
 YYSTYPE yy_yyv[YYMAXDEPTH], *yyv = yy_yyv;
 static int yymaxdepth = YYMAXDEPTH;
 
+static int d_flag = 0;  /* debug flag */
+void
+d_printf(char *format, ...)
+{
+  va_list arg;
+  
+  if (d_flag == 0)
+    return;
+  
+  va_start (arg, format);
+  vfprintf(stderr, format, arg);
+  va_end (arg);
+}
+
 int
 yylex(void)
 {
@@ -45,13 +60,13 @@ yylex(void)
     yylval.val = 77;
     if (c == '\n')
       tmp_c = 'N';
-    fprintf(stderr, "\nD:YYLEX(): returning token: '%c':\n", tmp_c);
+    d_printf("\nD:YYLEX(): returning token: '%c':\n", tmp_c);
     return (c);
   }
  
   if (isdigit(c)) {
     yylval.val = c - '0';
-    fprintf(stderr, "\nD:YYLEX(): returning token: ID: yylval=%d\n", yylval.val);
+    d_printf("\nD:YYLEX(): returning token: ID: yylval=%d\n", yylval.val);
     return (id);
   }
 
@@ -61,9 +76,11 @@ yylex(void)
 int
 main(int argc, char *argv[])
 {
-  int ret = 0;
-  while (ret == 0)
-    ret = yyparse();
+  if (argc != 1)
+    d_flag = 1;
+  
+  while (yyparse() == 0)
+    ;
 }
 
 static YYCONST yytabelem yyexca[] ={
@@ -191,7 +208,7 @@ int yyparse(void)
 		int *yy_ps;		/* top of state stack */
 		int yy_state;		/* current state */
 		int  yy_n;		/* internal state number info */
-	fprintf(stderr, "\nD: ENTERING YYPARSE\n");
+		d_printf("\nD: ENTERING YYPARSE\n");
 
 		/*
 		** get globals into registers.
@@ -211,12 +228,12 @@ int yyparse(void)
 		*/
 		if (++yy_ps >= &yys[yymaxdepth])	/* room on stack? */
 		{
-		  fprintf(stderr, "DRAGON: STACK OVERFLOW\n");
+		  d_printf("DRAGON: STACK OVERFLOW\n");
 		  exit(1);
 		}
 		*yy_ps = yy_state;
 		*++yy_pv = yyval;
-		fprintf(stderr, "D: SHIFT: Pushing: state=%d, value=%d\n",
+		d_printf("D: SHIFT: Pushing: state=%d, value=%d\n",
 			yy_state, yyval.val);
 
 		/*
@@ -237,11 +254,11 @@ int yyparse(void)
 				yyerrflag--;
 			
 			if (yychar == '\n')
-			  fprintf(stderr, "D: VALID: yychar was 'nl': goto yy_stack.\n");
+			  d_printf("D: VALID: yychar was 'nl': goto yy_stack.\n");
 			else if (yychar == id)
-			  fprintf(stderr, "D: VALID: yychar was 'id': goto yy_stack.\n");
+			  d_printf("D: VALID: yychar was 'id': goto yy_stack.\n");
 			else
-			  fprintf(stderr, "D: VALID: yychar was '%c': goto yy_stack.\n",
+			  d_printf("D: VALID: yychar was '%c': goto yy_stack.\n",
 				  (char)yychar);
 			yychar = -1;
 			goto yy_stack;
@@ -259,7 +276,7 @@ int yyparse(void)
 			{
 				YYCONST int *yyxi = yyexca;
 
-				fprintf(stderr, "D:           going through yyexca[]\n");
+				d_printf("D:           going through yyexca[]\n");
 				while ((*yyxi != -1) ||
 				       (yyxi[1] != yy_state))
 				  yyxi += 2;
@@ -267,7 +284,7 @@ int yyparse(void)
 				       (*yyxi != yychar))
 				  ;
 				if ((yy_n = yyxi[1]) < 0) {
-				  fprintf(stderr, "D:         ACCEPT\n");
+				  d_printf("D:         ACCEPT\n");
 				  YYACCEPT;
 				}
 			}
@@ -282,7 +299,7 @@ int yyparse(void)
        		  case 0:    /* new error */
 		  case 1:
 		  case 2:    /* incompletely recovered error */
-		    fprintf(stderr,  "syntax error" );
+		    d_printf( "syntax error" );
        		    YYABORT;
 		  case 3:	   /* no shift yet; eat a token */
 		    if (yychar == 0)	/* reached EOF. quit */
@@ -323,7 +340,7 @@ int yyparse(void)
 		    if (yy_state >= YYLAST ||
 			yychk[yy_state = yyact[yy_state]] != -yy_n)
 		      yy_state = yyact[yypgo[yy_n]];
-		    fprintf(stderr, "D: REDUCE(1) by : popping %d elements\n", yy_len);
+		    d_printf("D: REDUCE(1) by : popping %d elements\n", yy_len);
 		    goto yy_stack;
 		  }
 		  
@@ -334,7 +351,7 @@ int yyparse(void)
 		  if (yy_state >= YYLAST ||
 		      yychk[yy_state = yyact[yy_state]] != -yy_n)
 		    yy_state = yyact[yypgo[yy_n]];
-		  fprintf(stderr, "D: REDUCE(2) by rule (%d): popping %d elements\n",
+		  d_printf("D: REDUCE(2) by rule (%d): popping %d elements\n",
 			  yytmp, yy_len);
 		}
 		/* save until reenter driver code */
@@ -347,7 +364,7 @@ int yyparse(void)
 	** code supplied by user is placed in this switch
 	*/
 	if (yytmp < 1 || yytmp > 7) {
-	  fprintf(stderr, "D:  yytmp(%d): INTERNAL ERROR(?)\n", yytmp);
+	  d_printf("D:  yytmp(%d): INTERNAL ERROR(?)\n", yytmp);
 	  return (0);
 	}
 
