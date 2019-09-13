@@ -1,51 +1,34 @@
 /*
- * example434.READ.c
- *  edited (yacc generated) example434.c
+ * example434.c 
+ *  Edited version 
  */
- 
 #include <ctype.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define id 257
-#define YYFLAG		(-10000000)
+#define YYFLAG 	(-10000000)
 #define YYMAXDEPTH 150
-#define	YYCONST	const
 #define YYERRCODE 256
-
-#define yyclearin yychar = -1
-#define yyerrok yyerrflag = 0
+#define id 257
+#define	YYCONST	const
 
 typedef int yytabelem;
-
-typedef union {
+typedef union YYSTYPE {
   int val;
   char *str;
 } YYSTYPE;
 
-void yyerror (char const *);
-void yyerror(YYCONST char *);
-int yylex(void);
 int yyparse(void);
 
 YYSTYPE yylval;
 YYSTYPE yyval;
 
-int yy_yys[YYMAXDEPTH];
-int *yys = yy_yys;
-
-YYSTYPE yy_yyv[YYMAXDEPTH];
-YYSTYPE *yyv = yy_yyv;
-
+/* stack and stack values */
+int     yy_yys[YYMAXDEPTH], *yys = yy_yys;
+YYSTYPE yy_yyv[YYMAXDEPTH], *yyv = yy_yyv;
 static int yymaxdepth = YYMAXDEPTH;
-
-void
-yyerror(char const *s)
-{
-  fprintf(stderr, "%s\n", s);
-}
 
 int
 yylex(void)
@@ -58,8 +41,7 @@ yylex(void)
     return (EOF);
 
   switch (c) {
-  case '\n': case '(': case ')':
-  case '+': case '*':
+  case '\n': case '(': case ')': case '+': case '*':
     return (c);
   }
   
@@ -79,14 +61,15 @@ main(int argc, char *argv[])
     ret = yyparse();
 }
 
-static YYCONST yytabelem yyexca[] = {
-  -1, 1, 0, -1, -2, 0,
+static YYCONST yytabelem yyexca[] ={
+  -1, 1,
+  0, -1,
+  -2, 0,
 };
 
 # define YYNPROD 8
 # define YYLAST 218
-
-static YYCONST yytabelem yyact[] = {
+static YYCONST yytabelem yyact[]={
      5,     7,    13,     4,     8,     9,     3,     1,     2,     0,
      0,     0,     0,    12,    10,    11,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
@@ -112,8 +95,8 @@ static YYCONST yytabelem yyact[] = {
 };
 
 static YYCONST yytabelem yypact[] = {
-   -40, YYFLAG, -9, -37, YYFLAG, -40, YYFLAG, YYFLAG,
-   -40, -40, -39, -37, YYFLAG, YYFLAG
+   -40, YYFLAG,    -9,   -37, YYFLAG,   -40, YYFLAG, YYFLAG,
+   -40,   -40, -39,   -37, YYFLAG, YYFLAG
 };
 
 static YYCONST yytabelem yypgo[] = {
@@ -121,18 +104,16 @@ static YYCONST yytabelem yypgo[] = {
 };
 
 static YYCONST yytabelem yyr1[] = {
-     0,     1,     2,     2,     3,
-     3,     4,     4
+     0,     1,     2,     2,     3,     3,     4,     4
 };
 
 static YYCONST yytabelem yyr2[] = {
-     0,     5,     7,     3,     7,
-     3,     7,     3
+     0,     5,     7,     3,     7,     3,     7,     3
 };
 
 static YYCONST yytabelem yychk[] = {
-  YYFLAG, -1, -2, -3, -4,  40, 257, 10,
-  43, 42, -2,    -3,    -4,    41
+  YYFLAG,    -1,    -2,    -3,    -4,    40,   257,    10,
+  43,    42, -2,    -3,    -4,    41
 };
 
 static YYCONST yytabelem yydef[] = {
@@ -145,8 +126,8 @@ typedef struct yytoktype {
   int t_val;
 } yytoktype;
 
-yytoktype yytoks[] =
-{
+
+yytoktype yytoks[] = {
 	"id",	257,
 	"+",	43,
 	"*",	42,
@@ -165,26 +146,19 @@ const char * yyreds[] = {
 };
 
 /*
-** Skeleton parser driver for yacc output
-*/
-
-/*
 ** yacc user known macros and defines
 */
-#define YYERROR		goto yyerrlab
 #define YYACCEPT	return(0)
 #define YYABORT		return(1)
 
 #define YYNEW(type)	malloc(sizeof(type) * yynewmax)
 #define YYCOPY(to, from, type) \
-	(type *) memcpy(to, (char *) from, yymaxdepth * sizeof (type))
-#define YYENLARGE( from, type) \
-	(type *) realloc((char *) from, yynewmax * sizeof(type))
+  (type *) memcpy(to, (char *) from, yymaxdepth * sizeof (type))
 
 /*
-** user known globals
+** driver internal defines
 */
-int yydebug;			/* set to 1 to get debugging */
+
 
 /*
 ** global variables used by the parser
@@ -202,8 +176,7 @@ int yychar;			/* current input token number */
 /*
 ** yyparse - return 0 if worked, 1 if syntax error not recovered from
 */
-
-int yyparse()
+int yyparse(void)
 {
 	YYSTYPE *yypvt = 0;	/* top of value stack for $vars */
 
@@ -222,11 +195,29 @@ int yyparse()
 		int *yy_ps;		/* top of state stack */
 		int yy_state;		/* current state */
 		int  yy_n;		/* internal state number info */
+	fprintf(stderr, "D:00:          yystate = %d, yy_state = %d\n", yystate, yy_state);
+	goto yystack;	/* moved from 6 lines above to here to please C++ */
 
+		/*
+		** get globals into registers.
+		** branch to here only if YYBACKUP was called.
+		*/
+	yynewstate:
+	fprintf(stderr, "D:yynewstate: yystate = %d, yy_state = %d\n", yystate, yy_state);
+		yy_pv = yypv;
+		yy_ps = yyps;
+		yy_state = yystate;
+		goto yy_newstate;
+
+		/*
+		** get globals into registers.
+		** either we just started, or we just finished a reduction
+		*/
 	yystack:
 		yy_pv = yypv;
 		yy_ps = yyps;
 		yy_state = yystate;
+	fprintf(stderr, "D:01:yystack:  yystate = %d, yy_state = %d\n", yystate, yy_state);
 
 		/*
 		** top of for (;;) loop while no reductions done
@@ -235,7 +226,12 @@ int yyparse()
 		/*
 		** put a state and value onto the stacks
 		*/
-
+        fprintf(stderr, "D:02:yy_stack: yystate = %d, yy_state = %d\n", yystate, yy_state);
+		if (++yy_ps >= &yys[yymaxdepth])	/* room on stack? */
+		{
+		  fprintf(stderr, "DRAGON: STACK OVERFLOW\n");
+		  exit(1);
+		}
 		*yy_ps = yy_state;
 		*++yy_pv = yyval;
 
@@ -245,24 +241,24 @@ int yyparse()
 	yy_newstate:
 		if ((yy_n = yypact[yy_state]) <= YYFLAG)
 			goto yydefault;		/* simple state */
-		if ((yychar < 0 ) && ((yychar = yylex()) < 0))
+		if ((yychar < 0) && ((yychar = yylex()) < 0))
 			yychar = 0;		/* reached EOF */
-		if (((yy_n += yychar) < 0) || (yy_n >= YYLAST))
+		if (((yy_n += yychar) < 0 ) || (yy_n >= YYLAST))
 			goto yydefault;
 		if (yychk[yy_n = yyact[yy_n]] == yychar)	/*valid shift*/
 		{
 			yychar = -1;
 			yyval = yylval;
 			yy_state = yy_n;
-			if (yyerrflag > 0)
+			if ( yyerrflag > 0 )
 				yyerrflag--;
 			goto yy_stack;
 		}
 
 	yydefault:
-		if((yy_n = yydef[yy_state]) == -2)
+		if ((yy_n = yydef[yy_state]) == -2)
 		{
-			if ((yychar < 0) && ((yychar = yylex()) < 0))
+			if ((yychar < 0) && ((yychar = yylex()) < 0 ))
 				yychar = 0;		/* reached EOF */
 
 			/*
@@ -287,43 +283,29 @@ int yyparse()
 		*/
 		if (yy_n == 0)	/* have an error */
 		{
-			/* no worry about speed here! */
-			switch (yyerrflag)
-			{
-			case 0:		/* new error */
-				yyerror( "syntax error" );
-				goto skip_init;
-			yyerrlab:
-				/*
-				** get globals into registers.
-				** we have a user generated syntax type error
-				*/
-				yy_pv = yypv;
-				yy_ps = yyps;
-				yy_state = yystate;
-			skip_init:
-				yynerrs++;
-				/* FALLTHRU */
-			case 1:
-			case 2:		/* incompletely recovered error */
-					/* try again... */
-				yyerrflag = 3;
-				/* DRAGON: recovery codes removed */
-				YYABORT;
-			case 3:		/* no shift yet; eat a token */
-				if (yychar == 0)	/* reached EOF. quit */
-					YYABORT;
-				yychar = -1;
-				goto yy_newstate;
-			}
-		} /* end if (yy_n == 0) */
+   		  switch (yyerrflag) {
+       		  case 0:    /* new error */
+		  case 1:
+		  case 2:    /* incompletely recovered error */
+		    fprintf(stderr,  "syntax error" );
+       		    YYABORT;
+		  case 3:	   /* no shift yet; eat a token */
+		    if (yychar == 0)	/* reached EOF. quit */
+		      YYABORT;
+		    yychar = -1;
+		    goto yy_newstate;
+		  }
+		}/* end if ( yy_n == 0 ) */
+		
 		/*
 		** reduction by production yy_n
 		** put stack tops, etc. so things right after switch
 		*/
-
-		yytmp = yy_n;	       	/* value to switch over */
-		yypvt = yy_pv;	       	/* $vars top of value stack */
+		
+		fprintf(stderr, "D:GOING To consult parsing tables\n");
+	
+		yytmp = yy_n;			/* value to switch over */
+		yypvt = yy_pv;			/* $vars top of value stack */
 		/*
 		** Look in goto table for next state
 		** Sorry about using yy_state here as temporary
@@ -337,66 +319,60 @@ int yyparse()
 		** can be made before the choice of what to do is needed.
 		*/
 		{
-			/* length of production doubled with extra bit */
-			int yy_len = yyr2[yy_n];
+		  /* length of production doubled with extra bit */
+		  int yy_len = yyr2[yy_n];
 
-			if (!(yy_len & 01))
-			{
-				yy_len >>= 1;
-				yyval = (yy_pv -= yy_len)[1];	/* $$ = $1 */
-				yy_state = yypgo[ yy_n = yyr1[ yy_n]] +
-					*(yy_ps -= yy_len) + 1;
-				if (yy_state >= YYLAST ||
-					yychk[yy_state =
-					yyact[yy_state]] != -yy_n)
-				{
-					yy_state = yyact[yypgo[yy_n]];
-				}
-				goto yy_stack;
-			}
-			yy_len >>= 1;
-			yyval = (yy_pv -= yy_len)[1];	/* $$ = $1 */
-			yy_state = yypgo[yy_n = yyr1[ yy_n]] +
-				*(yy_ps -= yy_len) + 1;
-			if (yy_state >= YYLAST ||
-				yychk[yy_state = yyact[yy_state]] != -yy_n)
-			{
-				yy_state = yyact[yypgo[yy_n]];
-			}
+		  if (!(yy_len & 01)) {
+		    yy_len >>= 1;
+		    yyval = (yy_pv -= yy_len)[1]; /* $$ = $1 */
+		    yy_state = yypgo[yy_n = yyr1[yy_n]] +
+		      *(yy_ps -= yy_len) + 1;
+		    if (yy_state >= YYLAST ||
+			yychk[yy_state = yyact[yy_state]] != -yy_n)
+		      yy_state = yyact[yypgo[yy_n]];
+		    goto yy_stack;
+		  }
+		  
+		  yy_len >>= 1;
+		  yyval = (yy_pv -= yy_len)[1];	/* $$ = $1 */
+		  yy_state = yypgo[yy_n = yyr1[yy_n]] +
+		    *(yy_ps -= yy_len) + 1;
+		  if (yy_state >= YYLAST ||
+		      yychk[yy_state = yyact[yy_state]] != -yy_n)
+		    yy_state = yyact[ yypgo[ yy_n ]];
 		}
-	       /* save until reenter driver code */
+		/* save until reenter driver code */
 		yystate = yy_state;
 		yyps = yy_ps;
 		yypv = yy_pv;
 	}
+	
 	/*
 	** code supplied by user is placed in this switch
 	*/
-	switch(yytmp)
-	{
-		case 1:
-		     yyval.val = yypvt[-1].val;
-    		     printf("\tval = %d\n", yyval.val);
-    		     return (0);
-		     break;
-		case 2:
-		     {yyval.val = yypvt[-2].val + yypvt[-0].val;}
-		     break;
-		case 3:
-		     {yyval.val = yypvt[-0].val;}
-		     break;
-		case 4:
-		     {yyval.val = yypvt[-2].val * yypvt[-0].val;}
-		     break;
-		case 5:
-		     {yyval.val = yypvt[-0].val;}
-		     break;
-		case 6:
-		     {yyval.val = yypvt[-1].val;}
-		     break;
-		case 7:
-		     {yyval.val = yypvt[-0].val;}
-		     break;
+	switch(yytmp) {
+	case 1: 
+	    yyval.val = yypvt[-1].val;
+	    printf("\tval = %d\n", yyval.val);
+	    return (0);
+	case 2:
+	  yyval.val = yypvt[-2].val + yypvt[-0].val;
+	  break;
+	case 3:
+	  yyval.val = yypvt[-0].val;
+	  break;
+	case 4:
+	  yyval.val = yypvt[-2].val * yypvt[-0].val;
+	  break;
+	case 5:
+	  yyval.val = yypvt[-0].val;
+	  break;
+	case 6:
+	  yyval.val = yypvt[-1].val;
+	  break;
+	case 7:
+	  yyval.val = yypvt[-0].val;
+	  break;
 	}
 	goto yystack;		/* reset registers in driver code */
 }

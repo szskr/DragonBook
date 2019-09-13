@@ -63,7 +63,7 @@ $(SGRAMMAR): sgrammar.y $(DYACC)
 
 $(CMMNTD434): $(CMMNTDF)
 	$(CC) $(CMMNTDF) -o $(CMMNTD434)
-	echo "1+2+3+4*5" | ./$(CMMNTD434)
+	echo "(1+2)+3+4*5" | ./$(CMMNTD434)
 
 clean:
 	rm -f $(DFILES)
