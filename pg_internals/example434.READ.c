@@ -4,7 +4,6 @@
  */
 #include <ctype.h>
 #include <stdio.h>
-#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -157,15 +156,6 @@ const char * yyreds[] = {
 #define YYACCEPT	return(0)
 #define YYABORT		return(1)
 
-#define YYNEW(type)	malloc(sizeof(type) * yynewmax)
-#define YYCOPY(to, from, type) \
-  (type *) memcpy(to, (char *) from, yymaxdepth * sizeof (type))
-
-/*
-** driver internal defines
-*/
-
-
 /*
 ** global variables used by the parser
 */
@@ -202,17 +192,6 @@ int yyparse(void)
 		int yy_state;		/* current state */
 		int  yy_n;		/* internal state number info */
 	fprintf(stderr, "\nD: ENTERING YYPARSE\n");
-	goto yystack;	/* moved from 6 lines above to here to please C++ */
-
-		/*
-		** get globals into registers.
-		** branch to here only if YYBACKUP was called.
-		*/
-	yynewstate:
-		yy_pv = yypv;
-		yy_ps = yyps;
-		yy_state = yystate;
-		goto yy_newstate;
 
 		/*
 		** get globals into registers.
@@ -336,9 +315,6 @@ int yyparse(void)
 		  /* length of production doubled with extra bit */
 		  int yy_len = yyr2[yy_n];
 
-		  fprintf(stderr, "D:yy_len=%d: low bit is %s\n ", yy_len,
-			  (yy_len&0x01) ? "ON" : "OFF");
-	
 		  if (!(yy_len & 01)) {
 		    yy_len >>= 1;
 		    yyval = (yy_pv -= yy_len)[1]; /* $$ = $1 */
@@ -347,7 +323,7 @@ int yyparse(void)
 		    if (yy_state >= YYLAST ||
 			yychk[yy_state = yyact[yy_state]] != -yy_n)
 		      yy_state = yyact[yypgo[yy_n]];
-		    fprintf(stderr, "D: REDUCE(1): popping %d elements\n", yy_len);
+		    fprintf(stderr, "D: REDUCE(1) by : popping %d elements\n", yy_len);
 		    goto yy_stack;
 		  }
 		  
@@ -358,7 +334,8 @@ int yyparse(void)
 		  if (yy_state >= YYLAST ||
 		      yychk[yy_state = yyact[yy_state]] != -yy_n)
 		    yy_state = yyact[yypgo[yy_n]];
-		  fprintf(stderr, "D: REDUCE(2): popping %d elements\n", yy_len);
+		  fprintf(stderr, "D: REDUCE(2) by rule (%d): popping %d elements\n",
+			  yytmp, yy_len);
 		}
 		/* save until reenter driver code */
 		yystate = yy_state;
@@ -369,6 +346,11 @@ int yyparse(void)
 	/*
 	** code supplied by user is placed in this switch
 	*/
+	if (yytmp < 1 || yytmp > 7) {
+	  fprintf(stderr, "D:  yytmp(%d): INTERNAL ERROR(?)\n", yytmp);
+	  return (0);
+	}
+
 	switch(yytmp) {
 	case 1: 
 	    yyval.val = yypvt[-1].val;
