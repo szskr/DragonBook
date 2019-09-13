@@ -33,20 +33,26 @@ static int yymaxdepth = YYMAXDEPTH;
 int
 yylex(void)
 {
-  int c;
+  int c, tmp_c;
   
   while ((c = getchar()) == ' ' || c == '\t')
     ;
   if (c == EOF)
     return (EOF);
 
+  tmp_c = c;
   switch (c) {
   case '\n': case '(': case ')': case '+': case '*':
+    yylval.val = 77;
+    if (c == '\n')
+      tmp_c = 'N';
+    fprintf(stderr, "\nD:YYLEX(): returning token: '%c':\n", tmp_c);
     return (c);
   }
-  
+ 
   if (isdigit(c)) {
     yylval.val = c - '0';
+    fprintf(stderr, "\nD:YYLEX(): returning token: ID: yylval=%d\n", yylval.val);
     return (id);
   }
 
@@ -195,7 +201,7 @@ int yyparse(void)
 		int *yy_ps;		/* top of state stack */
 		int yy_state;		/* current state */
 		int  yy_n;		/* internal state number info */
-	fprintf(stderr, "D:00:          yystate = %d, yy_state = %d\n", yystate, yy_state);
+	fprintf(stderr, "\nD: ENTERING YYPARSE\n");
 	goto yystack;	/* moved from 6 lines above to here to please C++ */
 
 		/*
@@ -203,7 +209,6 @@ int yyparse(void)
 		** branch to here only if YYBACKUP was called.
 		*/
 	yynewstate:
-	fprintf(stderr, "D:yynewstate: yystate = %d, yy_state = %d\n", yystate, yy_state);
 		yy_pv = yypv;
 		yy_ps = yyps;
 		yy_state = yystate;
@@ -217,16 +222,14 @@ int yyparse(void)
 		yy_pv = yypv;
 		yy_ps = yyps;
 		yy_state = yystate;
-	fprintf(stderr, "D:01:yystack:  yystate = %d, yy_state = %d\n", yystate, yy_state);
 
 		/*
 		** top of for (;;) loop while no reductions done
 		*/
 	yy_stack:
 		/*
-		** put a state and value onto the stacks
+		** SHIFT: put a state and value onto the stacks
 		*/
-        fprintf(stderr, "D:02:yy_stack: yystate = %d, yy_state = %d\n", yystate, yy_state);
 		if (++yy_ps >= &yys[yymaxdepth])	/* room on stack? */
 		{
 		  fprintf(stderr, "DRAGON: STACK OVERFLOW\n");
@@ -234,6 +237,8 @@ int yyparse(void)
 		}
 		*yy_ps = yy_state;
 		*++yy_pv = yyval;
+		fprintf(stderr, "D: SHIFT: Pushing: state=%d, value=%d\n",
+			yy_state, yyval.val);
 
 		/*
 		** we have a new state - find out what to do
@@ -247,11 +252,19 @@ int yyparse(void)
 			goto yydefault;
 		if (yychk[yy_n = yyact[yy_n]] == yychar)	/*valid shift*/
 		{
-			yychar = -1;
 			yyval = yylval;
 			yy_state = yy_n;
-			if ( yyerrflag > 0 )
+			if (yyerrflag > 0)
 				yyerrflag--;
+			
+			if (yychar == '\n')
+			  fprintf(stderr, "D: VALID: yychar was 'nl': goto yy_stack.\n");
+			else if (yychar == id)
+			  fprintf(stderr, "D: VALID: yychar was 'id': goto yy_stack.\n");
+			else
+			  fprintf(stderr, "D: VALID: yychar was '%c': goto yy_stack.\n",
+				  (char)yychar);
+			yychar = -1;
 			goto yy_stack;
 		}
 
@@ -267,14 +280,17 @@ int yyparse(void)
 			{
 				YYCONST int *yyxi = yyexca;
 
+				fprintf(stderr, "D:           going through yyexca[]\n");
 				while ((*yyxi != -1) ||
 				       (yyxi[1] != yy_state))
 				  yyxi += 2;
 				while ((*(yyxi += 2) >= 0) &&
 				       (*yyxi != yychar))
 				  ;
-				if ((yy_n = yyxi[1]) < 0)
+				if ((yy_n = yyxi[1]) < 0) {
+				  fprintf(stderr, "D:         ACCEPT\n");
 				  YYACCEPT;
+				}
 			}
 		}
 
@@ -295,15 +311,13 @@ int yyparse(void)
 		    yychar = -1;
 		    goto yy_newstate;
 		  }
-		}/* end if ( yy_n == 0 ) */
+		}/* end if (yy_n == 0) */
 		
 		/*
 		** reduction by production yy_n
 		** put stack tops, etc. so things right after switch
 		*/
 		
-		fprintf(stderr, "D:GOING To consult parsing tables\n");
-	
 		yytmp = yy_n;			/* value to switch over */
 		yypvt = yy_pv;			/* $vars top of value stack */
 		/*
@@ -322,6 +336,9 @@ int yyparse(void)
 		  /* length of production doubled with extra bit */
 		  int yy_len = yyr2[yy_n];
 
+		  fprintf(stderr, "D:yy_len=%d: low bit is %s\n ", yy_len,
+			  (yy_len&0x01) ? "ON" : "OFF");
+	
 		  if (!(yy_len & 01)) {
 		    yy_len >>= 1;
 		    yyval = (yy_pv -= yy_len)[1]; /* $$ = $1 */
@@ -330,6 +347,7 @@ int yyparse(void)
 		    if (yy_state >= YYLAST ||
 			yychk[yy_state = yyact[yy_state]] != -yy_n)
 		      yy_state = yyact[yypgo[yy_n]];
+		    fprintf(stderr, "D: REDUCE(1): popping %d elements\n", yy_len);
 		    goto yy_stack;
 		  }
 		  
@@ -339,7 +357,8 @@ int yyparse(void)
 		    *(yy_ps -= yy_len) + 1;
 		  if (yy_state >= YYLAST ||
 		      yychk[yy_state = yyact[yy_state]] != -yy_n)
-		    yy_state = yyact[ yypgo[ yy_n ]];
+		    yy_state = yyact[yypgo[yy_n]];
+		  fprintf(stderr, "D: REDUCE(2): popping %d elements\n", yy_len);
 		}
 		/* save until reenter driver code */
 		yystate = yy_state;
