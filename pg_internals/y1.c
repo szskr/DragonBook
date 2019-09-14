@@ -114,7 +114,7 @@ main(int argc, char *argv[])
        (void) setlocale(LC_ALL, "");
   
        if (strcmp(argv[0], "dtyacc") == 0)
-	 d_trace_on();
+	 d_tflag(TFLG_ON);
     
 	int i_level = d_indent_level();
 	d_trace("dyacc: IN  main()");

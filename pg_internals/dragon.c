@@ -3,8 +3,14 @@
  */
 #include "dragon.h"
 
+#define PUT_SPACE() {\
+  int i = 0;\
+  for (i = 0; i < indent_level; i++)\
+    fputc(' ', stderr), fputc (' ', stderr);\
+  }
+
 static int indent_level = 0;
-static unsigned int t_flag = 0;
+static unsigned char tflag = 0;
 
 /*
  * tracer routines
@@ -33,7 +39,7 @@ d_printf(char *format, ...)
 {
   va_list arg;
   
-  if (t_flag == 0)
+  if (tflag == 0)
     return;
   
   va_start (arg, format);
@@ -42,21 +48,18 @@ d_printf(char *format, ...)
 }
 
 void
-d_trace_on()
+d_tflag(unsigned char flg)
 {
-  t_flag = 0x01;
+  tflag = flg;
 }
 
 void
 d_trace(char *s)
 {
-  int i = 0;
-
-  if (t_flag == 0)
+  if (tflag == 0)
     return;
-  
-  for (i = 0; i < indent_level; i++)
-    fputc(' ', stderr), fputc (' ', stderr);
+
+  PUT_SPACE();
   fprintf(stderr, "TRACE: %s\n", s);
 }
 
