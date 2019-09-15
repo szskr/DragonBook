@@ -60,13 +60,13 @@ yylex(void)
     yylval.val = 77;
     if (c == '\n')
       tmp_c = 'N';
-    d_printf("\nD:YYLEX(): returning token: '%c':\n", tmp_c);
+    d_printf("\nD: YYLEX(): returning: '%c':\n", tmp_c);
     return (c);
   }
  
   if (isdigit(c)) {
     yylval.val = c - '0';
-    d_printf("\nD:YYLEX(): returning token: ID: yylval=%d\n", yylval.val);
+    d_printf("\nD: YYLEX(): returning: id: yylval=%d\n", yylval.val);
     return (id);
   }
 
@@ -117,30 +117,30 @@ static YYCONST yytabelem yyact[]={
 };
 
 static YYCONST yytabelem yypact[] = {
-   -40, YYFLAG,    -9,   -37, YYFLAG,   -40, YYFLAG, YYFLAG,
-   -40,   -40, -39,   -37, YYFLAG, YYFLAG
+   -40, YYFLAG, -9,  -37, YYFLAG, -40, YYFLAG, YYFLAG,
+   -40, -40,    -39, -37, YYFLAG, YYFLAG
 };
 
 static YYCONST yytabelem yypgo[] = {
-     0,     7,     8,     6,     3
+   0,     7,     8,     6,     3
 };
 
 static YYCONST yytabelem yyr1[] = {
-     0,     1,     2,     2,     3,     3,     4,     4
+   0,     1,     2,     2,     3,     3,     4,     4
 };
 
 static YYCONST yytabelem yyr2[] = {
-     0,     5,     7,     3,     7,     3,     7,     3
+   0,     5,     7,     3,     7,     3,     7,     3
 };
 
 static YYCONST yytabelem yychk[] = {
-  YYFLAG,    -1,    -2,    -3,    -4,    40,   257,    10,
-  43,    42, -2,    -3,    -4,    41
+   YYFLAG,    -1,    -2,    -3,    -4,    40,   257,    10,
+   43,        42,    -2,    -3,    -4,    41
 };
 
 static YYCONST yytabelem yydef[] = {
-     0,    -2,     0,     3,     5,     0,     7,     1,
-     0,     0,     0,     2,     4,     6
+   0,    -2,     0,     3,     5,     0,     7,     1,
+   0,     0,     0,     2,     4,     6
 };
 
 typedef struct yytoktype {
@@ -148,17 +148,19 @@ typedef struct yytoktype {
   int t_val;
 } yytoktype;
 
-
 yytoktype yytoks[] = {
-	"id",	257,
+        "id",	257,
 	"+",	43,
 	"*",	42,
+	")",    41,
+	"(",    40,
+	"nl",   10,
 	"-unknown-",	-1	/* ends search */
 };
 
 const char * yyreds[] = {
 	"-no such reduction-",
-	"S : E '\n'",
+	"S : E '\\n'",
 	"E : E '+' T",
 	"E : T",
 	"T : T '*' F",
@@ -209,6 +211,7 @@ int yyparse(void)
 		int yy_state;		/* current state */
 		int  yy_n;		/* internal state number info */
 		d_printf("\nD: ENTERING YYPARSE\n");
+		yyval.val = -1;
 
 		/*
 		** get globals into registers.
@@ -353,6 +356,7 @@ int yyparse(void)
 		    yy_state = yyact[yypgo[yy_n]];
 		  d_printf("D: REDUCE(2) by rule (%d): popping %d elements\n",
 			  yytmp, yy_len);
+		  d_printf("D: %s\n", yyreds[yytmp]);
 		}
 		/* save until reenter driver code */
 		yystate = yy_state;
