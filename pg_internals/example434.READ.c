@@ -362,7 +362,7 @@ int yyparse(void)
 		    yy_state = yyact[yypgo[yy_n]];
 		  s_dep -= yy_len;
 		  d_printf("D: REDUCE:                              s_dep=%d\n",
-			   yytmp, yy_len, s_dep);
+			    s_dep);
 		  d_printf("D:         %s\n", yyreds[yytmp]);
 		  
 		}

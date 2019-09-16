@@ -1,0 +1,134 @@
+
+%%
+S : E '\n'
+  ;
+
+E : E '+' 
+  | T  
+  ;
+
+T : T '*' F
+  | F      
+  ;
+
+F : '(' E ')'
+  | id       
+  ;
+%%
+
+state 0
+	$accept : _S $end 
+
+	id  shift 6
+	(  shift 5
+	.  error
+
+	S  goto 1
+	E  goto 2
+	T  goto 3
+	F  goto 4
+
+state 1
+	$accept :  S_$end 
+
+	$end  accept
+	.  error
+
+state 2
+	S :  E_\n 
+	E :  E_+ T 
+
+	+  shift 8
+	\n  shift 7
+	.  error
+
+state 3
+	E :  T_    (3)
+	T :  T_* F 
+
+	*  shift 9
+	.  reduce 3
+
+state 4
+	T :  F_    (5)
+
+	.  reduce 5
+
+state 5
+	F :  (_E ) 
+
+	id  shift 6
+	(  shift 5
+	.  error
+
+	E  goto 10
+	T  goto 3
+	F  goto 4
+
+state 6
+	F :  id_    (7)
+
+	.  reduce 7
+
+state 7
+	S :  E \n_    (1)
+
+	.  reduce 1
+
+state 8
+	E :  E +_T 
+
+	id  shift 6
+	(  shift 5
+	.  error
+
+	T  goto 11
+	F  goto 4
+
+state 9
+	T :  T *_F 
+
+	id  shift 6
+	(  shift 5
+	.  error
+
+	F  goto 12
+
+state 10
+	E :  E_+ T 
+	F :  ( E_) 
+
+	+  shift 8
+	)  shift 13
+	.  error
+
+state 11
+	E :  E + T_    (2)
+	T :  T_* F 
+
+	*  shift 9
+	.  reduce 2
+
+state 12
+	T :  T * F_    (4)
+
+	.  reduce 4
+
+state 13
+	F :  ( E )_    (6)
+
+	.  reduce 6
+
+8/127 terminals, 4/600 nonterminals
+8/300 grammar rules, 14/1000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+8/601 working sets used
+memory: states,etc. 32/2000, parser 9/4000
+9/3001 distinct lookahead sets
+4 extra closures
+14 shift entries, 1 exceptions
+7 goto entries
+3 entries saved by goto default
+Optimizer space used: input 40/2000, output 218/4000
+218 table entries, 204 zero
+maximum spread: 257, maximum offset: 42
