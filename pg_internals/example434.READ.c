@@ -198,6 +198,7 @@ int yyparse(void)
 	/*
 	** Initialize externals - yyparse may be called more than once
 	*/
+	int s_dep = 0;
 	yypv = &yyv[-1];
 	yyps = &yys[-1];
 	yystate = 0;
@@ -234,10 +235,11 @@ int yyparse(void)
 		  d_printf("DRAGON: STACK OVERFLOW\n");
 		  exit(1);
 		}
+		++s_dep;
 		*yy_ps = yy_state;
 		*++yy_pv = yyval;
-		d_printf("D: SHIFT: Pushing: state=%d, value=%d\n",
-			yy_state, yyval.val);
+		d_printf("D: SHIFT: Pushing: state=%d, value=%d, s_dep=%d\n",
+			 yy_state, yyval.val, s_dep);
 
 		/*
 		** we have a new state - find out what to do
@@ -251,6 +253,8 @@ int yyparse(void)
 			goto yydefault;
 		if (yychk[yy_n = yyact[yy_n]] == yychar)	/*valid shift*/
 		{
+		  int save_flag = d_flag;
+		  d_flag = 0;
 			yyval = yylval;
 			yy_state = yy_n;
 			if (yyerrflag > 0)
@@ -264,6 +268,7 @@ int yyparse(void)
 			  d_printf("D: VALID: yychar was '%c': goto yy_stack.\n",
 				  (char)yychar);
 			yychar = -1;
+		  d_flag = save_flag;
 			goto yy_stack;
 		}
 
@@ -344,6 +349,7 @@ int yyparse(void)
 			yychk[yy_state = yyact[yy_state]] != -yy_n)
 		      yy_state = yyact[yypgo[yy_n]];
 		    d_printf("D: REDUCE(1) by : popping %d elements\n", yy_len);
+		    s_dep -= yy_len;
 		    goto yy_stack;
 		  }
 		  
@@ -354,9 +360,11 @@ int yyparse(void)
 		  if (yy_state >= YYLAST ||
 		      yychk[yy_state = yyact[yy_state]] != -yy_n)
 		    yy_state = yyact[yypgo[yy_n]];
-		  d_printf("D: REDUCE(2) by rule (%d): popping %d elements\n",
-			  yytmp, yy_len);
+		  s_dep -= yy_len;
+		  d_printf("D: REDUCE(2) by rule (%d): popping %d elements, s_dep(%d)\n",
+			   yytmp, yy_len, s_dep);
 		  d_printf("D: %s\n", yyreds[yytmp]);
+		  
 		}
 		/* save until reenter driver code */
 		yystate = yy_state;
