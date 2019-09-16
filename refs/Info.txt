@@ -1,5 +1,5 @@
 #
-# Various Refernces
+# Various Information
 #
-001) YACC, Unix, and programming advice from a Bell Lab veteran [JUL 10, 2008]
+001) YACC, Unix, and programming advice from a Bell Labs veteran [JUL 10, 2008]
   https://www.computerworld.com/article/2534785/yacc--unix--and-programming-advice-from-a-bell-labs-veteran.html
