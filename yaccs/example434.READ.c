@@ -58,15 +58,15 @@ yylex(void)
   case '\n': case '(': case ')': case '+': case '*':
     yylval.val = c;
     if (c == '\n')
-      d_printf("\nD: LEX() : Returns: '\\n',     value=%2d\n", c);
+      d_printf("\nD: LEX() : '\\n'\n");
     else
-      d_printf("\nD: LEX() : Returns: '%c',      value=%2d\n", c, c);
+      d_printf("\nD: LEX() : '%c'\n", c);
     return (c);
   }
  
   if (isdigit(c)) {
     yylval.val = c - '0';
-    d_printf("\nD: LEX() : Returns: 'id',     value=%2d\n", yylval.val);
+    d_printf("\nD: LEX() : 'id'\n");
     return (id);
   }
 
@@ -160,13 +160,13 @@ yytoktype yytoks[] = {
 
 const char * yyreds[] = {
 	"-no such reduction-",
-	"S : E '\\n'",
-	"E : E '+' T",
-	"E : T",
-	"T : T '*' F",
-	"T : F",
-	"F : '(' E ')'",
-	"F : id",
+	"[S : E '\\n']   ",
+	"[E : E '+' T]  ",
+	"[E : T]        ",
+	"[T : T '*' F]  ",
+	"[T : F]        ",
+	"[F : '(' E ')']",
+	"[F : id]       ",
 };
 
 /*
@@ -238,7 +238,7 @@ int yyparse(void)
 		++s_dep;
 		*yy_ps = yy_state;
 		*++yy_pv = yyval;
-		d_printf("D: SHIFT : Pushing: state=%2d, value=%2d, s_dep=%d\n",
+		d_printf("D: SHIFT : %2d                 val=%2d  s_dep=%d\n",
 			 yy_state, yyval.val, s_dep);
 
 		/*
@@ -361,10 +361,9 @@ int yyparse(void)
 		      yychk[yy_state = yyact[yy_state]] != -yy_n)
 		    yy_state = yyact[yypgo[yy_n]];
 		  s_dep -= yy_len;
-		  d_printf("D: REDUCE:                              s_dep=%d\n",
-			    s_dep);
-		  d_printf("D:         %s\n", yyreds[yytmp]);
-		  
+		  d_printf("D: REDUCE: (%d) %s        s_dep=%d state=%2d\n",
+			   yytmp, yyreds[yytmp], s_dep, *yy_ps);
+			  
 		}
 		/* save until reenter driver code */
 		yystate = yy_state;
