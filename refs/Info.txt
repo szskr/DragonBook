@@ -1,5 +1,9 @@
 #
 # Various Information
 #
-001) YACC, Unix, and programming advice from a Bell Labs veteran [JUL 10, 2008]
-  https://www.computerworld.com/article/2534785/yacc--unix--and-programming-advice-from-a-bell-labs-veteran.html
+001) Yacc: Yet Another Compiler-Compiler
+     Stephen C. Johnson
+     
+002) YACC, Unix, and programming advice from a Bell Labs veteran
+     By Naomi Hamilton, Computerworld Australia, JUL 10 2008
+     https://www.computerworld.com/article/2534785/yacc--unix--and-programming-advice-from-a-bell-labs-veteran.html
