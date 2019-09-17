@@ -2,11 +2,11 @@
 ;;  Grammar 4.34 (page 222 (4.19))
 ;;
 
-(defpackage #:example434
-  (:export #:example434)
+(defpackage #:dragon
+  (:export #:dragon)
   (:use #:cl #:yacc))
 
-(in-package #:example434)
+(in-package #:dragon)
 
 ;;;
 ;;; The parser
@@ -27,7 +27,7 @@
   (:muffle-conflicts t)
   (:print-states t)
   (:print-goto-graph t)
-  (:print-lookaheads nil)
+  (:print-lookaheads t)
   (:start-symbol S)
   (:terminals (id +  * |(| |)|))
   (:precedence ((:left * ) (:left + )))
@@ -93,11 +93,11 @@
 ;;;
 ;;; The toplevel loop
 ;;;
-(defun example434 ()
+(defun dragon ()
   (loop
-     (with-simple-restart (abort "Return to example434 toplevel.")
+     (with-simple-restart (abort "Return to dragon toplevel.")
        (format t "? ")
        (let ((e (parse-with-lexer #'lexer *yyparse*)))
          (when (null e)
-           (return-from example434))
+           (return-from dragon))
          (format t " => ~A~%" e)))))
