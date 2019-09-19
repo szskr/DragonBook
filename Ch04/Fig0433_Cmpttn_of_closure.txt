@@ -1,4 +1,4 @@
-;; P.222
+;;
 ;; The Closure Operation
 ;;
 

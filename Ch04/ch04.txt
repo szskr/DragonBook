@@ -1,9 +1,6 @@
 ##
 ## DragoBook: Chapter 4
 ##
-
-## Sec. 4.7
-
 The Closure Operation
  If I is a set of items for a grammar G, then closure(O) is the set of items constructed from
  I by the two rules:
