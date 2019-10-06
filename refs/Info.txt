@@ -1,9 +1,40 @@
 #
-# Various Information
+# Yacc is NOT dead YET
 #
-001) Yacc: Yet Another Compiler-Compiler
+
+0010) Yacc: Yet Another Compiler-Compiler
      Stephen C. Johnson
+     https://www.epaperpress.com/lexandyacc/download/yacc.pdf
      
-002) YACC, Unix, and programming advice from a Bell Labs veteran
+0011) YACC, Unix, and programming advice from a Bell Labs veteran
      By Naomi Hamilton, Computerworld Australia, JUL 10 2008
      https://www.computerworld.com/article/2534785/yacc--unix--and-programming-advice-from-a-bell-labs-veteran.html
+
+0020) cl-yacc
+     https://www.irif.fr/~jch/software/cl-yacc/
+
+0030) Parsing with Derivatives (Yacc is dead)
+     Matt's lecture at Stanford at Jun2, 2011
+     https://www.youtube.com/watch?v=ZzsK8Am6dKU
+
+0031) Yacc is dead
+     https://arxiv.org/pdf/1010.5023.pdf
+     http://matt.might.net/articles/parsing-with-derivatives/
+     https://github.com/sellout/YACC-is-dead
+
+0032) Matt's Articles
+     http://matt.might.net/articles/
+
+0040) Parsing with Derivatives
+     A Functional Pearl
+     By Matt and others
+     http://matt.might.net/papers/might2011derivatives.pdf
+
+0041) David Nolen on Parsing with Derivatives
+     Papers I should read. Sep 13, 2016
+     https://www.youtube.com/watch?v=FKiEsJiTMtI&feature=youtu.be
+
+0050) instaparse
+     https://github.com/Engelberg/instaparse
+     Very interesting notes on "Special Thanks" section
+
