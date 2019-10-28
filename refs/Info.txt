@@ -1,24 +1,31 @@
+
 #
 # Yacc is NOT dead YET
 #
 
+ **T0 30sec Intro
+ 
 # Syntax Analysis: LL and LALR internals
 0000) Compilers - Principles, Techniques, and Tools
      Alfred V.Aho, Ravi Sethi, Jeffrey D.Ullman
      Chapter 4: Syntax Analysis
+  **T1 1.00 MIN
 
 # Yaccs - LALR(1)
-0010) Yacc: Yet Another Compiler-Compiler
-     Stephen C. Johnson
-     https://www.epaperpress.com/lexandyacc/download/yacc.pdf
-     
-0011) YACC, Unix, and programming advice from a Bell Labs veteran
+0010) YACC, Unix, and programming advice from a Bell Labs veteran
      By Naomi Hamilton, Computerworld Australia, JUL 10 2008
      https://www.computerworld.com/article/2534785/yacc--unix--and-programming-advice-from-a-bell-labs-veteran.html
+  **T2 1.00 MIN
+
+0011) Yacc: Yet Another Compiler-Compiler
+     Stephen C. Johnson
+     https://www.epaperpress.com/lexandyacc/download/yacc.pdf
+ **T3 30 Seconds
 
 0012) cl-yacc
      https://github.com/jech/cl-yacc
      https://www.irif.fr/~jch/software/cl-yacc/
+ **T4 30 Seconds
 
 # Yacc is dead
 0020) Parsing with Derivatives (Yacc is dead)
@@ -28,16 +35,27 @@
      https://arxiv.org/pdf/1010.5023.pdf
      http://matt.might.net/articles/parsing-with-derivatives/
      https://github.com/sellout/YACC-is-dead
+ **T5 2.00 MIN
 
 0021) Parsing with Derivatives-  A Functional Pearl
      By Matt and others
      http://matt.might.net/papers/might2011derivatives.pdf
+ **T6 1.00 MIN
 
 0022) David Nolen on Parsing with Derivatives
      Papers I should read. Sep 13, 2016
      https://www.youtube.com/watch?v=FKiEsJiTMtI&feature=youtu.be
+ **T7 1.00 MIN
 
 # Instaparse: A paenerator for Clojure
 0030) instaparse
      https://github.com/Engelberg/instaparse
      Very interesting notes on "Special Thanks" section
+ **T8 1.00 MIN
+
+ **T9 30sec  Closing
+
+ **T10 Q/A
+
+ T0 +  T1 + (T2 + T3 + T4) + ((T5 + T6 + T7) + T8) + T9  + T10
+ 30s   1m    1m   1m   1m      2m   1m   1m    1m    30s   Q    = 10 minutes　+ Q/A
