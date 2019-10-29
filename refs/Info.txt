@@ -1,8 +1,6 @@
-
 #
 # Yacc is NOT dead YET
 #
-
  **T0 30sec Intro
  
 # Syntax Analysis: LL and LALR internals
@@ -22,14 +20,14 @@
      https://www.epaperpress.com/lexandyacc/download/yacc.pdf
  **T3 30 Seconds
 
-0012) cl-yacc
+0012) cl-yacc by Juliusz Chroboczek
      https://github.com/jech/cl-yacc
      https://www.irif.fr/~jch/software/cl-yacc/
  **T4 30 Seconds
 
 # Yacc is dead
 0020) Parsing with Derivatives (Yacc is dead)
-     Matt's lecture at Stanford at Jun2, 2011
+     Matt Might's lecture at Stanford at Jun2, 2011
      https://www.youtube.com/watch?v=ZzsK8Am6dKU
      
      https://arxiv.org/pdf/1010.5023.pdf
@@ -47,14 +45,24 @@
      https://www.youtube.com/watch?v=FKiEsJiTMtI&feature=youtu.be
  **T7 1.00 MIN
 
-# Instaparse: A paenerator for Clojure
+# Instaparse: A parser generator for Clojure by Mark Engelberg
 0030) instaparse
      https://github.com/Engelberg/instaparse
      Very interesting notes on "Special Thanks" section
+     
+     APPEDIX 1: https://www.youtube.com/watch?v=b2AUW6psVcE
+	-: Mark's talk at Clojure/West 2014, 38min
+	-: Explains the implementation of instaparse (GLL and more)
+	-: laziness and memorization
+	-: workflow
+	-: Power of asynchronous calls and dataflow
+
+     APPENDIX 2: https://www.youtube.com/watch?v=AEhULv4ruL4
+       -: Solving Problems with Automata- Mark Engelberg and Alex Engelberg
+       -: Clojure/CONJ, Nov 17/2015, 38min      
  **T8 1.00 MIN
-
+ 
  **T9 30sec  Closing
-
  **T10 Q/A
 
  T0 +  T1 + (T2 + T3 + T4) + ((T5 + T6 + T7) + T8) + T9  + T10
