@@ -7,7 +7,7 @@
 0000) Compilers - Principles, Techniques, and Tools
      Alfred V.Aho, Ravi Sethi, Jeffrey D.Ullman
      Chapter 4: Syntax Analysis
-**T1 1.00 MIN
+**T1 2.00 MIN
 
 # Yaccs - LALR(1)
 0010) YACC, Unix, and programming advice from a Bell Labs veteran
@@ -34,17 +34,16 @@
      https://arxiv.org/pdf/1010.5023.pdf
      http://matt.might.net/articles/parsing-with-derivatives/
      https://github.com/sellout/YACC-is-dead
-**T5 2.00 MIN
+**T5 1.00 MIN
 
-0021) Parsing with Derivatives-  A Functional Pearl
-     By Matt and others
-     http://matt.might.net/papers/might2011derivatives.pdf
-**T6 1.00 MIN
-
-0022) David Nolen on Parsing with Derivatives
+0021) David Nolen on "Parsing with Derivatives - A Functional Pearl"
      Papers I should read. Sep 13, 2016
      https://www.youtube.com/watch?v=FKiEsJiTMtI&feature=youtu.be
-**T7 1.00 MIN
+     
+     "Parsing with Derivatives-  A Functional Pearl"
+          By Matt and others
+     http://matt.might.net/papers/might2011derivatives.pdf
+**T6 1.00 MIN
 
 # Instaparse: A parser generator for Clojure by Mark Engelberg
 0030) instaparse
@@ -59,15 +58,15 @@
 	-: Power of asynchronous calls and dataflow
 
      APPENDIX 2: https://www.youtube.com/watch?v=AEhULv4ruL4
-**T8 1.00 MIN
+**T7 1.00 MIN
 
 # On this repository
 0040) DragonBook/{refs, yaccs}
-**T9  30 Seconds
+**T8  30 Seconds
  
-**T10 30 Seconds  Closing
+**T09 30 Seconds  Closing
 
-**T11 Q/A
+**T10 Q/A
 
- T0 +  T1 + (T2 + T3 + T4) + ((T5 + T6 + T7) + T8) + T9  + T10
- 30s   1m    1m   1m   1m      2m   1m   1m    1m    30s   30sec = 10.5 minutes　+ Q/A
+ T0 +  T1 + (T2 + T3 + T4) + (T5 + T6) + T7 + T8  + T09
+ 30s   2m    1m   30s  30s    1m   1m    1m   30s   30sec = 8.5 minutes　+ Q/A
