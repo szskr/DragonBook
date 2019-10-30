@@ -1,19 +1,19 @@
 #
 # Yacc is NOT dead YET
 #
- **T0 30sec Intro
+**T0 30sec Intro
  
 # Syntax Analysis: LL and LALR internals
 0000) Compilers - Principles, Techniques, and Tools
      Alfred V.Aho, Ravi Sethi, Jeffrey D.Ullman
      Chapter 4: Syntax Analysis
-  **T1 1.00 MIN
+**T1 1.00 MIN
 
 # Yaccs - LALR(1)
 0010) YACC, Unix, and programming advice from a Bell Labs veteran
      By Naomi Hamilton, Computerworld Australia, JUL 10 2008
      https://www.computerworld.com/article/2534785/yacc--unix--and-programming-advice-from-a-bell-labs-veteran.html
-  **T2 1.00 MIN
+**T2 1.00 MIN
 
 0011) Yacc: Yet Another Compiler-Compiler
      Stephen C. Johnson
@@ -23,7 +23,8 @@
 0012) cl-yacc by Juliusz Chroboczek
      https://github.com/jech/cl-yacc
      https://www.irif.fr/~jch/software/cl-yacc/
- **T4 30 Seconds
+     Latest update is 2009. First commit at least 15 years ago.
+**T4 30 Seconds
 
 # Yacc is dead
 0020) Parsing with Derivatives (Yacc is dead)
@@ -33,12 +34,12 @@
      https://arxiv.org/pdf/1010.5023.pdf
      http://matt.might.net/articles/parsing-with-derivatives/
      https://github.com/sellout/YACC-is-dead
- **T5 2.00 MIN
+**T5 2.00 MIN
 
 0021) Parsing with Derivatives-  A Functional Pearl
      By Matt and others
      http://matt.might.net/papers/might2011derivatives.pdf
- **T6 1.00 MIN
+**T6 1.00 MIN
 
 0022) David Nolen on Parsing with Derivatives
      Papers I should read. Sep 13, 2016
@@ -58,8 +59,6 @@
 	-: Power of asynchronous calls and dataflow
 
      APPENDIX 2: https://www.youtube.com/watch?v=AEhULv4ruL4
-       -: Solving Problems with Automata- Mark Engelberg and Alex Engelberg
-       -: Clojure/CONJ, Nov 17/2015, 38min      
  **T8 1.00 MIN
  
  **T9 30sec  Closing
