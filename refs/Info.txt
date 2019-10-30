@@ -1,7 +1,7 @@
 #
 # Yacc is NOT dead YET
 #
-**T0 30sec Intro
+**T0 30 Seconds Intro
  
 # Syntax Analysis: LL and LALR internals
 0000) Compilers - Principles, Techniques, and Tools
@@ -63,9 +63,9 @@
 
 # On this repository
 0040) DragonBook/{refs, yaccs}
-**T9  30 secconds
+**T9  30 Seconds
  
-**T10 30sec  Closing
+**T10 30 Seconds  Closing
 
 **T11 Q/A
 
