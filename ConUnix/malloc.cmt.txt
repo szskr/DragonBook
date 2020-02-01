@@ -1,0 +1,36 @@
+#
+# Comments on malloc.c
+#
+
+(1) Why the members of the 'structure map', m_size and m_addr, declared as pointers?
+
+    struct map
+    {
+        char *m_size;
+        char *m_addr;
+    };
+
+   Pre K&R did not support 'unsigned int'.
+   However, by declaring a symbol 'char *', declared symbol's value was  treated as if it has 'unsigned int' type.
+
+   See the example how it is used in malloc() code.
+   
+	int
+   	malloc (struct map *mp, int size)
+	{
+	    register int a;
+  	    register struct map *bp;
+
+  	    for (bp = mp; bp->m_size; bp++)
+    	        if (bp->m_size >= size)
+      	          a = bp->m_addr;
+	     ....
+	}
+
+(2) What is the first argument of the function mfree() ?
+
+    	 void
+    	 mfree(struct map *map, int size, int aa)
+    	 {
+		...
+    	 }
