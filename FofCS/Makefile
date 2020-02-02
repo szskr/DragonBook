@@ -1,12 +1,17 @@
 #
 #
 #
-
 HDRS = fcs.h
-LIBOBS = 02.02.o
+LIBOBJS = 02.02.o
+PROGS= prog.0203
+
+all: $(PROGS)
 
 02.02.o: 02.02.c $(HDRS)
-	cc -c $(CFLAGS) 02.02.c
+	$(CC) -c $(CFLAGS) 02.02.c
+
+prog.0203: prog.0203.o $(LIBOBJS)
+	$(CC) -o prog.0203 prog.0203.o $(LIBOBJS)
 
 clean:
-	rm -f *.o
+	rm -f *.o $(PROGS)
