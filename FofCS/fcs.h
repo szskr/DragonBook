@@ -2,6 +2,7 @@
  * Foundatation of Computer Science
  */
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct CELL *LIST;
 struct CELL {
@@ -11,3 +12,12 @@ struct CELL {
 
 /* Chapter 02 */
 void SelectionSort(int *, int);
+LIST merge(LIST, LIST);
+LIST split(LIST);
+void PrintList(LIST);
+
+
+/*
+ * Tools
+ */
+LIST makeList(int *, int);
