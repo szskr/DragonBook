@@ -1,4 +1,8 @@
 /*
+ * Chapter 02 functions
+ */
+
+/*
  * Fig 2.2 Iterative selection sort
  */
 void
