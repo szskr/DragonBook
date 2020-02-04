@@ -14,6 +14,7 @@ struct CELL {
 void SelectionSort(int *, int);
 LIST merge(LIST, LIST);
 LIST split(LIST);
+LIST MergeSort(LIST);
 void PrintList(LIST);
 
 

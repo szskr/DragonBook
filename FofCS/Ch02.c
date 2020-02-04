@@ -24,6 +24,7 @@ SelectionSort(int a[], int n)
 
 /*
  * Fig. 2.24 Recursive merge
+ *   Assumption: list1 and list2 are sorted lists.
  */
 LIST
 merge(LIST list1, LIST list2)
@@ -58,6 +59,24 @@ split(LIST list)
     list->next = pSecondCell->next;
     pSecondCell->next = split(pSecondCell->next);
     return (pSecondCell);
+  }
+}
+
+/*
+ * FIg. 2.29 The merge sort algorithm
+ */
+LIST
+MergeSort(LIST list)
+{
+  LIST SecondList;
+
+  if (list == NULL)
+    return (NULL);
+  else if (list->next == NULL)
+    return (NULL);
+  else {
+    SecondList = split(list);
+    return (merge(MergeSort(list), MergeSort(SecondList)));
   }
 }
 
