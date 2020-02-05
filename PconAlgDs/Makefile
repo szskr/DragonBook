@@ -14,11 +14,11 @@ alds1_1_d: alds1_1_d.o
 alds1_1_a: alds1_1_a.o
 	cc -o alds1_1_a alds1_1_a.o $(LIBS)
 
-alds1_1_d.o: alds1_1_d.c $(HDR)
-	cc -c $(CFLAGS) alds1_1_d.c
+#alds1_1_d.o: alds1_1_d.c $(HDR)
+#	cc -c $(CFLAGS) alds1_1_d.c
 
-alds1_1_a.o: alds1_1_a.c $(HDR)
-	cc -c $(CFLAGS) alds1_1_a.c
+#alds1_1_a.o: alds1_1_a.c $(HDR)
+#	cc -c $(CFLAGS) alds1_1_a.c
 
 clean:
 	rm -f *.o $(PROGS)
@@ -44,3 +44,9 @@ test_alds1_1_a: alds1_1_a
 	echo 2 2 1 | alds1_1_a
 	@echo ""
 	echo 6 5 2 4 6 1 3 | alds1_1_a
+
+#
+# Macros
+#
+%.o: %.c $(HDR)
+	$(CC) -c $(CFLAGS) -o $@ $<
