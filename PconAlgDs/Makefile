@@ -2,8 +2,9 @@
 #
 #
 HDR = pcon.h
-PROGS = alds1_1_d alds1_1_a
-TESTS= test_0 test_alds1_1_d test_alds1_1_a
+PROGS = alds1_1_d alds1_1_a alds2_1_a alds1_2_b
+TESTS= test_0 \
+	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b
 LIBS=
 
 all: $(PROGS)
@@ -14,11 +15,11 @@ alds1_1_d: alds1_1_d.o
 alds1_1_a: alds1_1_a.o
 	cc -o alds1_1_a alds1_1_a.o $(LIBS)
 
-#alds1_1_d.o: alds1_1_d.c $(HDR)
-#	cc -c $(CFLAGS) alds1_1_d.c
+alds2_1_a: alds2_1_a.o
+	cc -o alds2_1_a alds2_1_a.o $(LIBS)
 
-#alds1_1_a.o: alds1_1_a.c $(HDR)
-#	cc -c $(CFLAGS) alds1_1_a.c
+alds1_2_b: alds1_2_b.o
+	cc -o alds1_2_b alds1_2_b.o $(LIBS)
 
 clean:
 	rm -f *.o $(PROGS)
@@ -44,6 +45,14 @@ test_alds1_1_a: alds1_1_a
 	echo 2 2 1 | alds1_1_a
 	@echo ""
 	echo 6 5 2 4 6 1 3 | alds1_1_a
+
+test_alds2_1_a: alds2_1_a
+	@echo ""
+	echo 1 1  | alds2_1_a
+	@echo ""
+	echo 2 2 1 | alds2_1_a
+	@echo ""
+	echo 6 5 2 4 6 1 3 | alds2_1_a
 
 #
 # Macros

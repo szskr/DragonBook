@@ -1,5 +1,5 @@
 /*
- * Chapter 02 functions
+ * Chapter 02: Iteration, Induction, and Recursion
  */
 #include "./fcs.h"
 

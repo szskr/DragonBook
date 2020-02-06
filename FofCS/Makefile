@@ -2,7 +2,7 @@
 #
 #
 HDRS = fcs.h
-LIBOBJS = Ch02.o fcsTools.o
+LIBOBJS = Ch02.o Ch05.o fcsTools.o
 PROGS= prog.0203
 TESTS= test.0201
 
