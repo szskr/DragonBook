@@ -2,9 +2,9 @@
 #
 #
 HDR = pcon.h
-PROGS = alds1_1_d alds1_1_a alds2_1_a alds1_2_b alds1_2_c
+PROGS = alds1_1_d alds1_1_a alds2_1_a alds1_2_b alds1_2_c alds1_2_d
 TESTS= test_0 \
-	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c
+	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c test_alds1_2_d
 LIBS=
 
 all: $(PROGS)
@@ -23,6 +23,9 @@ alds1_2_b: alds1_2_b.o
 
 alds1_2_c: alds1_2_c.o
 	cc -o alds1_2_c alds1_2_c.o $(LIBS)
+
+alds1_2_d: alds1_2_d.o
+	cc -o alds1_2_d alds1_2_d.o $(LIBS)
 
 clean:
 	rm -f *.o $(PROGS)
@@ -69,7 +72,11 @@ test_alds1_2_c: alds1_2_c
 	echo 5 h4 c9 s4 d2 c3 | alds1_2_c
 	echo 3 a1 b2 c3 | alds1_2_c
 
-#x
+test_alds1_2_d: alds1_2_d
+	@echo ""
+	echo 5 h4 c9 s4 d2 c3 | alds1_2_d
+
+#
 # Macros
 #
 %.o: %.c $(HDR)
