@@ -2,9 +2,14 @@
 #
 #
 HDR = pcon.h
-PROGS = alds1_1_d alds1_1_a alds2_1_a alds1_2_b alds1_2_c alds1_2_d
+
+PROGS = alds1_1_d alds1_1_a alds2_1_a alds1_2_b alds1_2_c alds1_2_d\
+	alds1_3_a
+
 TESTS= test_0 \
-	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c test_alds1_2_d
+	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c test_alds1_2_d\
+	test_alds1_3_a
+
 LIBS= algorithms.o
 
 all: $(PROGS) $(LIBS)
@@ -28,6 +33,9 @@ alds1_2_c: alds1_2_c.o
 
 alds1_2_d: alds1_2_d.o
 	cc -o alds1_2_d alds1_2_d.o $(LIBS)
+
+alds1_3_a: alds1_3_a.o
+	cc -o alds1_3_a alds1_3_a.o $(LIBS)
 
 clean:
 	rm -f *.o $(PROGS)
