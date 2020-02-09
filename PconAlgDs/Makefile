@@ -5,9 +5,11 @@ HDR = pcon.h
 PROGS = alds1_1_d alds1_1_a alds2_1_a alds1_2_b alds1_2_c alds1_2_d
 TESTS= test_0 \
 	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c test_alds1_2_d
-LIBS=
+LIBS= algorithms.o
 
-all: $(PROGS)
+all: $(PROGS) $(LIBS)
+
+$(PROGS): $(LIBS)
 
 alds1_1_d: alds1_1_d.o
 	cc -o alds1_1_d alds1_1_d.o $(LIBS)

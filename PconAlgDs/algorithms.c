@@ -1,19 +1,8 @@
 /*
- * Shell Sort
+ * Personal Collection of Algorithms
  */
-#include "./pcon.h"
+#include "pcon.h"
 
-typedef struct g G;
-
-struct g {
-  int *g;
-  int size;
-  long long cnt;
-};
-
-#define MAX 1000000
-
-#if 0
 int
 compute_shell_strides(int **g, int n)
 {
@@ -49,45 +38,3 @@ compute_shell_strides(int **g, int n)
   }
   return (size);
 }
-#endif
-
-void
-shellSort(int *a, int n, G *g)
-{
-  g->cnt = 0;
-  g->size = compute_shell_strides(&g->g, n);
-}
-  
-int
-main(int argc, char *argv[])
-{
-  int i;
-  int a[MAX], n;
-  G g;
-  int h = 1;
-
-  scanf("%d", &n);
-  for (i = 0; i < n; i++)
-    scanf("%d", &a[i]);
-
-  shellSort(a, n, &g);
-  if (g.g == (int *) ERROR) {
-    fprintf(stderr, "calloc() error\n");
-    exit(1);
-  }
-    
-  for (i = 0; i < g.size; i++)
-    printf("%d ", g.g[i]);
-
-  printf("\n");
-  printf("%d\n", g.cnt);
-
-  for (i = 0; i < n; i++) {
-    if (i > 0 && i%10 == 0)
-      printf("\n");
-    printf("%d ", a[i]);
-  }
-  
-  printf("\n");
-}
-
