@@ -52,10 +52,33 @@ compute_shell_strides(int **g, int n)
 #endif
 
 void
+insertionSort(int *a, int n, G *g, int idx)
+{
+  int i;
+  int gg = g->g[idx];
+
+  for (i = gg; i < n; i++) {
+    int v = a[i];
+    int j = i - gg;
+    while (j >= 0 && a[j] > v) {
+      a[j + gg] = a[j];
+      j -= gg;
+      g->cnt++;
+    }
+    a[j + gg] = v;
+  }
+}
+      
+void
 shellSort(int *a, int n, G *g)
 {
+  int i;
+  
   g->cnt = 0;
   g->size = compute_shell_strides(&g->g, n);
+
+  for (i = g->size - 1; i >= 0; i--)
+    insertionSort(a, n, g, i);
 }
   
 int
@@ -76,11 +99,11 @@ main(int argc, char *argv[])
     exit(1);
   }
     
-  for (i = 0; i < g.size; i++)
+  for (i = g.size - 1; i >= 0; i--)
     printf("%d ", g.g[i]);
 
   printf("\n");
-  printf("%d\n", g.cnt);
+  printf("%lld\n", g.cnt);
 
   for (i = 0; i < n; i++) {
     if (i > 0 && i%10 == 0)
@@ -90,4 +113,3 @@ main(int argc, char *argv[])
   
   printf("\n");
 }
-

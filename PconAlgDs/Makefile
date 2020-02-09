@@ -76,7 +76,7 @@ test_alds1_2_c: alds1_2_c
 
 test_alds1_2_d: alds1_2_d
 	@echo ""
-	echo 5 h4 c9 s4 d2 c3 | alds1_2_d
+	echo 5 5 1 4 3 2 | alds1_2_d
 
 #
 # Macros
