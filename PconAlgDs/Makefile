@@ -86,6 +86,10 @@ test_alds1_2_d: alds1_2_d
 	@echo ""
 	echo 5 5 1 4 3 2 | alds1_2_d
 
+test_alds1_3_a: alds1_3_a
+	@echo ""
+	echo "1 2 + 10 *" | alds1_3_a
+
 #
 # Macros
 #
