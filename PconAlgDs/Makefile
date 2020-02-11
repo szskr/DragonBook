@@ -4,11 +4,11 @@
 HDR = pcon.h
 
 PROGS = alds1_1_d alds1_1_a alds2_1_a alds1_2_b alds1_2_c alds1_2_d\
-	alds1_3_a
+	alds1_3_a alds1_3_b
 
 TESTS= test_0 \
 	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c test_alds1_2_d\
-	test_alds1_3_a
+	test_alds1_3_a test_alds1_3_b
 
 LIBS= algorithms.o
 
@@ -36,6 +36,9 @@ alds1_2_d: alds1_2_d.o
 
 alds1_3_a: alds1_3_a.o
 	cc -o alds1_3_a alds1_3_a.o $(LIBS)
+
+alds1_3_b: alds1_3_b.o
+	cc -o alds1_3_b alds1_3_b.o $(LIBS)
 
 clean:
 	rm -f *.o $(PROGS)
@@ -89,6 +92,10 @@ test_alds1_2_d: alds1_2_d
 test_alds1_3_a: alds1_3_a
 	@echo ""
 	echo "1 2 + 10 *" | alds1_3_a
+
+test_alds1_3_b: alds1_3_b
+	@echo ""
+	echo "5 100 p1 150 p2 80 p3 200 p4 350 p5 20" | alds1_3_b
 
 #
 # Macros
