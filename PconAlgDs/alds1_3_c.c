@@ -4,6 +4,8 @@
 #include "pcon.h"
 
 #define NODE_HEAD 0x01
+#define FORWARD   0x01
+#define BACKWARD  0x02
 
 typedef struct node Node;
 struct node {
@@ -16,10 +18,11 @@ struct node {
 Node *insert_key(Node *, int);
 void insert_node(Node *, Node *);
 Node *find_key(Node *, int);
-void remove_node(Node *);
+void remove_node(Node *, Node *);
 Node *alloc_node(int);
 Node *alloc_head();
-void traverse_nodes(Node *);
+void traverse_nodes(Node *, int);
+void free_nodes(Node *);
 void dump_node(Node *, char *);
 
 Node *
@@ -32,6 +35,7 @@ insert_key(Node *node, int key)
     return (n);
   n->key = key;
   n->next = node->next;
+  node->next->prev = n;
   node->next = n;
   n->prev = node;
   return (n);
@@ -41,6 +45,7 @@ void
 insert_node(Node *np, Node *n)
 {
   n->next = np->next;
+  np->next->prev = n;
   np->next = n;
   n->prev = np;
 }
@@ -49,11 +54,11 @@ Node *
 find_key(Node *node, int key)
 {
   Node *n = node;
+  int cnt = 0;
 
   do {
-    if (n->flags & NODE_HEAD)
-      continue;
-    if (n->key == key)
+    cnt++;
+    if (n->key == key && !(n->flags & NODE_HEAD))
       return (n);
     n = n->next;
   } while (!(n->flags & NODE_HEAD));
@@ -65,10 +70,17 @@ find_key(Node *node, int key)
 }
 
 void
-remove_node(Node *node)
+remove_node(Node *head, Node *node)
 {
+  if (!(head->flags & NODE_HEAD))
+    return;
+  
   if (node->flags & NODE_HEAD)
     return;
+
+  if (!find_key(head, node->key))
+    return;
+      
   node->prev->next = node->next;
   node->next->prev = node->prev;
 }
@@ -105,21 +117,40 @@ dump_node(Node *n, char *s)
 {
   if (s)
     printf("%s\n", s);
-  
+
+  if (n == (Node *) NULL)
+      return;
+      
   printf("TYPE = %s, ", (n->flags & NODE_HEAD) ? "HEAD" : "KEY ");
   printf("key  = %d\n", n->key);
 }
 
 void
-traverse_nodes(Node *n)
+traverse_nodes(Node *n, int which)
 {
   int cnt = 0;
 
-  printf("TRAVER_NODES():\n");
+  printf("TRAVER_NODES(%s):\n", which == FORWARD ? "forward" : "backward");
   while (!(n->flags & NODE_HEAD) || (cnt == 0)) {
     dump_node(n, (char *)NULL);
-    n = n->next;
+    if (which == FORWARD)
+      n = n->next;
+    else
+      n = n->prev;
     cnt++;
+  }
+}
+
+void
+free_nodes(Node *head)
+{
+  Node *n = head;
+  Node *next;
+  
+  while (1) {
+    next  = n->next;
+    free(n);
+    n = next;
   }
 }
   
@@ -134,10 +165,14 @@ main(int argc, char *argv[])
   insert_node(head, alloc_node(11));
   insert_node(head, alloc_node(12));
 
-  traverse_nodes(head);
+  node = find_key(head, 12);
+  dump_node(node, "twelve");
 
-  dump_node(head->prev, "DUMP_PREV_HEAD");
-  dump_node(head->next, "DUMP_NEXT_HEAD");
-  
-  return (1);
+  traverse_nodes(head, FORWARD);
+  traverse_nodes(head, BACKWARD);
+  remove_node(head, find_key(head, 11));
+  traverse_nodes(head, FORWARD);
+  traverse_nodes(head, BACKWARD);
+
+  return (0);
 }

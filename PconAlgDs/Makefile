@@ -100,6 +100,10 @@ test_alds1_3_b: alds1_3_b
 	@echo ""
 	echo "5 100 p1 150 p2 80 p3 200 p4 350 p5 20" | alds1_3_b
 
+test_alds1_3_c: alds1_3_c
+	@echo ""
+	alds1_3_c
+
 #
 # Macros
 #
