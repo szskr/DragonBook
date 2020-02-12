@@ -128,6 +128,7 @@ main(int argc, char *argv[])
   }
 
   while (!isEmpty(queue)) {
+    printf("cnt = %d, head = %d, tail = %d\n", queue->cnt, queue->head, queue->tail);
     p = deque(queue);
     i = min(q, p->t);
     p->t -= i;
@@ -135,7 +136,7 @@ main(int argc, char *argv[])
     if (p->t > 0)
       enque(queue, p);
     else
-      printf("%s %d\n", p->name, elaps);
+      printf("%s %d head = %d, tail = %d\n", p->name, elaps, queue->head, queue->tail);
   }
-    
+  printf("head = %d, tail = %d\n", queue->head, queue->tail);
 }
