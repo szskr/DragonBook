@@ -129,7 +129,7 @@ test_alds1_4_b: alds1_4_b
 
 test_alds1_4_c: alds1_4_c
 	@echo ""
-	echo "5 1 2 3 4 5 3 3 4 1" | alds1_4_c
+	echo "6 insert AAA insert AAC find AAA find CCC insert CCC find CCC" | alds1_4_c
 
 #
 # Macros
