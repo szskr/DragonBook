@@ -5,12 +5,12 @@ HDR = pcon.h
 
 PROGS = alds1_1_d alds1_1_a alds2_1_a alds1_2_b alds1_2_c alds1_2_d\
 	alds1_3_a alds1_3_b alds1_3_c alds1_3_d \
-	alds1_4_a alds1_4_b alds1_4_c
+	alds1_4_a alds1_4_b alds1_4_c alds1_4_d
 
 TESTS= test_0 \
 	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c test_alds1_2_d\
 	test_alds1_3_a test_alds1_3_b test_alds1_3_c \
-	test_alds1_4_a test_alds1_4_b test_alds1_4_c
+	test_alds1_4_a test_alds1_4_b test_alds1_4_c test_alds1_4_d
 
 LIBS= algorithms.o
 
@@ -56,6 +56,9 @@ alds1_4_b: alds1_4_b.o
 
 alds1_4_c: alds1_4_c.o
 	cc -o alds1_4_c alds1_4_c.o $(LIBS)
+
+alds1_4_d: alds1_4_d.o
+	cc -o alds1_4_d alds1_4_d.o $(LIBS)
 
 
 clean:
@@ -130,6 +133,10 @@ test_alds1_4_b: alds1_4_b
 test_alds1_4_c: alds1_4_c
 	@echo ""
 	echo "6 insert AAA insert AAC find AAA find CCC insert CCC find CCC" | alds1_4_c
+
+test_alds1_4_d: alds1_4_d
+	@echo ""
+	echo "6 insert AAA insert AAC find AAA find CCC insert CCC find CCC" | alds1_4_d
 
 #
 # Macros

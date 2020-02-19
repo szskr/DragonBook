@@ -1,5 +1,5 @@
 /*
- * Binary Search
+ * Hash
  */
 #include "./pcon.h"
 
