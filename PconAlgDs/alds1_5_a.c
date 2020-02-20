@@ -7,14 +7,19 @@ int
 solve(int i, int m, int *a, int n)
 {
   int res;
+
+  if (m < 0 || i >= n)
+    return (0);
   
   if (m == 0)
     return (1);
   
-  if (i >= n)
-    return (0);
+  res = solve(i + 1, m - a[i], a, n);
   
-  res = solve(i + 1, m, a, n) || solve(i + 1, m - a[i], a, n);
+  if (res)
+    return (res);
+  
+  res = solve(i + 1, m, a, n);
   
   return (res);
 }
