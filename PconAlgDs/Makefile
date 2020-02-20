@@ -3,14 +3,17 @@
 #
 HDR = pcon.h
 
-PROGS = alds1_1_d alds1_1_a alds2_1_a alds1_2_b alds1_2_c alds1_2_d\
+PROGS = rec\
+	alds1_1_d alds1_1_a alds2_1_a alds1_2_b alds1_2_c alds1_2_d\
 	alds1_3_a alds1_3_b alds1_3_c alds1_3_d \
-	alds1_4_a alds1_4_b alds1_4_c alds1_4_d
+	alds1_4_a alds1_4_b alds1_4_c alds1_4_d \
+	alds1_5_a
 
 TESTS= test_0 \
 	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c test_alds1_2_d\
 	test_alds1_3_a test_alds1_3_b test_alds1_3_c \
-	test_alds1_4_a test_alds1_4_b test_alds1_4_c test_alds1_4_d
+	test_alds1_4_a test_alds1_4_b test_alds1_4_c test_alds1_4_d\
+	test_alds1_5_a
 
 LIBS= algorithms.o
 
@@ -18,47 +21,53 @@ all: $(PROGS) $(LIBS)
 
 $(PROGS): $(LIBS)
 
+rec: rec.o
+	$(CC) -o rec rec.o $(LIBS)
+
 alds1_1_d: alds1_1_d.o
-	cc -o alds1_1_d alds1_1_d.o $(LIBS)
+	$(CC) -o alds1_1_d alds1_1_d.o $(LIBS)
 
 alds1_1_a: alds1_1_a.o
-	cc -o alds1_1_a alds1_1_a.o $(LIBS)
+	$(CC) -o alds1_1_a alds1_1_a.o $(LIBS)
 
 alds2_1_a: alds2_1_a.o
-	cc -o alds2_1_a alds2_1_a.o $(LIBS)
+	$(CC) -o alds2_1_a alds2_1_a.o $(LIBS)
 
 alds1_2_b: alds1_2_b.o
-	cc -o alds1_2_b alds1_2_b.o $(LIBS)
+	$(CC) -o alds1_2_b alds1_2_b.o $(LIBS)
 
 alds1_2_c: alds1_2_c.o
-	cc -o alds1_2_c alds1_2_c.o $(LIBS)
+	$(CC) -o alds1_2_c alds1_2_c.o $(LIBS)
 
 alds1_2_d: alds1_2_d.o
-	cc -o alds1_2_d alds1_2_d.o $(LIBS)
+	$(CC) -o alds1_2_d alds1_2_d.o $(LIBS)
 
 alds1_3_a: alds1_3_a.o
-	cc -o alds1_3_a alds1_3_a.o $(LIBS)
+	$(CC) -o alds1_3_a alds1_3_a.o $(LIBS)
 
 alds1_3_b: alds1_3_b.o
-	cc -o alds1_3_b alds1_3_b.o $(LIBS)
+	$(CC) -o alds1_3_b alds1_3_b.o $(LIBS)
 
 alds1_3_c: alds1_3_c.o
-	cc -o alds1_3_c alds1_3_c.o $(LIBS)
+	$(CC) -o alds1_3_c alds1_3_c.o $(LIBS)
 
 alds1_3_d: alds1_3_d.o
-	cc -o alds1_3_d alds1_3_d.o $(LIBS)
+	$(CC) -o alds1_3_d alds1_3_d.o $(LIBS)
 
 alds1_4_a: alds1_4_a.o
-	cc -o alds1_4_a alds1_4_a.o $(LIBS)
+	$(CC) -o alds1_4_a alds1_4_a.o $(LIBS)
 
 alds1_4_b: alds1_4_b.o
-	cc -o alds1_4_b alds1_4_b.o $(LIBS)
+	$(CC) -o alds1_4_b alds1_4_b.o $(LIBS)
 
 alds1_4_c: alds1_4_c.o
-	cc -o alds1_4_c alds1_4_c.o $(LIBS)
+	$(CC) -o alds1_4_c alds1_4_c.o $(LIBS)
 
 alds1_4_d: alds1_4_d.o
-	cc -o alds1_4_d alds1_4_d.o $(LIBS)
+	$(CC) -o alds1_4_d alds1_4_d.o $(LIBS)
+
+alds1_5_a: alds1_5_a.o
+	$(CC) -o alds1_5_a alds1_5_a.o $(LIBS)
 
 
 clean:
@@ -132,11 +141,15 @@ test_alds1_4_b: alds1_4_b
 
 test_alds1_4_c: alds1_4_c
 	@echo ""
-	echo "6 insert AAA insert AAC find AAA find CCC insert CCC find CCC" | alds1_4_c
+	echo "6 insert AAA insert AAC find AAA find $(CC)C insert $(CC)C find $(CC)C" | alds1_4_c
 
 test_alds1_4_d: alds1_4_d
 	@echo ""
-	echo "6 insert AAA insert AAC find AAA find CCC insert CCC find CCC" | alds1_4_d
+	echo "5 3 8 1 7 3 9" | alds1_4_d
+
+test_alds1_5_a: alds1_5_a
+	@echo ""
+	echo "5  1 5 7 10 21 4 2 4 17 8" | alds1_5_a
 
 #
 # Macros

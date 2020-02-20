@@ -1,5 +1,6 @@
 /*
  * combinations
+ * cnf: p.143
  */
 
 #include <stdio.h>
