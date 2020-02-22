@@ -1,5 +1,5 @@
 /*
- * Merge Sort
+ * Quick  Sort
  */
 #include "./pcon.h"
 

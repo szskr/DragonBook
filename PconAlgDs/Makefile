@@ -7,13 +7,15 @@ PROGS = rec\
 	alds1_1_d alds1_1_a alds2_1_a alds1_2_b alds1_2_c alds1_2_d\
 	alds1_3_a alds1_3_b alds1_3_c alds1_3_d \
 	alds1_4_a alds1_4_b alds1_4_c alds1_4_d \
-	alds1_5_a alds1_5_b alds1_6_b
+	alds1_5_a alds1_5_b \
+	alds1_6_b alds1_6_c
 
 TESTS= test_0 \
 	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c test_alds1_2_d\
 	test_alds1_3_a test_alds1_3_b test_alds1_3_c \
 	test_alds1_4_a test_alds1_4_b test_alds1_4_c test_alds1_4_d\
-	test_alds1_5_a test_alds1_5_b test_alds1_6_b
+	test_alds1_5_a test_alds1_5_b \
+	test_alds1_6_b test_alds1_6_c
 
 LIBS= algorithms.o
 
@@ -74,6 +76,11 @@ alds1_5_b: alds1_5_b.o
 
 alds1_6_b: alds1_6_b.o
 	$(CC) -o alds1_6_b alds1_6_b.o $(LIBS)
+
+alds1_6_c: alds1_6_c.o
+	$(CC) -o alds1_6_c alds1_6_c.o $(LIBS)
+
+
 
 clean:
 	rm -f *.o $(PROGS)
@@ -163,6 +170,10 @@ test_alds1_5_b: alds1_5_b
 test_alds1_6_b: alds1_6_b
 	@echo ""
 	echo "12 13 19 9 5 12 8 7 4 21 2 6 11" | alds1_6_b
+
+test_alds1_6_c: alds1_6_c
+	@echo ""
+	echo "12 13 19 9 5 12 8 7 4 21 2 6 11" | alds1_6_c
 
 #
 # Macros
