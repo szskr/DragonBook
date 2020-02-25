@@ -3,16 +3,15 @@
  */
 #include "./pcon.h"
 
+#ifdef ALONE
 int
-partition(int *a, int p, int r)
+partition (*a, int p, int r)
 {
   int j;
   int x = a[r];
   int i = p - 1;
   int tmp;
 
-  printf("a[%d] = %d\n", r, a[r]);
-  
   for (j = p; j < r; ++j) {
     if (a[j] <= x) {
       ++i;
@@ -25,6 +24,7 @@ partition(int *a, int p, int r)
   
   return (i);
 }
+#endif
 
 int
 main(int argc, char *argv[])

@@ -173,7 +173,7 @@ test_alds1_6_b: alds1_6_b
 
 test_alds1_6_c: alds1_6_c
 	@echo ""
-	echo "12 13 19 9 5 12 8 7 4 21 2 6 11" | alds1_6_c
+	echo "6 d 3 h 2 d 1 s 3 d 2 c 1" | alds1_6_c 1
 
 #
 # Macros

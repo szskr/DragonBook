@@ -38,3 +38,23 @@ compute_shell_strides(int **g, int n)
   }
   return (size);
 }
+
+int
+partition(int *a, int p, int r)
+{
+  int j;
+  int x = a[r];
+  int i = p - 1;
+
+  for (j = p; j < r; ++j) {
+    if (a[j] <= x) {
+      ++i;
+      swap(int, a[i], a[j]);
+    }
+  }
+  
+  ++i;
+  swap(int, a[i], a[r]);
+  
+  return (i);
+}

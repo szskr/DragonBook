@@ -3,55 +3,88 @@
  */
 #include "./pcon.h"
 
+int d_flag = 0;
+
+typedef struct Card Card;
+struct Card {
+  char suit;
+  int value;
+};
+
 int
-partition(int *a, int p, int r)
+C_partition(Card **a, int p, int r)
 {
   int j;
-  int x = a[r];
+  int x = a[r]->value;
   int i = p - 1;
 
-  printf("a[%d] = %d\n", r, a[r]);
-  
-  for (j = p; j < r; j++) {
-    if (a[j] <= x) {
-      i++;
-      swap(int, a[i], a[j]);
+  for (j = p; j < r; ++j) {
+    if (a[j]->value <= x) {
+      ++i;
+      swap(int, a[i]->value, a[j]->value);
     }
   }
-
-  swap(int, a[++i], a[r]);
+  
+  ++i;
+  swap(int, a[i]->value, a[r]->value);
   
   return (i);
+}
+
+void
+quicksort(Card **cards, int n, int p, int r)
+{
+  int q;
+
+  if (p < r) { 
+    q = C_partition(cards, p, r);
+    quicksort(cards, n, p, q - 1);
+    quicksort(cards, n, q + 1, r);
+  }
 }
 
 int
 main(int argc, char *argv[])
 {
   int n;
-  int *a;
   int i;
-  int q;
+  Card **cards;
+  char suit;
+  int val;
+  char s[10];
 
+  if (argc != 1)
+    d_flag = 1;
+ 
   scanf("%d", &n);
+  printf("n = %d\n", n);
   
-  a = (int *) malloc(n * sizeof (int));
-  if (a == (int *) NULL)
+  cards = (Card **) malloc(n * sizeof (Card *));
+  if (cards == (Card **) NULL)
     return (1);
   
-  for (i = 0; i < n; i++)
-    scanf("%d", a+i);
-
-  q = partition(a, 0, n-1);
-
   for (i = 0; i < n; i++) {
-    if (i)
-      printf(" ");
-    if (i == q)
-      printf("[");
-    printf("%d", a[i]);
-    if (i == q)
-      printf("]");
+    cards[i] = (Card *) malloc (sizeof (Card));
+    if (cards[i] == (Card *) NULL) {
+      fprintf(stderr, "malloc() error\n");
+      exit (1);
+    }
+    scanf("%s %d", s, &val);
+    cards[i]->suit = s[0];
+    cards[i]->value = val;    
   }
-  printf("\n");
+
+  if (d_flag) 
+    for (i = 0; i < n; i++)
+      printf("Card[%d] = (%c, %d)\n", i, cards[i]->suit, cards[i]->value);
+
+  quicksort(cards, n, 0, n-1);
+
+  if (d_flag) {
+    printf("\n");
+    for (i = 0; i < n; i++)
+      printf("Card[%d] = (%c, %d)\n", i, cards[i]->suit, cards[i]->value);
+  }
+
   return (0);
 }

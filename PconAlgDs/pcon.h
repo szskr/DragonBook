@@ -18,3 +18,4 @@ typedef long long llong;
 #define swap(type, x, y) {type _t_; _t_ = x; x = y; y = _t_;}
 
 int compute_shell_strides(int **, int);
+int partition(int *, int, int);
