@@ -1,5 +1,5 @@
 /*
- * Merge Sort
+ * Partion
  */
 #include "./pcon.h"
 
@@ -9,17 +9,19 @@ partition(int *a, int p, int r)
   int j;
   int x = a[r];
   int i = p - 1;
+  int tmp;
 
   printf("a[%d] = %d\n", r, a[r]);
   
-  for (j = p; j < r; j++) {
+  for (j = p; j < r; ++j) {
     if (a[j] <= x) {
-      i++;
+      ++i;
       swap(int, a[i], a[j]);
     }
   }
-
-  swap(int, a[++i], a[r]);
+  
+  ++i;
+  swap(int, a[i], a[r]);
   
   return (i);
 }
