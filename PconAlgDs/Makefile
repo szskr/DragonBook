@@ -1,5 +1,5 @@
 #
-#
+# Simple Makefile
 #
 HDR = pcon.h
 
@@ -10,7 +10,7 @@ PROGS = rec\
 	alds1_5_a alds1_5_b \
 	alds1_6_b alds1_6_c \
 	7_2_sort\
-	alds1_7_a
+	alds1_7_a alds1_7_b
 
 TESTS= test_0 \
 	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c test_alds1_2_d\
@@ -19,7 +19,7 @@ TESTS= test_0 \
 	test_alds1_5_a test_alds1_5_b \
 	test_alds1_6_b test_alds1_6_c \
 	test_7_2_sort\
-	test_alds1_7_a
+	test_alds1_7_a test_alds1_7_b
 
 LIBS= algorithms.o
 
@@ -90,7 +90,8 @@ alds1_6_c: alds1_6_c.o
 alds1_7_a: alds1_7_a.o
 	$(CC) -o alds1_7_a alds1_7_a.o $(LIBS)
 
-
+alds1_7_b: alds1_7_b.o
+	$(CC) -o alds1_7_b alds1_7_b.o $(LIBS)
 
 clean:
 	rm -f *.o $(PROGS)
@@ -206,6 +207,23 @@ test_alds1_7_a: alds1_7_a
 		10 2 11 12 \
 		11 0 \
 		12 0" | alds1_7_a 1
+
+test_alds1_7_b: alds1_7_b
+	@echo ""
+	echo "13 \
+		0 3 1 4 10 \
+		1 2 2 3 \
+		2 0 \
+		3 0 \
+		4 3 5 6 7 \
+		5 0 \
+		6 0 \
+		7 2 8 9 \
+		8 0 \
+		9 0 \
+		10 2 11 12 \
+		11 0 \
+		12 0" | alds1_7_b 1
 
 #
 # Macros
