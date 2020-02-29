@@ -8,9 +8,11 @@ struct node {         /* left-child, right sibling representation */
   Node *parent;
   Node *child_lm;     /* left most child */
   Node *sibling_imr;  /* sibling immidiately right */
-  int id;
 };
 
+const char str_root[] = {'r', 'o', 'o', 't', 0};
+const char str_node[] = {'n', 'o', 'd', 'e', 0};
+const char str_leaf[] = {'l', 'e', 'a', 'f', 0};
 
 int
 depth(Node *n)
@@ -32,11 +34,11 @@ dump_info(Node *nodes, int i)
   int id;
 
   if (n->parent == n)
-    type = "root";
+    type = (char *) str_root;
   else if (n->child_lm != (Node *) NULL)
-    type = "node";
+    type = (char *) str_node;
   else
-    type = "leaf";
+    type = (char *) str_leaf;
 
    printf ("Node :%2d, parent:%2lu, dep:%d, %s, [",
 	  i,
@@ -47,10 +49,10 @@ dump_info(Node *nodes, int i)
   if (n->child_lm != (Node *) NULL) {
     Node *c = n->child_lm;
     do {
-      printf("%d,", c - nodes);
+      printf("%ld,", c - nodes);
       c = c->sibling_imr;
     } while (c != c->sibling_imr);
-    printf("%d", c - nodes);
+    printf("%ld", c - nodes);
    }
   printf("]");
   printf("\n");
@@ -90,9 +92,6 @@ main(int argc, char *argv[])
  
     scanf("%d", &id);
 
-    /*
-     * Get the number of children
-     */
     scanf("%d", &num_child);
     for (j = 0; j < num_child; j++) {
       scanf("%d", &child);

@@ -4,10 +4,10 @@
 #include "./pcon.h"
 
 typedef struct node Node;
-struct node {         /* left-child, right sibling representation */
+struct node {     
   Node *parent;
-  Node *child_lm;     /* left most child */
-  Node *sibling_imr;  /* sibling immidiately right */
+  Node *left;
+  Node *right;
 };
 
 const char str_root[] = {'r', 'o', 'o', 't', 0};
