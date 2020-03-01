@@ -1,5 +1,5 @@
 /*
- * A Rooted Tree
+ * Binary Tree
  */
 #include "./pcon.h"
 
@@ -29,33 +29,6 @@ depth(Node *n)
 void
 dump_info(Node *nodes, int i)
 {
-  Node *n = nodes + i;
-  char *type;
-  int id;
-
-  if (n->parent == n)
-    type = (char *) str_root;
-  else if (n->child_lm != (Node *) NULL)
-    type = (char *) str_node;
-  else
-    type = (char *) str_leaf;
-
-   printf ("Node :%2d, parent:%2lu, dep:%d, %s, [",
-	  i,
-	  (n->parent - nodes),
-	  depth(n),
-	  type);
-
-  if (n->child_lm != (Node *) NULL) {
-    Node *c = n->child_lm;
-    do {
-      printf("%ld,", c - nodes);
-      c = c->sibling_imr;
-    } while (c != c->sibling_imr);
-    printf("%ld", c - nodes);
-   }
-  printf("]");
-  printf("\n");
 }
 
 int
@@ -63,6 +36,7 @@ main(int argc, char *argv[])
 {
   int n, i, j;
   Node *nodes;
+ int id, l, r;
   
   scanf("%d", &n);
   if (n <= 0) {
@@ -80,31 +54,20 @@ main(int argc, char *argv[])
     (nodes+i)->parent = nodes + i;
   
   for (i = 0; i < n; i++) {
-    int id;
-    int num_child;
-    int child;
-    Node *nchild;
-    Node *pchild;
-    Node *np = nodes + i;
+    scanf("%d %d %d", &id, &l, &r);
     
-    np->child_lm = (Node *) NULL;
-    pchild = (Node *) NULL;
- 
-    scanf("%d", &id);
+    if (l != -1) { 
+      (nodes + id)->left = nodes + l;
+      (nodes + l)->parent = nodes + id;
+    } else
+      (nodes + id)->left = (Node *) -1;
 
-    scanf("%d", &num_child);
-    for (j = 0; j < num_child; j++) {
-      scanf("%d", &child);
-      nchild = nodes + child;
-      if (j == 0)
-	np->child_lm = nchild;
-      nchild->parent = np;
-      if (pchild != (Node *) NULL)
-	pchild->sibling_imr = nchild;
-      nchild->sibling_imr = nchild;
-      pchild = nchild;
-     }
-   }
+    if (r != -1) {
+      (nodes + id)->right = nodes + r;
+      (nodes + r)->parent = nodes + id;
+    } else
+      (nodes + id)->right = (Node *) -1;
+  }
 
   printf("\n");
   for (i = 0; i < n; i++)
