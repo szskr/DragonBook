@@ -29,6 +29,30 @@ depth(Node *n)
 void
 dump_info(Node *nodes, int i)
 {
+  Node *n = nodes + i;
+  char *type;
+  int sibling = 0;
+
+  if (n->parent == n)
+    type = (char *) str_root;
+  else if ((n->left == (Node *) -1) && (n->right == (Node *) -1))
+    type = (char *) str_leaf;
+  else
+    type = (char *) str_node;
+
+  if (n->parent == n)
+    sibling = -1;
+  else if {
+  }
+
+  printf ("Node :%2d, parent:%2lu, sibling = %2d, dep:%d, %s",
+	  i,
+	  (n->parent - nodes),
+	  sibling,
+	  depth(n),
+	  type);
+
+  printf("\n");
 }
 
 int
