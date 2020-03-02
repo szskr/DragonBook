@@ -10,7 +10,7 @@ PROGS = rec\
 	alds1_5_a alds1_5_b \
 	alds1_6_b alds1_6_c \
 	7_2_sort\
-	alds1_7_a alds1_7_b
+	alds1_7_a alds1_7_b alds1_7_c
 
 TESTS= test_0 \
 	test_alds1_1_d test_alds1_1_a test_alds2_1_a test_alds1_2_b test_alds1_2_c test_alds1_2_d\
@@ -19,7 +19,7 @@ TESTS= test_0 \
 	test_alds1_5_a test_alds1_5_b \
 	test_alds1_6_b test_alds1_6_c \
 	test_7_2_sort\
-	test_alds1_7_a test_alds1_7_b
+	test_alds1_7_a test_alds1_7_b test_alds1_7_c
 
 LIBS= algorithms.o
 
@@ -92,6 +92,9 @@ alds1_7_a: alds1_7_a.o
 
 alds1_7_b: alds1_7_b.o
 	$(CC) -o alds1_7_b alds1_7_b.o $(LIBS)
+
+alds1_7_c: alds1_7_c.o
+	$(CC) -o alds1_7_c alds1_7_c.o $(LIBS)
 
 clean:
 	rm -f *.o $(PROGS)
@@ -220,6 +223,20 @@ test_alds1_7_b: alds1_7_b
 		6 -1 -1 \
 		7 -1 -1 \
 		8 -1 -1" | alds1_7_b 1
+
+test_alds1_7_c: alds1_7_c
+	@echo ""
+	echo "9 \
+		0 1 4 \
+		1 2 3 \
+		2 -1 -1 \
+		3 -1 -1 \
+		4 5 8 \
+		5 6 7 \
+		6 -1 -1 \
+		7 -1 -1 \
+		8 -1 -1" | alds1_7_c 1
+
 
 #
 # Macros
