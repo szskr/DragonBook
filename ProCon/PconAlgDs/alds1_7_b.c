@@ -14,6 +14,21 @@ const char str_root[] = {'r', 'o', 'o', 't', 0};
 const char str_node[] = {'n', 'o', 'd', 'e', 0};
 const char str_leaf[] = {'l', 'e', 'a', 'f', 0};
 
+#define ROOT 0
+#define LEFT 1
+#define RIGHT 2
+
+int
+amIwhich(Node *node)
+{
+  if (node->parent == node)
+    return (ROOT);
+  else if (node == node->parent->right)
+    return (RIGHT);
+  else
+    return (LEFT);
+}
+
 int
 depth(Node *n)
 {
@@ -26,12 +41,34 @@ depth(Node *n)
   return (d);
 }
 
+int
+height(Node *node)
+{
+  int left, right, ret;
+  
+  if ((node == NULL) ||
+      (((node->left == (Node *) -1)) && ((node->right == (Node *) -1))))
+    return (0);
+
+  left = height(node->left);
+  right = height(node->right);
+
+  if (left >= right)
+    ret = 1 + left;
+  else
+    ret = 1 + right;
+  
+  return (ret);
+}
+
 void
 dump_info(Node *nodes, int i)
 {
   Node *n = nodes + i;
   char *type;
   int sibling = 0;
+  int degree = 0;
+  int which;
 
   if (n->parent == n)
     type = (char *) str_root;
@@ -40,16 +77,35 @@ dump_info(Node *nodes, int i)
   else
     type = (char *) str_node;
 
-  if (n->parent == n)
-    sibling = -1;
-  else if {
-  }
+  if (n->left != (Node *)-1)
+    ++degree;
+  if (n->right != (Node *) -1)
+    ++degree;
 
-  printf ("Node :%2d, parent:%2lu, sibling = %2d, dep:%d, %s",
+  if (type == (char *) str_root)
+    sibling = -1;
+  else {
+    which = amIwhich(n);
+    if (which == LEFT) {
+      if (n->parent->right == (Node *) -1)
+	sibling = -1;
+      else 
+	sibling = (n->parent->right - nodes);
+    } else {
+      if (n->parent->left == (Node *) -1)
+	  sibling = -1;
+      else
+	sibling = (n->parent->left - nodes);
+    }
+  }
+  
+  printf ("Node :%2d, parent:%2lu, sibling: %2d, degree: %d, dep:%d, height:%d, %s",
 	  i,
 	  (n->parent - nodes),
 	  sibling,
+	  degree,
 	  depth(n),
+	  height(n),
 	  type);
 
   printf("\n");
