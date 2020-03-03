@@ -2,10 +2,13 @@
  * Tree Traverse
  */
 #include "./pcon.h"
+#define CMD_LEN 10
+#define INSERT 1
+#define PRINT 2
 
 typedef struct node Node;
 struct node {
-  int id;
+  int key;
   Node *parent;
   Node *left;
   Node *right;
@@ -14,9 +17,9 @@ struct node {
 void
 preOrder(Node *node)
 {
-  if (node == (Node *) -1)
+  if (node == (Node *) NULL)
     return;
-  printf("%d ", node->id);
+  printf("%2d ", node->key);
   preOrder(node->left);
   preOrder(node->right);
 }
@@ -24,74 +27,99 @@ preOrder(Node *node)
 void
 inOrder(Node *node)
 {
-  if (node == (Node *) -1)
+  if (node == (Node *) NULL)
     return;
+
   inOrder(node->left);
-  printf("%d ", node->id);
+  printf("%2d ", node->key);
   inOrder(node->right);
 }
 
 void
 postOrder(Node *node)
 {
-  if (node == (Node *) -1)
+  if (node == (Node *) NULL)
     return;
+
   postOrder(node->left);
   postOrder(node->right);
-  printf("%d ", node->id);
+  printf("%2d ", node->key);
+}
+  
+void
+print(Node *root)
+{
+  printf("pre : ");
+  preOrder(root);
+  printf("\n");
+
+  printf("in  : ");
+  inOrder(root);
+  printf("\n");
+
+  printf("post: ");
+  postOrder(root);
+  printf("\n");
 }
 
 int
 main(int argc, char *argv[])
 {
-  int n, i, j;
-  Node *nodes;
+  int n, i, key;
+  Node *node = (Node *) NULL;
+  Node *root;
+  Node *next, *prev;
+  char command[CMD_LEN + 1];
  int id, l, r;
+ int cmd;
   
   scanf("%d", &n);
   if (n <= 0) {
     fprintf(stderr, "No Nodes(%d)\n", n);
     exit(1);
   }
-  
-  nodes = (Node *) calloc(n, sizeof (Node));
-  if (nodes == (Node *) NULL) {
-    fprintf(stderr, "calloc(): error\n");
-    exit(1);
-  };
 
-  for (i = 0; i < n; i++)
-    (nodes+i)->parent = nodes + i;
-  
   for (i = 0; i < n; i++) {
-    scanf("%d %d %d", &id, &l, &r);
-    (nodes + id)->id = id;
+    scanf("%s", command);
+    if (strcmp(command, "insert") == 0)
+      cmd = INSERT;
+    else
+      cmd = PRINT;
     
-    if (l != -1) { 
-      (nodes + id)->left = nodes + l;
-      (nodes + l)->parent = nodes + id;
-    } else
-      (nodes + id)->left = (Node *) -1;
+    if (cmd == PRINT) {
+      print(root);
+      continue;
+    }
 
-    if (r != -1) {
-      (nodes + id)->right = nodes + r;
-      (nodes + r)->parent = nodes + id;
-    } else
-      (nodes + id)->right = (Node *) -1;
+    scanf("%d", &key);
+    node = (Node *) calloc(1, sizeof (Node));
+    if (node == (Node *) NULL) {
+      fprintf(stderr, "calloc(): error\n");
+      exit(1);
+    }
+
+    node->key = key;
+    if (i == 0) {
+      root = node;
+      node->parent = node;
+      continue;
+    }
+    
+    prev = next = root;
+    while (next) {
+      prev = next;
+      if (next->key >= key)
+	next = next->left;
+      else
+	next = next->right;
+    }
+    
+    node->parent = prev;
+    if (prev->key >= key)
+      prev->left = node;
+    else
+      prev->right = node;
   }
 
-  printf("PreOrder:\n");
-  preOrder(&nodes[0]);
-  printf("\n");
-  
-  printf("InOrder:\n");
-  inOrder(&nodes[0]);
-  printf("\n");
-  
-  printf("PostOrder:\n");
-  postOrder(&nodes[0]);
-  printf("\n");
-
-  printf("\n");
   return (0);
 }

@@ -261,16 +261,15 @@ test_alds1_7_d: alds1_7_d
 
 test_alds1_8_a: alds1_8_a
 	@echo ""
-	echo "9 \
-		0 1 4 \
-		1 2 3 \
-		2 -1 -1 \
-		3 -1 -1 \
-		4 5 8 \
-		5 6 7 \
-		6 -1 -1 \
-		7 -1 -1 \
-		8 -1 -1" | alds1_8_a 1
+	echo "8 \
+		insert 30 \
+		insert 88 \
+		insert 12 \
+		insert 1 \
+		insert 20 \
+		insert 17 \
+		insert 25 \
+		print" | alds1_8_a 1
 
 
 #
