@@ -68,7 +68,7 @@ main(int argc, char *argv[])
   int n, i, key;
   Node *node = (Node *) NULL;
   Node *root;
-  Node *next, *prev;
+  Node *nd, *prev;
   char command[CMD_LEN + 1];
  int id, l, r;
  int cmd;
@@ -105,13 +105,13 @@ main(int argc, char *argv[])
       continue;
     }
     
-    prev = next = root;
-    while (next) {
-      prev = next;
-      if (next->key >= key)
-	next = next->left;
+    prev = nd = root;
+    while (nd) {
+      prev = nd;
+      if (nd->key >= key)
+	nd = nd->left;
       else
-	next = next->right;
+	nd = nd->right;
     }
     
     node->parent = prev;
