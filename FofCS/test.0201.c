@@ -4,8 +4,6 @@
 
 #include "./fcs.h"
 
-
-
 int
 main()
 {
