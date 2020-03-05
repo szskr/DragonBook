@@ -4,10 +4,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef int ETYPE;
+
 typedef struct CELL *LIST;
 struct CELL {
   int element;
   LIST next;
+};
+
+typedef struct Node *Tree;
+struct Node {
+  ETYPE element;
+  Tree leftChild;
+  Tree rightChild;
 };
 
 /* Chapter 02 */
