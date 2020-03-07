@@ -19,7 +19,7 @@ test: test.0201
 	test.0201
 
 clean:
-	rm -f *.o $(PROGS)
+	rm -f *.o $(PROGS) $(TESTS)
 
 #
 #
