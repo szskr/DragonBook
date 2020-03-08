@@ -64,40 +64,55 @@ insert(ETYPE x, Tree t)
   return (t);
 }
 
+Tree
+find(ETYPE x, Tree t)
+{
+  if (t == NULL)
+    return NULL;
+  if (x == t->element)
+    return (t);
+  if (x > t->element)
+    return (find(x, t->rightChild));
+  return (find(x, t->leftChild));
+}
+
 ETYPE
-deletemin(Tree *pT)
+deletemin(Tree *pt)
 {
   ETYPE min;
 
-  d_printf(" deletemin(): called: %d\n", (*pT)->element);
+  d_printf(" deletemin(): called: %d\n", (*pt)->element);
 
-  if ((*pT)->leftChild == NULL) {
-    min = (*pT)->element;
-    (*pT) = (*pT)->rightChild;
+  if ((*pt)->leftChild == NULL) {
+    min = (*pt)->element;
+    (*pt) = (*pt)->rightChild;
     return (min);
   }
   else
-    return (deletemin(&((*pT)->leftChild)));
+    return (deletemin(&((*pt)->leftChild)));
 }
 
 void
-delete(ETYPE x, Tree *pT)
+delete(ETYPE x, Tree *pt)
 {
   d_printf("delete(): %d\n", x);
-  
-  if ((*pT) != NULL) {
-    if (x < (*pT)->element)
-      delete(x, &((*pT)->leftChild));
-    else if (x > (*pT)->element)
-      delete(x, &((*pT)->rightChild));
-  } else {
-    if (d_flag)
-      fprintf(stderr, "  delete: node=%d\n", x);
-    if ((*pT)->leftChild == NULL)
-      (*pT) = (*pT)->rightChild;
-    else if ((*pT)->rightChild == NULL)
-      (*pT) = (*pT)->leftChild;
+
+  if (*pt == NULL) {
+    d_printf(" delete(): NULL tree passed.");
+    return;
+  }
+
+  if (x < (*pt)->element)
+    delete(x, &((*pt)->leftChild));
+  else if (x > (*pt)->element)
+    delete(x, &((*pt)->rightChild));
+  else {
+    if ((*pt)->leftChild == NULL)
+      (*pt) = (*pt)->rightChild;
+    else if ((*pt)->rightChild == NULL)
+      (*pt) = (*pt)->leftChild;
     else
-      (*pT)->element = deletemin(&((*pT)->rightChild));
-    }
+      (*pt)->element = deletemin(&((*pt)->rightChild));
+  }
 }
+ 

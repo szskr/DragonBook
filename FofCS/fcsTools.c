@@ -3,6 +3,7 @@
  */
 #include "./fcs.h"
 
+int d_flag = 0;
 void
 d_printf(char *format, ...)
 {

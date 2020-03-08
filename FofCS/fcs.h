@@ -40,6 +40,7 @@ void inOrder(Tree);
 void postOrder(Tree);
 bool lookup(ETYPE, Tree);
 Tree insert(ETYPE, Tree);
+Tree find(ETYPE, Tree);
 ETYPE deletemin(Tree *);
 void delete(ETYPE, Tree *);
 
