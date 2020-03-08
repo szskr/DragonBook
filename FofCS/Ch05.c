@@ -6,6 +6,12 @@
 void
 preOrder(Tree t)
 {
+  if (t == NULL)
+    return;
+
+  printf("%d ", t->element);
+  preOrder(t->leftChild);
+  preOrder(t->rightChild);
 }
 
 void
