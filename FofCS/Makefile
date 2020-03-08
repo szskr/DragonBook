@@ -3,7 +3,7 @@
 #
 HDRS = fcs.h
 LIBOBJS = Ch02.o Ch05.o fcsTools.o
-PROGS= prog.0203
+PROGS= prog.0203 prog.0501
 TESTS= test.0201
 
 all: $(PROGS) $(LIBOBJS) $(TESTS)
@@ -11,6 +11,12 @@ all: $(PROGS) $(LIBOBJS) $(TESTS)
 prog.0203: prog.0203.o $(LIBOBJS)
 	$(CC) -o prog.0203 prog.0203.o $(LIBOBJS)
 
+prog.0501: prog.0501.o $(LIBOBJS)
+	$(CC) -o prog.0501 prog.0501.o $(LIBOBJS)
+
+#
+# Tests
+#
 test.0201: test.0201.o $(LIBOBJS)
 	$(CC) -o test.0201 test.0201.o $(LIBOBJS)
 

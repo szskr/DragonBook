@@ -31,6 +31,9 @@ LIST MergeSort(LIST);
 void PrintList(LIST);
 
 /* Chapter 05 */
+void preOrder(Tree);
+void inOrder(Tree);
+void postOrder(Tree);
 bool lookup(ETYPE, Tree);
 Tree insert(ETYPE, Tree);
 ETYPE deletemin(Tree *);

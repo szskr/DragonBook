@@ -3,6 +3,21 @@
  */
 #include "./fcs.h"
 
+void
+preOrder(Tree t)
+{
+}
+
+void
+inOrder(Tree t)
+{
+}
+
+void
+postOrder(Tree t)
+{
+}
+
 bool
 lookup(ETYPE x, Tree t)
 {
