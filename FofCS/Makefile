@@ -28,7 +28,12 @@ t.0201: test.0201
 
 t.0501: prog.0501
 	echo "TEST-0501"
-	echo "5 1 5 3 2 4" | prog.0501
+	echo "5 \
+		3 2 1 4 5 \
+		3 \
+		delete 2 \
+		insert 10 \
+		print" | prog.0501
 
 clean:
 	rm -f *.o $(PROGS) $(TESTS)

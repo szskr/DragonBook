@@ -3,6 +3,19 @@
  */
 #include "./fcs.h"
 
+void
+d_printf(char *format, ...)
+{
+  va_list arg;
+  
+  if (d_flag == 0)
+    return;
+  
+  va_start (arg, format);
+  vfprintf(stderr, format, arg);
+  va_end (arg);
+}
+
 LIST
 makeList(int *a, int n)
 {

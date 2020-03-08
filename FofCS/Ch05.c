@@ -17,11 +17,22 @@ preOrder(Tree t)
 void
 inOrder(Tree t)
 {
+  if (t == NULL)
+    return;
+  inOrder(t->leftChild);
+  printf("%d ", t->element);
+  inOrder(t->rightChild);
 }
 
 void
 postOrder(Tree t)
 {
+  if (t == NULL)
+    return;
+
+  postOrder(t->leftChild);
+  postOrder(t->rightChild);
+  printf("%d ", t->element);
 }
 
 bool
@@ -58,6 +69,8 @@ deletemin(Tree *pT)
 {
   ETYPE min;
 
+  d_printf(" deletemin(): called: %d\n", (*pT)->element);
+
   if ((*pT)->leftChild == NULL) {
     min = (*pT)->element;
     (*pT) = (*pT)->rightChild;
@@ -70,17 +83,21 @@ deletemin(Tree *pT)
 void
 delete(ETYPE x, Tree *pT)
 {
+  d_printf("delete(): %d\n", x);
+  
   if ((*pT) != NULL) {
     if (x < (*pT)->element)
       delete(x, &((*pT)->leftChild));
     else if (x > (*pT)->element)
       delete(x, &((*pT)->rightChild));
   } else {
-      if ((*pT)->leftChild == NULL)
-	(*pT) = (*pT)->rightChild;
-      else if ((*pT)->rightChild == NULL)
-	(*pT) = (*pT)->leftChild;
-      else
-	(*pT)->element = deletemin(&((*pT)->rightChild));
+    if (d_flag)
+      fprintf(stderr, "  delete: node=%d\n", x);
+    if ((*pT)->leftChild == NULL)
+      (*pT) = (*pT)->rightChild;
+    else if ((*pT)->rightChild == NULL)
+      (*pT) = (*pT)->leftChild;
+    else
+      (*pT)->element = deletemin(&((*pT)->rightChild));
     }
 }

@@ -4,11 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <strings.h>
+#include <stdarg.h>
 
 #ifndef _ETYPE_
 typedef int ETYPE;
 #define _ETYPE_
 #endif
+
+int d_flag;
 
 typedef struct CELL * LIST;
 struct CELL {
@@ -43,4 +47,5 @@ void delete(ETYPE, Tree *);
 /*
  * Tools
  */
+void d_printf(char *, ...);
 LIST makeList(int *, int);
