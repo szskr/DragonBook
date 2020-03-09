@@ -95,9 +95,12 @@ main(int argc, char *argv[])
   Node *root;
   Node *nd, *prev;
   char command[CMD_LEN + 1];
- int id, l, r;
- int cmd;
-  
+  int id, l, r;
+  int cmd;
+
+  if (argc != 1)
+    d_flag = 1;
+
   scanf("%d", &n);
   if (n <= 0) {
     fprintf(stderr, "No Nodes(%d)\n", n);

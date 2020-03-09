@@ -3,6 +3,8 @@
  */
 #include "pcon.h"
 
+int d_flag = 0;
+
 int
 compute_shell_strides(int **g, int n)
 {
@@ -57,4 +59,17 @@ partition(int *a, int p, int r)
   swap(int, a[i], a[r]);
   
   return (i);
+}
+
+void
+d_printf(char *format, ...)
+{
+  va_list arg;
+  
+  if (d_flag == 0)
+    return;
+  
+  va_start (arg, format);
+  vfprintf(stderr, format, arg);
+  va_end (arg);
 }

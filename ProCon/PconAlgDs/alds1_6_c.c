@@ -3,8 +3,6 @@
  */
 #include "./pcon.h"
 
-int d_flag = 0;
-
 typedef struct Card Card;
 struct Card {
   char suit;

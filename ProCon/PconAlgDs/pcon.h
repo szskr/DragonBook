@@ -5,11 +5,14 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define ERROR -1
 #define OK    0
 #define TRUE  1
 #define FALSE 0
+
+int d_flag;
 
 typedef long long llong;
 
@@ -19,3 +22,4 @@ typedef long long llong;
 
 int compute_shell_strides(int **, int);
 int partition(int *, int, int);
+void d_printf(char *, ...);
