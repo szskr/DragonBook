@@ -64,27 +64,75 @@ print(Node *root)
   printf("\n");
 }
 
-int
+Node *
 find(Node *root, int key)
 {
   Node *node = root;
 
   while (node != (Node *) NULL) {
     if (node ->key == key)
-      return (1);
+      return (node);
     if (node ->key > key)
       node = node->left;
     else
       node = node->right;
   }
   
-  return (0);
+  return (NULL);
+}
+
+Node *
+find_deletemin(Node *tp)
+{
+  while (tp && tp->left != NULL)
+    tp = tp->left;
+  return (tp);
 }
 
 void
-delete(Node *root, int key)
+delete(Node *tp, int key)
 {
-  printf("DELETE %d\n", key);
+  Node *node;
+  
+  if (tp == NULL)
+    return;
+
+  if ((node = find(tp, key)) == NULL)
+    return;
+
+  /*
+   * removing node is a leaf
+   */
+  if ((node->left == NULL) && (node->right == NULL)) {
+    d_printf("  DELETING a leaf node\n");
+    if (node->parent->left == node)
+      node->parent->left = NULL;
+    else
+      node->parent->right = NULL;
+    free (node);
+    return;
+  }
+
+  /*
+   * removing node has a child
+   */
+  if (((node->left == NULL) && (node->right != NULL)) ||
+      ((node->right == NULL) && (node->left != NULL))) {
+    
+    if (node->right != NULL) {
+      if (node->parent->right == node) {
+	node->parent->right = node->right;
+	node->right->parent = node->parent;
+      }
+    }
+    
+    free(node);
+    return;
+  }
+
+  /*
+   * removeing node has both left and right children
+   */
 }
 
 int
