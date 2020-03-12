@@ -293,7 +293,7 @@ t_alds1_8_b: alds1_8_b
 
 t_alds1_8_c: alds1_8_c
 	@echo ""
-	echo "19 \
+	echo "20 \
 		insert 8 \
 		insert 2 \
 		insert 3 \
@@ -310,6 +310,7 @@ t_alds1_8_c: alds1_8_c
 		find 8 \
 		print \
 		delete 199 \
+		delete 8 \
 		delete 3 \
 		delete 7 \
 		print" | alds1_8_c  1

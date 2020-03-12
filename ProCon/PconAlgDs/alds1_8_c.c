@@ -84,8 +84,10 @@ find(Node *root, int key)
 Node *
 find_deletemin(Node *tp)
 {
-  while (tp && tp->left != NULL)
-    tp = tp->left;
+  d_printf("find_deletemin(): called\n");
+  
+  while (tp && tp->right != NULL)
+    tp = tp->right;
   return (tp);
 }
 
@@ -93,12 +95,17 @@ void
 delete(Node *tp, int key)
 {
   Node *node;
+  Node *min_node;
+
+  d_printf("Deleting %d\n", key);
   
   if (tp == NULL)
     return;
 
-  if ((node = find(tp, key)) == NULL)
+  if ((node = find(tp, key)) == NULL) {
+    d_printf("  DELETING: key not found\n");
     return;
+  }
 
   /*
    * removing node is a leaf
@@ -109,21 +116,30 @@ delete(Node *tp, int key)
       node->parent->left = NULL;
     else
       node->parent->right = NULL;
+    
     free (node);
     return;
   }
 
   /*
-   * removing node has a child
+   * removing node has one child but not both
    */
   if (((node->left == NULL) && (node->right != NULL)) ||
       ((node->right == NULL) && (node->left != NULL))) {
+    d_printf("  DELETING a node with one child\n");
     
     if (node->right != NULL) {
-      if (node->parent->right == node) {
+      if (node->parent->right == node)
 	node->parent->right = node->right;
-	node->right->parent = node->parent;
-      }
+      else
+	node->parent->left = node->right;
+      node->right->parent = node->parent;
+    } else {
+      if (node->parent->right == node)
+	node->parent->right = node->left;
+      else
+	node->parent->left = node->left;
+      node->left->parent = node->parent;
     }
     
     free(node);
@@ -131,8 +147,12 @@ delete(Node *tp, int key)
   }
 
   /*
-   * removeing node has both left and right children
+   * removing node has both left and right children
    */
+  d_printf("  DELETING a node with both children\n");
+  min_node = find_deletemin(node->right);
+  d_printf("    minkey = %d\n", min_node->key);
+  
 }
 
 int
