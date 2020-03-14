@@ -21,7 +21,7 @@ TESTS= t_0 \
 	t_alds1_6_b t_alds1_6_c \
 	t_7_2_sort\
 	t_alds1_7_a t_alds1_7_b t_alds1_7_c t_alds1_7_d \
-	t_alds1_8_a t_alds1_8_b t_alds1_8_c
+	t_alds1_8_a t_alds1_8_b t_alds1_8_c test
 
 LIBS= algorithms.o
 
@@ -296,7 +296,7 @@ t_alds1_8_c: alds1_8_c
 	echo "20 \
 		insert 8 \
 		insert 2 \
-		insert 3 \
+		insert 3  \
 		insert 7 \
 		insert 22 \
 		insert 1 \
@@ -313,6 +313,22 @@ t_alds1_8_c: alds1_8_c
 		delete 8 \
 		delete 3 \
 		delete 7 \
+		print" | alds1_8_c  1
+
+test: alds1_8_c
+	@echo "TEST"
+	echo "12 \
+		insert 8 \
+		insert 2 \
+		insert 4 \
+		insert 3 \
+		insert 7 \
+		insert 22 \
+		insert 1 \
+		print \
+		delete 2 \
+		print \
+		delete 3 \
 		print" | alds1_8_c  1
 
 

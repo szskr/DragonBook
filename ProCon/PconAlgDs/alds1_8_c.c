@@ -86,8 +86,8 @@ find_deletemin(Node *tp)
 {
   d_printf("find_deletemin(): called\n");
   
-  while (tp && tp->right != NULL)
-    tp = tp->right;
+  while (tp && tp->left != NULL)
+    tp = tp->left;
   return (tp);
 }
 
@@ -152,7 +152,31 @@ delete(Node *tp, int key)
   d_printf("  DELETING a node with both children\n");
   min_node = find_deletemin(node->right);
   d_printf("    minkey = %d\n", min_node->key);
-  
+  node->key = min_node->key;
+
+  if (min_node->right == NULL) {
+    /*
+     * min_node is a leaf
+     */
+    d_printf("    Deleting min_node which is a leaf\n");
+    if (min_node->parent->left == min_node)
+      min_node->parent->left = NULL;
+    else
+      min_node->parent->right = NULL;
+    free(min_node);
+    return;
+  }
+
+  d_printf("    Deleting min_key which is an internal node\n");
+  if (min_node->parent->left == min_node) {
+    min_node->parent->left = min_node->right;
+    min_node->right->parent = min_node->parent;
+  } else {
+    min_node->parent->right = min_node->right;
+    min_node->right->parent = min_node->parent;
+  }
+  free(min_node);
+  return;
 }
 
 int
