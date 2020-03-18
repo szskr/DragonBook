@@ -12,7 +12,7 @@ PROGS = rec\
 	7_2_sort\
 	alds1_7_a alds1_7_b alds1_7_c alds1_7_d \
 	alds1_8_a alds1_8_b alds1_8_c \
-	alds1_9_a
+	alds1_9_a alds1_9_b
 
 TESTS= t_0 \
 	t_alds1_1_d t_alds1_1_a t_alds2_1_a t_alds1_2_b t_alds1_2_c t_alds1_2_d\
@@ -23,7 +23,7 @@ TESTS= t_0 \
 	t_7_2_sort\
 	t_alds1_7_a t_alds1_7_b t_alds1_7_c t_alds1_7_d \
 	t_alds1_8_a t_alds1_8_b t_alds1_8_c test_01 \
-	t_alds1_9_a
+	t_alds1_9_a t_alds1_9_b
 
 LIBS= algorithms.o
 
@@ -114,6 +114,9 @@ alds1_8_c: alds1_8_c.o
 
 alds1_9_a: alds1_9_a.o
 	$(CC) -o alds1_9_a alds1_9_a.o $(LIBS)
+
+alds1_9_b: alds1_9_b.o
+	$(CC) -o alds1_9_b alds1_9_b.o $(LIBS)
 
 
 clean:
@@ -339,9 +342,14 @@ test_01: alds1_8_c
 		print" | alds1_8_c  1
 
 t_alds1_9_a: alds1_9_a
-	@echo ""
+	@echo "t_alds1_9_a"
 	echo "5 \
 		7 8 1 2 3" | alds1_9_a 1
+
+t_alds1_9_b: alds1_9_b
+	@echo "t_alds1_9_b"
+	echo "10 \
+		4 1 3 2 16 9 10 14 8 7" | alds1_9_b 1
 
 
 #
