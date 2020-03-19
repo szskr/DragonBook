@@ -1,8 +1,1 @@
-Reading Computer Science Books- Notes, codes, experiments
-
-DragonBook
-
-FndtnsOfCS
-
-ConUnixd
-
+Computer Science - Notes, codes, experiments
