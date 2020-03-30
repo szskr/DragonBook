@@ -10,7 +10,36 @@ Low-Level System Information
      An EIP-relative branch or function call computes its destination address in terms of the
      current instruction pointer, not relative to any absolute address.
 
-  2) 
- 
+  2) When the program requires an absolute address, it computes the desired value.
+     Instead of embedding absolute address in the instructions, the compiler generates code to
+     calculate an absolute address during execution.
 
- 
+ Because the Intel (and many other architectures) provides EIP-relative call and branch instructions,
+ compilers can satisfy the first condition easily.
+
+ A global offset table, GOT, provides information for address calculation. PIC object files, executable
+ and shared object files) have this table in their data segment. When the system creates the memory image
+ for an object file, the table entries are relocated to reflect the absolute virtual addresses as
+ assigned for an individual process. Because data segments are private for each process, the table
+ entries can change -- unlike thext segments, which multiple processes share.
+
+ Assembly langue examples below show the explicit notation needed for PIC code.
+
+    name@GOT(%ebx)
+	This expression denotes an %ebx-relative reference to the GOT entry
+	for the symbol name. The %ebx register contains the absolute address
+	of ht GOT explained below.
+	
+    name@GOTOFF(%ebx)
+	This expression denotes an %ebx-relative reference to the symbol name.
+	Again, %ebx holds the GOT address. Note this expression references name,
+	not GOT entry for name.
+
+    name@PLT
+	This expression denotes an EIP-relative reference to the PLT entry for
+	the symbol name.
+	
+    _GLOBAL_OFFSET_TABLE_
+	This symbol _GLOBAL_OFFSET_TABLE_ us used to access the GOT.
+	When an instruction uses the symbol, it sees the offset between
+	the current instruction and the global offset table as the symbol value.
