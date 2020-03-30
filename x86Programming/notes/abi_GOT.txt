@@ -1,0 +1,16 @@
+Low-Level System Information
+
+3-35 Coding Examples
+
+ To maximize text shareing, shared objects conventionally use position-independent code, PIC.
+ PIC contains no absolute addresses.
+
+ PIC relies on two techniques:
+  1) Control tranfer instructions hold offsets relative to the extended instruction pointer, EIP.
+     An EIP-relative branch or function call computes its destination address in terms of the
+     current instruction pointer, not relative to any absolute address.
+
+  2) 
+ 
+
+ 
