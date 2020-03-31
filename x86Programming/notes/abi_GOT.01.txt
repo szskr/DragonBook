@@ -28,7 +28,7 @@ Low-Level System Information
     name@GOT(%ebx)
 	This expression denotes an %ebx-relative reference to the GOT entry
 	for the symbol name. The %ebx register contains the absolute address
-	of ht GOT explained below.
+	of the GOT explained below.
 	
     name@GOTOFF(%ebx)
 	This expression denotes an %ebx-relative reference to the symbol name.
@@ -51,7 +51,7 @@ Low-Level System Information
  register %ebx the GOT's address. Because %ebx is private for each function and
  preserved across function calls, a function calculate it value once at the entry.
 
-   Figure 3-36: Calculating GOT address
+  Figure 3-36: Calculating GOT address
      1.        call .L1
      2. .L1:   popl %ebx
      3.        addl $_GLOBAL_OFFSET_TABLE + [. - .L1], %ebx
@@ -72,10 +72,41 @@ Low-Level System Information
   This computation can be added tot he standard function prologue, giving the standard
   prologue for the PIC code.
 
-  
 3-37 Data Objects
 
   Position-independent instructions cannot contain absolute addresses. Instead,
   instructions that references symbols hold the symbols' offsets into the GOT.
   Combining the offset with the GOT address in %ebx gives the absolute address
   of the table entry holding the desired address.
+
+  Figure 3-38: Position-Independent Data Access
+  
+    C                         Assembly
+    -----------------------   ------------------------
+    extern int src;           .global src, dst, ptr
+    extern int dst;
+    extern int *ptr;
+    ptr = &dst;               movl    ptr@GOT(%ebx), %eax
+                              movl    dst@GOT(%ebx), %edx
+			      movl    %edx, (%eax)
+
+    *ptr = src;               movl    ptr@GOT(%ebx), %eax
+                              movl    (%eax), %eax
+			      movl    src@GOT(%ebx), %edx
+			      movl    (%edx), %edx
+			      movl    %edx, (%eax)
+			      
+  Figure 3-40: Position-Independent Static Data Access
+  
+    C                         Assembly
+    -----------------------   ------------------------  
+    static int src;           
+    static int dst;
+    static int *ptr;
+    ptr = &dst;               leal    ptr@GOTOFF(%ebx), %eax
+                              leal    dst@GOTOFF(%ebx), %edx
+			      movl    %edx, (%eax)
+
+    *ptr = src;               movl    ptr@GOTOFF(%ebx), %eax
+  			      movl    src@GOTOFF(%ebx), %edx
+			      movl    %edx, (%eax)
