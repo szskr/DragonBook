@@ -40,6 +40,42 @@ Low-Level System Information
 	the symbol name.
 	
     _GLOBAL_OFFSET_TABLE_
-	This symbol _GLOBAL_OFFSET_TABLE_ us used to access the GOT.
+	This symbol _GLOBAL_OFFSET_TABLE_ is used to access the GOT.
 	When an instruction uses the symbol, it sees the offset between
 	the current instruction and the global offset table as the symbol value.
+
+3-36 Position-Independent Function Prologue
+
+ This section describels the function prologue for PIC. A function's prologue
+ allocates the local stack space, save any registers it must preserve, and sets
+ register %ebx the GOT's address. Because %ebx is private for each function and
+ preserved across function calls, a function calculate it value once at the entry.
+
+   Figure 3-36: Calculating GOT address
+     1.        call .L1
+     2. .L1:   popl %ebx
+     3.        addl $_GLOBAL_OFFSET_TABLE + [. - .L1], %ebx
+
+  These three lines accomplies the following:
+     1. The call instruction pushes the absolute address of the next instruction
+        onto the stack.
+     2. Then, the popl instruction pops the absolute address of .L1 into the
+        register %ebx.
+     3. The last instruction computes the desired absolute value into %ebx.
+        This works because:
+	a.  _GLOBAL_OFFSET_TABLE_ in the expression holds the distace between the
+	    addl instruction to the GOT.
+	b. [. - .L1] gives the distance between the addl instruction to .L1 label.
+	c. Adding the absolute address of .L1, which is in %ebx, and the sum gives
+	   the absolute address of GOT.
+
+  This computation can be added tot he standard function prologue, giving the standard
+  prologue for the PIC code.
+
+  
+3-37 Data Objects
+
+  Position-independent instructions cannot contain absolute addresses. Instead,
+  instructions that references symbols hold the symbols' offsets into the GOT.
+  Combining the offset with the GOT address in %ebx gives the absolute address
+  of the table entry holding the desired address.
