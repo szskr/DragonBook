@@ -110,3 +110,9 @@ Low-Level System Information
     *ptr = src;               movl    ptr@GOTOFF(%ebx), %eax
   			      movl    src@GOTOFF(%ebx), %edx
 			      movl    %edx, (%eax)
+
+ 3-41 EXERCISE
+   Read and understand codes in Figure 3-39 and Figure 3-40.
+
+3-42 Function Calls
+
