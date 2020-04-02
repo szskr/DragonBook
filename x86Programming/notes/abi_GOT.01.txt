@@ -116,3 +116,17 @@ Low-Level System Information
 
 3-42 Function Calls
 
+  Figure 3-43: Absolute Direct Function Call
+  
+    C                         Assembly
+    -----------------------   ------------------------  
+    extern void function();   .global function
+    ptr = &dst;               leal    ptr@GOTOFF(%ebx), %eax
+                              leal    dst@GOTOFF(%ebx), %edx
+			      movl    %edx, (%eax)
+
+    *ptr = src;               movl    ptr@GOTOFF(%ebx), %eax
+  			      movl    src@GOTOFF(%ebx), %edx
+			      movl    %edx, (%eax)
+ 
+
