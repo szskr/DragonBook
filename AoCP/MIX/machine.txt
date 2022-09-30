@@ -1,8 +1,0 @@
-
-1 Machine
-
-1.1 Bye and Word
- Byte: There are six bits in a byte.
- Word: A word is consisted by a sign bit followed by 5 bytes
-
-1.2 Registers and Memory
